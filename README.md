@@ -34,7 +34,6 @@ Here is my list of practical recommendations for using Claude Code:
 - There are two different types:
   - Project memory `./CLAUDE.md` - share it with your team.
   - User memory `~/.claude/CLAUDE.md` - personal preferences.
-- `# <text>` - short-term memory, which is cleared after the session ends.
 - Use `/memory` to edit the memory file directly. It will open the file in your default editor.
 
 - Codebase Q&A: Use Claude Code to ask questions about your codebase. It can help during onboarding or when you need to understand how something works.
