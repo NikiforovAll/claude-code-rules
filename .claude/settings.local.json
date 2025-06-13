@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__microsoft_docs_mcp__microsoft_docs_search",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "microsoft.docs.mcp"
+  ]
+}
