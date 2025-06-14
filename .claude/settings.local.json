@@ -3,7 +3,9 @@
     "allow": [
       "mcp__microsoft_docs_mcp__microsoft_docs_search",
       "mcp__context7__resolve-library-id",
-      "mcp__context7__get-library-docs"
+      "mcp__context7__get-library-docs",
+      "Bash(ls:*)",
+      "Bash(find:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
