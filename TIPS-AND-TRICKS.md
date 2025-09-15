@@ -7,6 +7,7 @@
 * 6. [Use `#` to add things to the project memory](#Usetoaddthingstotheprojectmemory)
 * 7. [Learn how to Configure and Customize](#LearnhowtoConfigureandCustomize)
 * 8. [Connect to IDE](#ConnecttoIDE)
+* 9. [List Claude Code Tools](#ListClaudeCodeTools)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -47,3 +48,7 @@ Settings, Permissions, MCP, Slash Commands, Sub-Agents, Output Prompts, etc
 ##  8. <a name='ConnecttoIDE'></a>Connect to IDE
 
 You can connect to VSCode or JetBrains IDEs to get context for files and diagnostics.
+
+##  9. <a name='ListClaudeCodeTools'></a>List Claude Code Tools
+
+Claude Code in a way is self-aware of its capabilities. You can ask it to list available tools.

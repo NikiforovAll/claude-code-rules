@@ -6,6 +6,10 @@ A collection of [Claude Code](https://docs.anthropic.com/en/docs/claude-code/ove
 
 📖 **See [BEST-PRACTICES.md](./BEST-PRACTICES.md)** for development patterns and techniques.
 
+## Tips and Tricks
+
+✨ **See [TIPS-AND-TRICKS.md](./TIPS-AND-TRICKS.md)** for hidden gems and lesser-known features.
+
 **Quick Reference:**
 
 - 📝 **Planning & Problem Solving** - Research, ideation, and structured development
@@ -20,6 +24,10 @@ A collection of [Claude Code](https://docs.anthropic.com/en/docs/claude-code/ove
 * Claude Code Common Tasks - <https://docs.anthropic.com/en/docs/claude-code/common-workflows>
 * Prompt Engineering - <https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview>
 * Interactive Tutorial for Prompt Engineering - <https://github.com/anthropics/prompt-eng-interactive-tutorial>
+
+* [youtube.com/@indydevdan](https://www.youtube.com/@indydevdan) - Claude Code visionary, a lot of inspiring materials and high end content.
+
+* [youtube.com/@EricWTech](https://www.youtube.com/@EricWTech) - Hands-on tutorials and practical examples.
 
 ## 💳 Credits
 
