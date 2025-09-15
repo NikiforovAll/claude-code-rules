@@ -10,6 +10,7 @@
   },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
-    "microsoft.docs.mcp"
+    "microsoft.docs.mcp",
+    "context7"
   ]
 }

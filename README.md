@@ -49,11 +49,15 @@ Here is my list of practical recommendations for using Claude Code:
 
 You can use MCP servers. See [claude-code/mcps](https://docs.anthropic.com/en/docs/claude-code/mcps).
 
-## Vibe Coding Workflow: AI Task-Based Development
+## Spec-Driven Workflow: AI Task-Based Development
 
 - Use `/create-prd` to create a Product Requirements Document (PRD) based on user input.
 - Use `/generate-tasks` to create a task list from the PRD.
 - Use `/process-task-list` to manage and track task progress.
+
+### Or use spek-kit:
+
+See <https://github.com/github/spec-kit> for more details.
 
 ## Useful Links
 
