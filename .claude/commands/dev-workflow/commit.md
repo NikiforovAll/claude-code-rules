@@ -39,7 +39,8 @@ Create well-formatted commits with conventional commit messages and emojis.
 5. Generate descriptive commit message
 6. Include scope if applicable: `type(scope): description`
 7. Add body for complex changes explaining why
-8. Execute commit
+8. NOTE: Exclude Claude co-authorship footer from commits
+9. Execute commit
 
 ## Best Practices:
 - Keep commits atomic and focused
