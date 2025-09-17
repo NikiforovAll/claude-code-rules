@@ -20,6 +20,7 @@ A collection of [Claude Code](https://docs.anthropic.com/en/docs/claude-code/ove
 
 ## Useful Links
 
+* Claude Code Repository - <https://github.com/anthropics/claude-code>
 * Official Best Practices - <https://www.anthropic.com/engineering/claude-code-best-practices>
 * Claude Code Common Tasks - <https://docs.anthropic.com/en/docs/claude-code/common-workflows>
 * Prompt Engineering - <https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview>
@@ -28,6 +29,8 @@ A collection of [Claude Code](https://docs.anthropic.com/en/docs/claude-code/ove
 * [youtube.com/@indydevdan](https://www.youtube.com/@indydevdan) - Claude Code visionary, a lot of inspiring materials and high end content.
 
 * [youtube.com/@EricWTech](https://www.youtube.com/@EricWTech) - Hands-on tutorials and practical examples.
+    - [Sub-Agents](https://www.youtube.com/watch?v=aK3dky0zpj0&ab_channel=EricTech)
+    - [Playwright](https://www.youtube.com/watch?v=NjOqPbUecC4&ab_channel=EricTech), [github](https://github.com/EricTechPro/match-me/commit/231e5fa52d32e9c0c4df9ea58d3d80fcbd118766)
 
 ## 💳 Credits
 

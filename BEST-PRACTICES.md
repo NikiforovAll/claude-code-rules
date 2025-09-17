@@ -5,21 +5,21 @@
 A guide to effective development patterns and techniques using Claude Code.
 
 <!-- vscode-markdown-toc -->
-1. [🧠 Planning & Problem Solving](#PlanningProblemSolving)
+* 1. [📃 Planning & Problem Solving](#PlanningProblemSolving)
 	* 1.1. [Explore → Plan → Code → Commit](#ExplorePlanCodeCommit)
 	* 1.2. [Test-Driven Development](#Test-DrivenDevelopment)
 	* 1.3. [Spec-Driven Development](#Spec-DrivenDevelopment)
 	* 1.4. [Brainstorming & Ideation](#BrainstormingIdeation)
-2. [🧠 Context Engineering](#ContextEngineering)
+* 2. [🧠 Context Engineering](#ContextEngineering)
 	* 2.1. [Context Grounding](#ContextGrounding)
 	* 2.2. [Project Memory (`./CLAUDE.md`)](#ProjectMemory.CLAUDE.md)
 	* 2.3. [Session Management](#SessionManagement)
-3. [Extras/Tips & Tricks](#ExtrasTipsTricks)
+* 3. [Extras. Tips & Tricks](#Extras.TipsTricks)
 	* 3.1. [Self-Discovery & Capabilities](#Self-DiscoveryCapabilities)
 	* 3.2. [Deep Thinking Nudges](#DeepThinkingNudges)
 	* 3.3. [Command Line Integration](#CommandLineIntegration)
-4. [Known How to Customize Claude](#KnownHowtoCustomizeClaude)
-5. [🎯 Tips for Success](#TipsforSuccess)
+* 4. [Known How to Customize Claude](#KnownHowtoCustomizeClaude)
+* 5. [🎯 Tips for Success](#TipsforSuccess)
 	* 5.1. [Communication](#Communication)
 	* 5.2. [Iteration](#Iteration)
 	* 5.3. [Learning](#Learning)
@@ -30,7 +30,7 @@ A guide to effective development patterns and techniques using Claude Code.
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
-##  1. <a name='PlanningProblemSolving'></a>🧠 Planning & Problem Solving
+##  1. <a name='PlanningProblemSolving'></a>📃 Planning & Problem Solving
 
 ###  1.1. <a name='ExplorePlanCodeCommit'></a>Explore → Plan → Code → Commit
 
@@ -103,10 +103,13 @@ Or use spec-kit, <https://github.com/github/spec-kit> for more details.
 - **`/clear`** - Reset conversation context when needed
 - **`/compact <prompt>`** - Aggregate and summarize conversation history
 - **Context Control:** Manage conversation length for optimal performance
+- **/context** - Review current context and adjust as necessary
 
 💡 Be aware of context limits and how it may impact the quality of responses. It is better to keep your context short and focused.
 
-##  3. <a name='ExtrasTipsTricks'></a>Extras/Tips & Tricks
+##  3. <a name='Extras.TipsTricks'></a>✨Extras. Tips & Tricks
+
+> 🤩 See more at [TIPS-AND-TRICKS.md](./TIPS-AND-TRICKS.md)
 
 ###  3.1. <a name='Self-DiscoveryCapabilities'></a>Self-Discovery & Capabilities
 

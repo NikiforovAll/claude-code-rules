@@ -5,9 +5,11 @@
       "mcp__context7__resolve-library-id",
       "mcp__context7__get-library-docs",
       "Bash(ls:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "WebFetch(domain:nikiforovall.blog)"
     ]
   },
+  "hooks": {},
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "microsoft.docs.mcp",
