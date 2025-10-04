@@ -27,6 +27,8 @@ A collection of [Claude Code](https://docs.anthropic.com/en/docs/claude-code/ove
 * Interactive Tutorial for Prompt Engineering - <https://github.com/anthropics/prompt-eng-interactive-tutorial>
 
 * [youtube.com/@indydevdan](https://www.youtube.com/@indydevdan) - Claude Code visionary, a lot of inspiring materials and high end content.
+    - [My TOP 5 Agentic Bets: Multi-Agent UI & Compute Scaling ](https://www.youtube.com/watch?v=d3rtOcwnqz0)
+    - [Elite Context Engineering with Claude Code](https://www.youtube.com/watch?v=Kf5-HWJPTIE)
 
 * [youtube.com/@EricWTech](https://www.youtube.com/@EricWTech) - Hands-on tutorials and practical examples.
     - [Sub-Agents](https://www.youtube.com/watch?v=aK3dky0zpj0&ab_channel=EricTech), [github](https://github.com/EricTechPro/fitbox/blob/main/.claude/agents/shadcn-component-researcher.md)
