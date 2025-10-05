@@ -2,7 +2,7 @@
 * 1. [Learn Shell Keyboard Shortcuts for Text Editing](#LearnShellKeyboardShortcutsforTextEditing)
 * 2. [Mount Multiple Directories](#MountMultipleDirectories)
 * 3. [Use `git worktree` for parallel development](#Usegitworktreeforparalleldevelopment)
-* 4. [Use `git commit` as checkpoints, commit frequently](#Usegitcommitascheckpointscommitfrequently)
+* 4. [Commit frequently](#Commitfrequently)
 * 5. [Run bash tasks in the background](#Runbashtasksinthebackground)
 * 6. [Input images](#Inputimages)
 * 7. [Use voice control to interact with Claude Code](#UsevoicecontroltointeractwithClaudeCode)
@@ -22,6 +22,9 @@
 * 21. [Use ccstatusline](#Useccstatusline)
 * 22. [Use ccoutputstyles](#Useccoutputstyles)
 * 23. [Feature Development Loop](#FeatureDevelopmentLoop)
+* 24. [Fix Windows Update Bug](#FixWindowsUpdateBug)
+* 25. [Spec-Driven Development](#Spec-DrivenDevelopment)
+* 26. [Command Line Integration](#CommandLineIntegration)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -53,7 +56,7 @@ This is a collection of tips and tricks for using Claude Code.
 
 You can use `git worktree` to create multiple working directories for the same repository. This is useful for parallel development, e.g., working on multiple features or bug fixes simultaneously without needing to switch branches in a single working directory.
 
-##  4. <a name='Usegitcommitascheckpointscommitfrequently'></a>Commit frequently
+##  4. <a name='Commitfrequently'></a>Commit frequently
 
 Git Commits are free 😅 so please commit often and use meaningful commit messages. This will help you keep track of changes and make it easier to revert back if needed.
 You can use the `/commit` ([git commit](./.claude/commands/dev-workflow/commit.md)) command to automate commit creation. This command will do a commit for you.
@@ -212,3 +215,31 @@ flowchart LR
     style Developer fill:#e1f5ff
     style Claude_Code fill:#ffe1e1
 ```
+
+##  24. <a name='FixWindowsUpdateBug'></a>Fix Windows Update Bug
+
+> There's a file modification bug in Claude Code. The workaround is: always use complete absolute Windows paths
+> with drive letters and backslashes for ALL file operations. Apply this rule going forward, not just for this
+> file.
+
+<https://www.reddit.com/r/ClaudeCode/comments/1nj49vz/claude_file_has_been_unexpectedly_modified_but/>
+
+##  25. <a name='Spec-DrivenDevelopment'></a>Spec-Driven Development
+
+- Use `/create-prd` (create project requirement document) to create a Product Requirements Document (PRD) based on user input.
+- Use `/generate-tasks` (generate tasks from PRD) to create a task list from the PRD.
+- Use `/process-task-list` (process task list) to manage and track task progress.
+
+Or use [spec-kit](https://github.com/github/spec-kit) for more details.
+
+**When to use:** Greenfield projects, PoC development, pet projects
+
+💡 This is a new methodology and might not give you best results with complex production code bases. Be careful with your time and feel free to throw away code that you don't like and iterate. Also, since much work is delegated to LLM the result and applicability heavily depends on LLM at use.
+
+
+##  26. <a name='CommandLineIntegration'></a>Command Line Integration
+- **Pipe Mode:** Use Claude as a Unix utility: `claude -p ""` or `echo '' | claude -p ""`
+- **Integration:** Combine with existing development tools and scripts
+- **Automation:** Chain Claude commands for repeated workflows
+
+**When to use:** When you want to integrate Claude into your CI/CD pipelines or automate repetitive tasks. For example, you can do some decision making as part of your CI/CD workflow based on structured output from Claude.
