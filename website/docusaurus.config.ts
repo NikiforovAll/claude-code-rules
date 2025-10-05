@@ -18,11 +18,11 @@ const config: Config = {
   url: 'https://nikiforovall.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/claude-code-handbook/',
+  baseUrl: '/claude-code-rules/',
 
   // GitHub pages deployment config.
   organizationName: 'nikiforovall', // GitHub org/user name
-  projectName: 'claude-code-handbook', // Repo name
+  projectName: 'claude-code-rules', // Repo name
 
   onBrokenLinks: 'throw',
 
