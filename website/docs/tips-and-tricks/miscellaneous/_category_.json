@@ -1,0 +1,11 @@
+{
+  "label": "Miscellaneous",
+  "position": 100,
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "title": "Miscellaneous Tips",
+    "description": "Additional tips and tricks for Claude Code"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "label": "Tips & Tricks",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "title": "Tips & Tricks",
+    "description": "Collection of practical tips and tricks for using Claude Code effectively",
+    "keywords": ["tips", "tricks", "shortcuts", "productivity"]
+  }
+}
