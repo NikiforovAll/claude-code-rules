@@ -1,6 +1,6 @@
 ---
 title: "Skip Permissions Mode"
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 You can use `--dangerously-skip-permissions` to run Claude Code without being prompted for permissions. 

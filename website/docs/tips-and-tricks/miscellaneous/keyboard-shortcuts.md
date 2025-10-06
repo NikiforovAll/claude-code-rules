@@ -1,6 +1,6 @@
 ---
 title: "Learn Keyboard Shortcuts"
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Learn Keyboard Shortcuts

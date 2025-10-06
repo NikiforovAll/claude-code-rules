@@ -1,6 +1,6 @@
 ---
 title: "Create Custom Subagents"
-sidebar_position: 15
+sidebar_position: 12
 ---
 
 # Create Custom Subagents

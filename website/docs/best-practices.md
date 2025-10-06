@@ -101,6 +101,7 @@ More guides at [Prompt Engineering Guide](https://www.promptingguide.ai/), [Lear
 
 > 💡 Hint Claude in the right direction. E.g.: "Hint: you might want to check relevant tests for this functionality"
 
+See [Manage Context](/tips-and-tricks/manage-context) for more information about context window and strategies for effective context management.
 
 ---
 

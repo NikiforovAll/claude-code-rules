@@ -1,6 +1,6 @@
 ---
 title: "Use git worktree"
-sidebar_position: 3
+sidebar_position: 15
 ---
 
 # Use `git worktree` for parallel development

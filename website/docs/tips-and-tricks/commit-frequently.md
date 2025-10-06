@@ -1,6 +1,6 @@
 ---
 title: "Commit Frequently"
-sidebar_position: 4
+sidebar_position: 15
 ---
 
 # Commit frequently

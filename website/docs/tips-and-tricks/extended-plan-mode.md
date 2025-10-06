@@ -1,6 +1,6 @@
 ---
 title: "Use Extended Plan Mode"
-sidebar_position: 3
+sidebar_position: 10
 ---
 
 # Use Extended Plan Mode
