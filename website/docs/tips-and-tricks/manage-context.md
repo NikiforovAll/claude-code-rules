@@ -20,3 +20,9 @@ As context windows fill up, LLM performance actually decreases. Models become le
 > 💡 Use **"structured notes"** taking approach when you need to re-use context and store it for later use. For example, you could ask Claude Code something like: "Please write a summary of this conversation to design-decision.md and focus on key decisions and findings we explored during this session"
 
 ![](/img/context2.png)
+
+## Additional References
+
+- See amazing [Advanced Context Engineering for Agents](https://www.youtube.com/watch?v=IS_y40zY-hc)
+- [advanced-context-engineering-for-coding-agents](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents)
+- [12-factor-agents](https://github.com/humanlayer/12-factor-agents)
