@@ -1,6 +1,6 @@
 ---
 title: "Fix - Claude: 'File has been unexpectedly modified'"
-sidebar_position: 10
+sidebar_position: 15
 ---
 
 **Issue:**
