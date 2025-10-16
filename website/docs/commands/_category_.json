@@ -1,0 +1,10 @@
+{
+  "label": "📝 Commands",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "title": "Commands",
+    "description": "Custom slash commands and prompts for Claude Code",
+    "keywords": ["commands", "slash commands", "prompts"]
+  }
+}

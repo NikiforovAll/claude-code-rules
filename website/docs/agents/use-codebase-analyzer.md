@@ -1,9 +1,9 @@
 ---
 title: "Use @codebase-analyzer"
-sidebar_position: 5
+sidebar_position: 1
 ---
 
-# Use @codebase-analyzer agent
+# Use `@codebase-analyzer` agent
 
 
 > Analyzes codebase implementation details. Call the codebase-analyzer agent when you need to find detailed information about specific components. As always, the more detailed your request prompt, the better! :)

@@ -3,16 +3,18 @@ title: "Fix - Maintain working dir"
 sidebar_position: 18
 ---
 
-# If you find Claude Code struggle with working dir
+# Maintain Working Directory
 
-Use `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR`
+## Problem
 
-You may have noticed that Claude gets really confused about its current directory after doing that.
+By default, when `cd` is used in a bash command, it changes the current working directory permanently for the rest of the session. This can cause Claude Code to lose track of the project root directory, leading to confusion in subsequent commands and file operations.
 
-The problem is that cd changes the current working directory permanently (for the rest of the session). So any steps after that will also use the new CWD. Which Claude does not expect.
+## Solution
 
-Anyway they recently added a flag to change this:
+Enable the `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR` flag to automatically reset the working directory to the project root after each bash command:
 
 ```bash
 export CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1
 ```
+
+This ensures that Claude Code always maintains its working directory at the project root, regardless of any `cd` commands executed during the session.

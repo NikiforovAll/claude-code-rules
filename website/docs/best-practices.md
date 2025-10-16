@@ -1,5 +1,5 @@
 ---
-title: "Best Practices"
+title: "🎯 Best Practices"
 sidebar_position: 1
 description: "A guide to effective development patterns and techniques using Claude Code"
 keywords: [best practices, claude code, development]

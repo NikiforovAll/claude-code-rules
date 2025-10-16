@@ -5,3 +5,5 @@ A collection of [Claude Code](https://docs.anthropic.com/en/docs/claude-code/ove
 Learn practical techniques to enhance your AI-assisted development workflow with Claude Code.
 
 ![](./assets/handbook-demo.png)
+
+See: [Claude Code Handbook](https://nikiforovall.blog/claude-code-rules/)

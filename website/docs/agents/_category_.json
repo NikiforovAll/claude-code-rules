@@ -1,0 +1,10 @@
+{
+  "label": "🤖 Agents",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "title": "Agents",
+    "description": "Specialized AI agents for Claude Code workflows",
+    "keywords": ["agents", "subagents", "specialized", "workflows"]
+  }
+}

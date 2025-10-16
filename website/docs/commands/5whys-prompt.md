@@ -1,6 +1,6 @@
 ---
 title: "Use the 5 Whys Technique"
-sidebar_position: 10
+sidebar_position: 4
 ---
 
 You can use the "Five Whys" root cause analysis technique to deeply understand problems. Just add this prompt to your `.claude/commands` folder as `five-whys.md` and use `/five-whys` command inside Claude Code.
