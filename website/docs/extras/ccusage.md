@@ -1,6 +1,6 @@
 ---
 title: "Use ccusage"
-sidebar_position: 17
+sidebar_position: 4
 ---
 
 # Use ccusage

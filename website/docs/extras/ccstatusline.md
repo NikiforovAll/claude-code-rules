@@ -1,6 +1,6 @@
 ---
 title: "Use ccstatusline"
-sidebar_position: 17
+sidebar_position: 3
 ---
 
 # Use ccstatusline

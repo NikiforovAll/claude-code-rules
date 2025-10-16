@@ -22,7 +22,7 @@ Claude Code is self-aware and driven by human language. So many discrete capabil
    - "Extract the content of this website and summarize it"
 - **Understand limitations** by testing boundaries
 
-> 💡 You can go even further and setup [Claude Code Docs](/tips-and-tricks/claude-code-docs) to enhance Claude Code with `/docs` and work with most recent documentation directly from Claude Code.
+> 💡 You can go even further and setup [Claude Code Docs](/extras/claude-code-docs) to enhance Claude Code with `/docs` and work with most recent documentation directly from Claude Code.
 
 ---
 

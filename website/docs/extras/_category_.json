@@ -1,0 +1,10 @@
+{
+  "label": "✨Extras",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "title": "✨Extras",
+    "description": "Community tools, advanced utilities, and extensions for Claude Code",
+    "keywords": ["tools", "utilities", "extensions", "community", "advanced"]
+  }
+}

@@ -76,12 +76,12 @@ npx create-docusaurus@latest website classic
 - `docs/tips-and-tricks/resume-rewind.md`
 - `docs/tips-and-tricks/bash-mode.md`
 - `docs/tips-and-tricks/prompt-libraries.md`
-- `docs/tips-and-tricks/taskmaster.md`
-- `docs/tips-and-tricks/claude-code-docs.md`
+- `docs/extras/taskmaster.md`
+- `docs/extras/claude-code-docs.md`
 - `docs/tips-and-tricks/bash-working-dir.md`
-- `docs/tips-and-tricks/ccusage.md`
-- `docs/tips-and-tricks/ccstatusline.md`
-- `docs/tips-and-tricks/ccoutputstyles.md`
+- `docs/extras/ccusage.md`
+- `docs/extras/ccstatusline.md`
+- `docs/extras/ccoutputstyles.md`
 - `docs/tips-and-tricks/feature-dev-loop.md`
 
 **Rationale**:

@@ -1,6 +1,6 @@
 ---
 title: "Use ccdocs"
-sidebar_position: 17
+sidebar_position: 5
 ---
 
 # Use Claude Code Docs

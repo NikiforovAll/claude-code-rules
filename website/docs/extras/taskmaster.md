@@ -1,6 +1,6 @@
 ---
 title: "Use TaskMaster"
-sidebar_position: 16
+sidebar_position: 2
 ---
 
 # Use TaskMaster

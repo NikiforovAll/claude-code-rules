@@ -1,9 +1,9 @@
 ---
-title: "See Awesome Claude Code"
-sidebar_position: 25
+title: "Use Awesome Claude Code"
+sidebar_position: 7
 ---
 
-# See Awesome Claude Code
+# Use Awesome Claude Code
 
 [Awesome Claude Code](https://github.com/hesreallyhim/awesome-claude-code) - a curated list of prompts, agents, and resources related to Claude Code.
 

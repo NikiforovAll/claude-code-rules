@@ -1,6 +1,6 @@
 ---
 title: "Use Spec Kit"
-sidebar_position: 16
+sidebar_position: 1
 ---
 
 # Use Spec Kit
