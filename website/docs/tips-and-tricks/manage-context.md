@@ -1,6 +1,6 @@
 ---
 title: "Manage Context"
-sidebar_position: 4
+sidebar_position: 3
 ---
 
 The **context window** refers to the entirety of the amount of text a language model can look back on and reference when generating new text plus the new text it generates. This is different from the large corpus of data the language model was trained on, and instead represents a **working memory** for the model. It includes your messages, Claude's responses, file contents, and tool outputs. 

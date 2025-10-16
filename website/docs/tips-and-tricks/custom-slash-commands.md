@@ -1,6 +1,6 @@
 ---
 title: "Create Custom Slash Commands"
-sidebar_position: 7
+sidebar_position: 6
 ---
 
 # Create Custom Slash Commands

@@ -1,20 +1,24 @@
 ---
 title: "Use Plugins"
-sidebar_position: 13
+sidebar_position: 9
 ---
 
 # Use Plugins
 
 Claude Code plugins are custom collections of extension points that can be installed with a single command. They allow you to bundle and share development workflows, tools, and best practices.
 
+> 💡 Plugins work across both terminal and VS Code environments, making them a portable way to customize your Claude Code experience.
+
+
 ## What are Plugins?
 
-Plugins can include four main types of customizations:
+Plugins can include five main types of customizations:
 
 1. **Slash commands** - Custom shortcuts for frequently-used operations
 2. **Subagents** - Purpose-built agents for specialized development tasks
-3. **MCP servers** - Connections to tools and data sources through the Model Context Protocol
-4. **Hooks** - Customizations to Claude Code's behavior at key workflow points
+3. **Skills** - Model-invoked capabilities that Claude autonomously triggers based on context
+4. **MCP servers** - Connections to tools and data sources through the Model Context Protocol
+5. **Hooks** - Customizations to Claude Code's behavior at key workflow points
 
 ## Installing Plugins
 
@@ -46,4 +50,6 @@ These examples demonstrate best practices and common patterns for building your 
 
 For detailed information about creating and using plugins, see the [official announcement](https://www.anthropic.com/news/claude-code-plugins).
 
-> 💡 Plugins work across both terminal and VS Code environments, making them a portable way to customize your Claude Code experience.
+## Related Topics
+
+- [Use Agent Skills](/tips-and-tricks/agent-skills) - Learn about model-invoked Skills that extend Claude's capabilities

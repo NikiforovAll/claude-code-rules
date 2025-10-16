@@ -1,6 +1,6 @@
 ---
 title: "Manage Sessions"
-sidebar_position: 5
+sidebar_position: 4
 ---
 
 Use `/rewind` to rewind a conversation. You will be prompted to select from recent sessions and then a point in the conversation history to rewind to. The code and context will be restored to that point.

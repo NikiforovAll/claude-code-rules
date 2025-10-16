@@ -1,6 +1,6 @@
 ---
 title: "Mount Directories"
-sidebar_position: 24
+sidebar_position: 14
 ---
 
 # Mount Directories
