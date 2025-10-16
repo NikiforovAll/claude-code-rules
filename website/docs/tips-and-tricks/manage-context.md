@@ -23,6 +23,7 @@ As context windows fill up, LLM performance actually decreases. Models become le
 
 ## Additional References
 
+- [Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) - Anthropic's comprehensive guide to context engineering techniques
 - See amazing [Advanced Context Engineering for Agents](https://www.youtube.com/watch?v=IS_y40zY-hc)
 - [advanced-context-engineering-for-coding-agents](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents)
 - [12-factor-agents](https://github.com/humanlayer/12-factor-agents)
