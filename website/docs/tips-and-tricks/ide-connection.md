@@ -1,6 +1,6 @@
 ---
 title: "Connect to IDE"
-sidebar_position: 13
+sidebar_position: 15
 ---
 
 # Connect to IDE

@@ -1,6 +1,6 @@
 ---
 title: "Structured Note-Taking"
-sidebar_position: 10
+sidebar_position: 12
 ---
 
 Structured note-taking is a powerful technique where Claude regularly writes notes that persist outside the context window. These notes can be retrieved later when needed, providing persistent memory and building institutional knowledge over time.
