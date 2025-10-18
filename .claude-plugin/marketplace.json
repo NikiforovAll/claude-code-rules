@@ -1,11 +1,13 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "Claude Code Handbook Marketplace",
-  "description": "Official marketplace for Claude Code Handbook plugins and extensions",
+  "name": "cc-handbook-marketplace",
   "version": "1.0.0",
   "owner": {
     "name": "nikiforovall",
-    "email": "https://github.com/nikiforovall"
+    "email": "nikiforovall@github.com"
+  },
+  "metadata": {
+    "description": "Official marketplace for Claude Code Handbook plugins and extensions",
+    "version": "1.0.0"
   },
   "repository": "https://github.com/nikiforovall/claude-code-rules",
   "plugins": [
@@ -17,7 +19,7 @@
         "name": "nikiforovall",
         "url": "https://github.com/nikiforovall"
       },
-      "source": "https://github.com/nikiforovall/claude-code-rules/tree/main/plugins/cc-handbook",
+      "source": "./plugins/cc-handbook",
       "category": "productivity",
       "tags": ["handbook", "best-practices", "development", "tools", "commands", "agents"],
       "homepage": "https://nikiforovall.blog/claude-code-rules/",
@@ -31,7 +33,7 @@
         "name": "nikiforovall",
         "url": "https://github.com/nikiforovall"
       },
-      "source": "https://github.com/nikiforovall/claude-code-rules/tree/main/plugins/cc-handbook-extras",
+      "source": "./plugins/cc-handbook-extras",
       "category": "extensions",
       "tags": ["experimental", "extras", "extensions", "community"],
       "homepage": "https://nikiforovall.blog/claude-code-rules/",
