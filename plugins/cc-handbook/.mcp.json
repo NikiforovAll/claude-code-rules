@@ -1,9 +1,5 @@
 {
   "mcpServers": {
-    "microsoft.docs.mcp": {
-      "type": "http",
-      "url": "https://learn.microsoft.com/api/mcp"
-    },
     "context7": {
       "type": "stdio",
       "command": "npx",
@@ -16,12 +12,6 @@
       "command": "npx",
       "args": [
         "@playwright/mcp@latest"
-      ]
-    },
-    "chrome-devtools": {
-      "command": "npx",
-      "args": [
-        "chrome-devtools-mcp@latest"
       ]
     }
   }

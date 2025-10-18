@@ -23,7 +23,7 @@ Generate a pros&cons prompt
 hint: use this guide - https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices
 ```
 
-For more comprehensive approach for prompt generation see [Prompt Generator - Meta Prompting](/commands/prompt-generator).
+For more comprehensive approach for prompt generation see [Prompt Generator - Meta Prompting](/component-reference/commands/prompt-generator).
 
 
 ## Example: `/explain`

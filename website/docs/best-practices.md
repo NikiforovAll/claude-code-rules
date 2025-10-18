@@ -22,44 +22,6 @@ Claude Code is self-aware and driven by human language. So many discrete capabil
    - "Extract the content of this website and summarize it"
 - **Understand limitations** by testing boundaries
 
-> 💡 You can go even further and setup [Claude Code Docs](/extras/claude-code-docs) to enhance Claude Code with `/docs` and work with most recent documentation directly from Claude Code.
-
----
-
-## 🔎Explore → 📃Plan → 🤖Implement → 🧪Evaluate
-
-This is a structured multi-stage approach for implementing features with Claude Code based on Plan Mode and Context Priming (aka Context Grounding).
-
-**When to use:** New features, bug fixes, refactoring tasks. This is your daily driver for structured development.
-
-**Stage 1: Context Priming**
-- Research and understand the problem space
-- Provide Claude with proper context about the codebase
-- Share requirements and implementation details
-- Help Claude understand existing patterns and architecture
-
-**Stage 2: Planning**
-- Use Claude Code's **Plan Mode** to create an implementation plan
-- Review the plan thoroughly before proceeding
-- Ensure all edge cases and requirements are covered
-
-**Stage 3: Implementation**
-- Let Claude Code follow the plan autonomously
-- Monitor progress and inspect changes as they happen
-- Provide additional context or course-correct if needed
-
-**Stage 4: Evaluation**
-- Enable Claude Code to evaluate the task outcome
-- Use unit tests and integration tests for validation
-- For frontend changes, use Playwright or similar tools to verify visual results
-- Find a way to somehow close the feedback loop and give feedback to Claude
-
-> 💡 Act as a supervisor during implementation - stay engaged but let Claude work through the plan independently.
-
-> 💡 The evaluation stage is crucial - having automated tests or visual verification tools ready before starting saves time and ensures quality.
-
-More at [Extended Plan Mode](/tips-and-tricks/extended-plan-mode).
-
 ---
 
 ## 📝 Prompt Engineering
@@ -78,7 +40,9 @@ But it is good idea to have a good understanding of general prompt engineering p
 * Explanation using Analogies
 * Debate-style questions (ask argument for and against to have more understanding)
 
-> 💡 In Claude Code you can apply your knowledge of prompt engineering when you create [Custom Slash Commands](./tips-and-tricks/custom-slash-commands) and [Subagents](./tips-and-tricks/subagents)
+:::tip
+In Claude Code you can apply your knowledge of prompt engineering when you create [Custom Slash Commands](./tips-and-tricks/custom-slash-commands) and [Subagents](./tips-and-tricks/subagents)
+:::
 
 More guides at [Prompt Engineering Guide](https://www.promptingguide.ai/), [Learn Prompting](https://learnprompting.org/docs/introduction)
 
@@ -93,29 +57,64 @@ More guides at [Prompt Engineering Guide](https://www.promptingguide.ai/), [Lear
 - Perform prior code base/feature exploration and ask Claude to focus on relevant parts
 - Use web search and MCPs to gather additional context and information
 
-> 💡 Be aware of context limits and how it may impact the quality of responses. It is better to keep your context short and focused.
+:::tip
+Be aware of context limits and how it may impact the quality of responses. It is better to keep your context short and focused.
+:::
 
-> 💡 Use MCP servers for latest/authoritative information. E.g.: [Microsoft Docs MCP](https://learn.microsoft.com/en-us/training/support/mcp), [Context7](https://context7.com/)
+:::tip
+Use MCP servers for latest/authoritative information. E.g.: [Microsoft Docs MCP](https://learn.microsoft.com/en-us/training/support/mcp), [Context7](https://context7.com/)
+:::
 
-> 💡 Explicitly mention relevant tools and resources that could assist Claude in understanding the context better.
+:::tip
+Explicitly mention relevant tools and resources that could assist Claude in understanding the context better.
+:::
 
-> 💡 Hint Claude in the right direction. E.g.: "Hint: you might want to check relevant tests for this functionality"
+:::tip
+Hint Claude in the right direction. E.g.: "Hint: you might want to check relevant tests for this functionality"
+:::
 
 See [Manage Context](/tips-and-tricks/manage-context) for more information about context window and strategies for effective context management.
 
 ---
 
-## 🧠 Brainstorming & Ideation
+## 🧠 Problem Solving
 
 Use Claude Code to brainstorm and generate ideas for complex problems. Treat it as a peer developer that can provide multiple perspectives, give you fresh ideas and provide constructive feedback.
 
 - Ask Claude to brainstorm multiple approaches and iterate on ideas
 - Use generated ideas as grounding context for subsequent prompts
 - Build on previous suggestions rather than starting from scratch
+- Leverage specialized [agents](/tips-and-tricks/subagents) and [commands](/tips-and-tricks/custom-slash-commands) for problem solving and exploration:
+  - [`@pair-programmer`](/component-reference/agents/pair-programmer) - explore multiple solution approaches with complexity rankings
+  - [`@system-architect`](/component-reference/agents/system-architect) - architectural brainstorming and scalability design
+  - [`@root-cause-analyst`](/component-reference/agents/root-cause-analyst) - systematic investigation of complex problems
+  - [`@deep-research-agent`](/component-reference/agents/deep-research-agent) - comprehensive research and information gathering
+  - [`/explain`](/component-reference/commands/explain) - understand existing concepts and patterns
+  - [`/five-whys`](/component-reference/commands/5whys-prompt) - root cause analysis through structured questioning
+  - [`/prompt-generator`](/component-reference/commands/prompt-generator) - craft effective prompts for complex scenarios
 
-> 💡 Be direct in a way you interact with LLM. E.g.: "give me 3 results and compare pros and cons for each result using markdown tables"
+:::tip
+Be direct in a way you interact with LLM. E.g.: "give me 3 results and compare pros and cons for each result using markdown tables"
+:::
 
-> 💡 For common tasks, you can create re-usable slash commands to help you to describe your problem solving approach, e.g.: `/five` command - Use the "Five Whys" root cause analysis technique
+---
+
+## 🧪 Experiment with Different Approaches
+
+Don't be afraid to try multiple implementation strategies when working on a feature. If one approach doesn't work, discard it and try another.
+
+- **Try different implementations**: Experiment with various techniques and patterns to solve the same problem
+- **Discard and restart**: Don't hesitate to throw away an approach that isn't working - use git to safely rewind
+- **Reference existing code**: Investigate your codebase for similar patterns, utilities, and solutions to leverage
+- **Learn from failures**: Each failed attempt teaches you something about the problem domain
+
+:::tip
+Use `/rewind` to backtrack to previous conversation states and try different approaches. See [Manage Sessions](/tips-and-tricks/manage-sessions)
+:::
+
+:::tip
+Commit frequently so you can easily revert changes and try alternative solutions. See [Commit Frequently](/tips-and-tricks/commit-frequently)
+:::
 
 ---
 ## ⚙️ Know How to Customize Claude

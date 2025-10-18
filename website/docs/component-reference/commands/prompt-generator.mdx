@@ -1,0 +1,33 @@
+---
+title: "/prompt-generator"
+sidebar_position: 1
+---
+
+import PromptGeneratorSource from '!!raw-loader!../../../../plugins/cc-handbook-extras/commands/prompt-generator.md'
+import CodeBlock from '@theme/CodeBlock';
+
+
+
+# Use `/prompt-generator`
+
+<span className="badge badge--secondary">cc-handbook-extras</span>
+
+Generate effective prompts for Claude 4.5 Sonnet to achieve user-defined outcomes using expert prompt engineering techniques.
+
+This command transforms your input into well-crafted prompts that elicit optimal responses from Claude Sonnet 4.5. Use `/prompt-generator` command inside Claude Code to access this functionality.
+
+## Command Specification
+
+<CodeBlock language="markdown">
+{PromptGeneratorSource}
+</CodeBlock>
+
+## How to Use
+
+Simply invoke the command with your desired outcome:
+
+```
+/prompt-generator I want to analyze code quality and suggest improvements
+```
+
+The command will transform your input into an effective, well-structured prompt optimized for Claude Sonnet 4.5.

@@ -16,6 +16,10 @@ Learn structured approaches to development, context engineering techniques, and 
 ### 💡 [Tips & Tricks](/tips-and-tricks/use-cc-alias)
 Discover practical shortcuts, advanced features, and productivity hacks to enhance your Claude Code workflow.
 
+### 🔌 [Plugins](/plugins)
+Discover and install Claude Code Handbook plugins - tools and agents to enhance your development workflow.
+
+
 ## 🎓 Getting Started
 
 If you're new to Claude Code, we recommend starting with:

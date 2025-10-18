@@ -95,6 +95,11 @@ const config: Config = {
           position: 'left',
         },
         {
+          to: '/plugins',
+          label: '🔌 Plugins',
+          position: 'right',
+        },
+        {
           href: 'https://github.com/nikiforovall/claude-code-rules',
           className: 'header-github-link',
           'aria-label': 'GitHub repository',

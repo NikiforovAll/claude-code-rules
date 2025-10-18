@@ -29,9 +29,13 @@ A structured multi-stage approach for implementing features with Claude Code:
 
 **When to use:** Complex feature development requiring multiple steps and verification. Ideal for production code where quality and correctness are critical.
 
-💡 Act as a supervisor during implementation - stay engaged but let Claude work through the plan independently.
+:::tip
+Act as a supervisor during implementation - stay engaged but let Claude work through the plan independently.
+:::
 
-💡 The evaluation stage is crucial - having automated tests or visual verification tools ready before starting saves time and ensures quality.
+:::tip
+The evaluation stage is very important - having automated tests or visual verification tools ready before starting saves time and ensures quality.
+:::
 
 ```mermaid
 flowchart TD

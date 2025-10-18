@@ -1,0 +1,14 @@
+{
+  "name": "cc-handbook",
+  "version": "1.0.0",
+  "description": "Core Claude Code handbook with best practices and essential tools",
+  "author": {
+    "name": "nikiforovall",
+    "url": "https://github.com/nikiforovall"
+  },
+  "homepage": "https://nikiforovall.blog/claude-code-rules/",
+  "repository": "https://github.com/nikiforovall/claude-code-rules",
+  "license": "MIT",
+  "keywords": ["handbook", "best-practices", "productivity", "development", "tools"],
+  "mcpServers": "./.mcp.json"
+}

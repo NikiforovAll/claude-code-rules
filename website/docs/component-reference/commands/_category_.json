@@ -1,6 +1,6 @@
 {
-  "label": "⚡ Commands",
-  "position": 3,
+  "label": "Commands",
+  "position": 1,
   "link": {
     "type": "generated-index",
     "title": "Commands",

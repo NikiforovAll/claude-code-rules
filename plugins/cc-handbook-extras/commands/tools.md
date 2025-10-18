@@ -1,6 +1,5 @@
 ---
 description: List Claude Code Tools
-
 ---
 
 List available Claude Code tools for various development tasks. 

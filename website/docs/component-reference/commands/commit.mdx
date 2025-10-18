@@ -1,0 +1,44 @@
+---
+title: "/commit"
+sidebar_position: 2
+---
+
+import CommitCommandSource from '!!raw-loader!../../../../plugins/cc-handbook/commands/commit.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `/commit`
+
+<span className="badge badge--primary">cc-handbook</span>
+
+Create well-formatted git commits with conventional commit messages and emojis using the `/commit` command.
+
+This command streamlines your git workflow by automatically staging files, running pre-commit checks, and generating descriptive commit messages that follow conventional commit format.
+
+## Command Specification
+
+<CodeBlock language="markdown">
+{CommitCommandSource}
+</CodeBlock>
+
+## Example Commit Messages
+
+```
+✨ feat(auth): add OAuth2 authentication support
+
+Implement OAuth2 flow to support third-party login providers.
+This replaces the custom token-based authentication system.
+```
+
+```
+🐛 fix(api): handle null values in user profile endpoint
+
+Prevent crashes when user profile data contains null fields.
+Fixes #123
+```
+
+```
+📝 docs: update installation guide with Windows instructions
+
+Add step-by-step instructions for Windows users including
+PowerShell-specific commands and common troubleshooting tips.
+```
