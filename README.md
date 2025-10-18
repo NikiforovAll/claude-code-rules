@@ -21,7 +21,7 @@ Use Claude Code's `/plugin` command for the quickest installation:
 
 ```bash
 # Add the marketplace (one-time setup)
-/plugin marketplace add https://github.com/nikiforovall/claude-code-rules
+/plugin marketplace add nikiforovall/claude-code-rules
 
 # Install core plugin
 /plugin install cc-handbook
