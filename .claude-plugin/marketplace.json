@@ -12,7 +12,7 @@
   "repository": "https://github.com/nikiforovall/claude-code-rules",
   "plugins": [
     {
-      "name": "core",
+      "name": "handbook",
       "version": "1.0.0",
       "description": "Core Claude Code handbook with best practices and essential tools",
       "author": {
@@ -26,7 +26,7 @@
       "strict": true
     },
     {
-      "name": "extras",
+      "name": "handbook-extras",
       "version": "1.0.0",
       "description": "Extended features and experimental tools for Claude Code Handbook",
       "author": {
