@@ -170,4 +170,9 @@ description: Create conventional git commits (feat, fix, docs) with descriptive 
 ## Reference
 
 For more information, see the official documentation:
+- [Introducing Agent Skills](https://www.anthropic.com/news/skills)
 - [Claude Code Skills Documentation](https://docs.claude.com/en/docs/claude-code/skills)
+- [Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
+- [anthropics/skills](https://github.com/anthropics/skills)
+- [Claude Skills Cookbook](https://github.com/anthropics/claude-cookbooks/tree/main/skills)
+- ⭐ [Skill authoring best practices](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/best-practices)
