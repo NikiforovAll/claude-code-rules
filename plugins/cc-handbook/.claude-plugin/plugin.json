@@ -10,5 +10,6 @@
   "repository": "https://github.com/nikiforovall/claude-code-rules",
   "license": "MIT",
   "keywords": ["handbook", "best-practices", "productivity", "development", "tools"],
-  "mcpServers": "./.mcp.json"
+  "mcpServers": "./.mcp.json",
+  "skills": ["./skills/skill-creator"]
 }
