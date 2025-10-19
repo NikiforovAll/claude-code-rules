@@ -1,6 +1,6 @@
 {
   "name": "handbook-extras",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Extended features and experimental tools for Claude Code Handbook",
   "author": {
     "name": "nikiforovall",
@@ -9,5 +9,11 @@
   "homepage": "https://nikiforovall.blog/claude-code-rules/",
   "repository": "https://github.com/nikiforovall/claude-code-rules",
   "license": "MIT",
-  "keywords": ["handbook", "extras", "experimental", "extensions", "tools"]
+  "keywords": [
+    "handbook",
+    "extras",
+    "experimental",
+    "extensions",
+    "tools"
+  ]
 }

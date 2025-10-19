@@ -2,6 +2,13 @@
 
 All notable changes to the Claude Code Handbook plugin are documented in this file.
 
+## [1.0.1] - 2025-10-19
+
+### Added
+- Version bump skill for automated release version management
+- Python scripts for atomic version updates across the monorepo
+- Version consistency validation tooling
+
 ## [1.0.0] - 2025-10-18
 
 ### Added
