@@ -13,3 +13,4 @@ sidebar_position: 7
 - [VoltAgent/awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents)
 - [langgptai/awesome-claude-prompts](https://github.com/langgptai/awesome-claude-prompts)
 - [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates)
+- [wshobson/agents](https://github.com/wshobson/agents)
