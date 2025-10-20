@@ -2,6 +2,21 @@
 
 All notable changes to the Claude Code Handbook plugin are documented in this file.
 
+## [1.1.0] - 2025-10-20
+
+### Added
+- New `cc-handbook-dotnet` plugin with automatic CSharpier formatting for C# files
+- PostToolUse hook for automatic code formatting on file writes and edits
+- Dynamic CSharpier executable detection (local and global installations)
+- Comprehensive documentation for the dotnet plugin and hooks
+- Website documentation for hooks in Component Reference section
+
+### Changed
+- Modernized version-bump skill to support dynamic plugin discovery
+- Updated version-bump script to use new marketplace location (`.claude-plugin/marketplace.json`)
+- Version management now automatically discovers all plugins from marketplace manifest
+- Improved scalability for adding future plugins
+
 ## [1.0.1] - 2025-10-19
 
 ### Added

@@ -18,15 +18,16 @@ Trigger this skill when users mention:
 
 ## Version Management Overview
 
-The monorepo maintains versions in 5 locations that must stay synchronized:
+The monorepo maintains versions across multiple locations that must stay synchronized:
 
-1. `marketplace/marketplace.json` - Marketplace version
-2. `marketplace/marketplace.json` - cc-handbook plugin entry
-3. `marketplace/marketplace.json` - cc-handbook-extras plugin entry
-4. `plugins/cc-handbook/.claude-plugin/plugin.json`
-5. `plugins/cc-handbook-extras/.claude-plugin/plugin.json`
+1. `.claude-plugin/marketplace.json` - Marketplace metadata version
+2. `.claude-plugin/marketplace.json` - Plugin entries (currently 3 plugins)
+3. Individual plugin.json files for each plugin:
+   - `plugins/cc-handbook/.claude-plugin/plugin.json`
+   - `plugins/cc-handbook-extras/.claude-plugin/plugin.json`
+   - `plugins/cc-handbook-dotnet/.claude-plugin/plugin.json`
 
-This skill ensures all locations are updated atomically and remain consistent.
+The skill automatically discovers all plugins from the marketplace manifest and updates them dynamically, ensuring all locations are updated atomically and remain consistent.
 
 ## Workflow Instructions
 
@@ -123,9 +124,10 @@ After successful completion:
    Version bump completed successfully!
 
    Changes made:
-   - marketplace/marketplace.json
+   - .claude-plugin/marketplace.json
    - plugins/cc-handbook/.claude-plugin/plugin.json
    - plugins/cc-handbook-extras/.claude-plugin/plugin.json
+   - plugins/cc-handbook-dotnet/.claude-plugin/plugin.json
    - CHANGELOG.md
 
    Next steps:
@@ -171,9 +173,10 @@ Claude: "Version bump completed successfully!
 - New version: 1.0.1
 
 Files updated:
-- marketplace/marketplace.json
+- .claude-plugin/marketplace.json
 - plugins/cc-handbook/.claude-plugin/plugin.json
 - plugins/cc-handbook-extras/.claude-plugin/plugin.json
+- plugins/cc-handbook-dotnet/.claude-plugin/plugin.json
 - CHANGELOG.md
 
 Next steps:

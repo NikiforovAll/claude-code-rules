@@ -22,7 +22,7 @@ Extended features and experimental tools for advanced use cases.
 
 ## <span className="badge badge--success">cc-handbook-dotnet</span>
 
-.NET development tools with automatic CSharpier formatting for C# files.
+.NET development tools and automatic CSharpier formatting for C# files.
 
 **Features:**
 - Automatic C# code formatting after file edits

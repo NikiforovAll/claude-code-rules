@@ -34,9 +34,27 @@ if sys.platform == 'win32':
 class VersionBumper:
     def __init__(self, repo_root: Path):
         self.repo_root = repo_root
-        self.marketplace_path = repo_root / "marketplace" / "marketplace.json"
-        self.cc_handbook_path = repo_root / "plugins" / "cc-handbook" / ".claude-plugin" / "plugin.json"
-        self.cc_handbook_extras_path = repo_root / "plugins" / "cc-handbook-extras" / ".claude-plugin" / "plugin.json"
+        self.marketplace_path = repo_root / ".claude-plugin" / "marketplace.json"
+
+    def discover_plugins(self) -> List[Dict]:
+        """Discover all plugins from marketplace.json dynamically."""
+        marketplace_data = self.read_json(self.marketplace_path)
+        plugins = []
+
+        for plugin_entry in marketplace_data.get('plugins', []):
+            plugin_name = plugin_entry.get('name')
+            source = plugin_entry.get('source')  # e.g., "./plugins/cc-handbook"
+
+            if plugin_name and source:
+                # Convert relative path to absolute
+                plugin_json_path = self.repo_root / source.lstrip('./') / ".claude-plugin" / "plugin.json"
+                plugins.append({
+                    'name': plugin_name,
+                    'path': plugin_json_path,
+                    'marketplace_entry': plugin_entry
+                })
+
+        return plugins
 
     def parse_version(self, version_str: str) -> Tuple[int, int, int]:
         """Parse semantic version string into (major, minor, patch) tuple."""
@@ -87,7 +105,9 @@ class VersionBumper:
 
         # Read marketplace.json
         marketplace_data = self.read_json(self.marketplace_path)
-        versions['marketplace'] = marketplace_data.get('version')
+        marketplace_version = marketplace_data.get('metadata', {}).get('version')
+        if marketplace_version:
+            versions['marketplace'] = marketplace_version
 
         # Read plugin versions from marketplace.json
         for plugin in marketplace_data.get('plugins', []):
@@ -95,12 +115,17 @@ class VersionBumper:
             if plugin_name:
                 versions[f'marketplace.plugins.{plugin_name}'] = plugin.get('version')
 
-        # Read individual plugin.json files
-        cc_handbook_data = self.read_json(self.cc_handbook_path)
-        versions['cc-handbook.plugin'] = cc_handbook_data.get('version')
+        # Read individual plugin.json files dynamically
+        plugins = self.discover_plugins()
+        for plugin_info in plugins:
+            plugin_name = plugin_info['name']
+            plugin_path = plugin_info['path']
 
-        cc_handbook_extras_data = self.read_json(self.cc_handbook_extras_path)
-        versions['cc-handbook-extras.plugin'] = cc_handbook_extras_data.get('version')
+            if plugin_path.exists():
+                plugin_data = self.read_json(plugin_path)
+                versions[f'{plugin_name}.plugin'] = plugin_data.get('version')
+            else:
+                print(f"⚠️  Warning: Plugin file not found: {plugin_path}")
 
         return versions
 
@@ -149,23 +174,26 @@ class VersionBumper:
 
         # Update marketplace.json
         marketplace_data = self.read_json(self.marketplace_path)
-        marketplace_data['version'] = new_version_str
+        if 'metadata' in marketplace_data and 'version' in marketplace_data['metadata']:
+            marketplace_data['metadata']['version'] = new_version_str
         for plugin in marketplace_data.get('plugins', []):
             plugin['version'] = new_version_str
         self.write_json(self.marketplace_path, marketplace_data)
         print(f"✓ Updated {self.marketplace_path}")
 
-        # Update cc-handbook plugin.json
-        cc_handbook_data = self.read_json(self.cc_handbook_path)
-        cc_handbook_data['version'] = new_version_str
-        self.write_json(self.cc_handbook_path, cc_handbook_data)
-        print(f"✓ Updated {self.cc_handbook_path}")
+        # Update all plugin.json files dynamically
+        plugins = self.discover_plugins()
+        for plugin_info in plugins:
+            plugin_path = plugin_info['path']
+            plugin_name = plugin_info['name']
 
-        # Update cc-handbook-extras plugin.json
-        cc_handbook_extras_data = self.read_json(self.cc_handbook_extras_path)
-        cc_handbook_extras_data['version'] = new_version_str
-        self.write_json(self.cc_handbook_extras_path, cc_handbook_extras_data)
-        print(f"✓ Updated {self.cc_handbook_extras_path}")
+            if plugin_path.exists():
+                plugin_data = self.read_json(plugin_path)
+                plugin_data['version'] = new_version_str
+                self.write_json(plugin_path, plugin_data)
+                print(f"✓ Updated {plugin_path}")
+            else:
+                print(f"⚠️  Warning: Plugin file not found: {plugin_path}")
 
         # Verify consistency after update
         print("\nVerifying consistency...")
