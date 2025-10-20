@@ -53,3 +53,7 @@ Docusaurus-based documentation site deployed at [nikiforovall.blog/claude-code-r
 - Source docs in `website/docs/`
 - Configuration in `website/docusaurus.config.js`
 - Build and deploy via standard Docusaurus commands
+
+## IMPORTANT
+
+**Do not modify:** `TIPS-AND-TRICKS.md` and `BEST-PRACTICES.md` (obsolete, website is source of truth)

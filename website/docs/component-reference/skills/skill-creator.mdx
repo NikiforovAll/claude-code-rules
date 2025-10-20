@@ -1,0 +1,55 @@
+---
+title: "skill-creator"
+sidebar_position: 1
+---
+
+import SkillCreatorSource from '!!raw-loader!../../../../plugins/cc-handbook/skills/skill-creator/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `skill-creator` skill
+
+<span className="badge badge--primary">cc-handbook</span>
+
+Guide for creating effective skills that extend Claude's capabilities with specialized knowledge, workflows, and tool integrations.
+
+The `skill-creator` skill helps you design and implement custom skills for Claude Code. Skills are modular packages that provide specialized workflows, domain expertise, and bundled resources (scripts, references, and assets) for specific tasks or domains.
+
+## When to Use This Skill
+
+Use the `skill-creator` skill when you want to:
+
+- Create a new skill from scratch
+- Update or improve an existing skill
+- Transform repeated workflows into reusable capabilities
+- Package domain-specific knowledge for Claude to use
+- Bundle scripts, documentation, or assets for recurring tasks
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{SkillCreatorSource}
+</CodeBlock>
+
+## Key Concepts
+
+### Skill Anatomy
+
+Skills consist of:
+- **SKILL.md** (required): Metadata and instructions in YAML frontmatter + Markdown
+- **scripts/** (optional): Executable code for deterministic tasks
+- **references/** (optional): Documentation loaded into context as needed
+- **assets/** (optional): Files used in output (templates, boilerplate, etc.)
+
+### Progressive Disclosure
+
+Skills use a three-level loading system:
+1. Metadata (name + description) - Always in context
+2. SKILL.md body - When skill triggers
+3. Bundled resources - As needed by Claude
+
+## Example Use Cases
+
+- **PDF Editor**: Include `scripts/rotate_pdf.py` for deterministic PDF operations
+- **BigQuery Helper**: Store table schemas in `references/schema.md` for easy reference
+- **Frontend Builder**: Bundle HTML/React boilerplate in `assets/hello-world/`
+- **Brand Guidelines**: Store company assets and style guides for consistent output
