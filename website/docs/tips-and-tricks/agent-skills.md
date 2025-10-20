@@ -1,9 +1,9 @@
 ---
-title: "Use Agent Skills"
+title: "Use Custom Agent Skills"
 sidebar_position: 9
 ---
 
-# Use Agent Skills
+# Use Custom Agent Skills
 
 Agent Skills are modular capabilities that extend Claude's functionality through organized folders containing instructions, scripts, and resources. They enable teams to package expertise into discoverable, reusable components.
 

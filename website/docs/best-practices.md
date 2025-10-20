@@ -113,7 +113,7 @@ Use `/rewind` to backtrack to previous conversation states and try different app
 :::
 
 :::tip
-Commit frequently so you can easily revert changes and try alternative solutions. See [Commit Frequently](/tips-and-tricks/commit-frequently)
+Commit frequently so you can easily revert changes and try alternative solutions. See [Commit Frequently](/tips-and-tricks/miscellaneous/commit-frequently)
 :::
 
 ---

@@ -1,9 +1,9 @@
 ---
-title: "Create Custom Slash Commands"
+title: "Use Custom Slash Commands"
 sidebar_position: 7
 ---
 
-# Create Custom Slash Commands
+# Use Custom Slash Commands
 
 You can create [custom slash commands](https://docs.claude.com/en/docs/claude-code/slash-commands) to streamline your workflow in Claude Code. It makes sense to create reusable commands for tasks you perform frequently.
 

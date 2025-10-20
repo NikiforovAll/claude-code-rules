@@ -1,9 +1,9 @@
 ---
-title: "Create Custom Subagents"
+title: "Use Custom Subagents"
 sidebar_position: 8
 ---
 
-# Create Custom Subagents
+# Use Custom Subagents
 
 Create and use specialized AI subagents in Claude Code for task-specific workflows and improved context management.
 
