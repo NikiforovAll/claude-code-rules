@@ -1,19 +1,19 @@
 {
   "name": "cc-handbook",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "owner": {
     "name": "nikiforovall",
     "email": "nikiforovall@github.com"
   },
   "metadata": {
     "description": "Official marketplace for Claude Code Handbook plugins and extensions",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "repository": "https://github.com/nikiforovall/claude-code-rules",
   "plugins": [
     {
       "name": "handbook",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Core Claude Code handbook with best practices and essential tools",
       "author": {
         "name": "nikiforovall",
@@ -21,13 +21,20 @@
       },
       "source": "./plugins/cc-handbook",
       "category": "productivity",
-      "tags": ["handbook", "best-practices", "development", "tools", "commands", "agents"],
+      "tags": [
+        "handbook",
+        "best-practices",
+        "development",
+        "tools",
+        "commands",
+        "agents"
+      ],
       "homepage": "https://nikiforovall.blog/claude-code-rules/",
       "strict": true
     },
     {
       "name": "handbook-extras",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Extended features and experimental tools for Claude Code Handbook",
       "author": {
         "name": "nikiforovall",
@@ -35,7 +42,33 @@
       },
       "source": "./plugins/cc-handbook-extras",
       "category": "extensions",
-      "tags": ["experimental", "extras", "extensions", "community"],
+      "tags": [
+        "experimental",
+        "extras",
+        "extensions",
+        "community"
+      ],
+      "homepage": "https://nikiforovall.blog/claude-code-rules/",
+      "strict": true
+    },
+    {
+      "name": "handbook-dotnet",
+      "version": "1.0.1",
+      "description": ".NET development tools including automatic CSharpier formatting for C# files",
+      "author": {
+        "name": "nikiforovall",
+        "url": "https://github.com/nikiforovall"
+      },
+      "source": "./plugins/cc-handbook-dotnet",
+      "category": "development",
+      "tags": [
+        "dotnet",
+        "csharp",
+        "formatting",
+        "csharpier",
+        "hooks",
+        "automation"
+      ],
       "homepage": "https://nikiforovall.blog/claude-code-rules/",
       "strict": true
     }

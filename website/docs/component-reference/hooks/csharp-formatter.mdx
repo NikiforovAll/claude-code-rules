@@ -1,0 +1,87 @@
+---
+title: "CSharpier Formatter"
+sidebar_position: 1
+---
+
+import CodeBlock from '@theme/CodeBlock';
+
+# CSharpier Auto-Formatter Hook
+
+<span className="badge badge--success">cc-handbook-dotnet</span>
+
+Automatically format C# files after Claude creates or edits them using CSharpier.
+
+This PostToolUse hook integrates CSharpier formatting into your Claude Code workflow, ensuring consistent code style without manual intervention.
+
+## How It Works
+
+The hook triggers after Claude uses the `Write` or `Edit` tools:
+
+1. **Detects C# files**: Only processes files with `.cs` extension
+2. **Runs CSharpier**: Executes `dotnet csharpier format <file>` with optimized flags
+3. **Non-blocking**: Shows warnings if formatting fails, but doesn't interrupt Claude's workflow
+
+## Hook Configuration
+
+```json
+{
+  "description": "Automatic CSharpier formatting for C# files",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/format-csharp.sh\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### CSharpier Options Used
+
+- `--skip-validation`: Skip validation for better performance
+- `--compilation-errors-as-warnings`: Format code even with compilation errors
+
+## Prerequisites
+
+CSharpier must be installed on your system:
+
+```bash
+# Install globally
+dotnet tool install -g csharpier
+
+# Verify installation
+dotnet csharpier --version
+```
+
+## Formatting Fails
+
+**Debug manually:**
+```bash
+dotnet csharpier format path/to/file.cs --skip-validation --compilation-errors-as-warnings
+```
+
+Or make sure `jq` is installed. The hook script requires `jq` for JSON parsing.
+
+## Performance Considerations
+
+- **`--skip-validation`**: Skips re-parsing formatted code for significant speed improvements
+- **Timeout**: 30 seconds (configurable in `hooks.json`)
+- **Parallel execution**: Hook runs asynchronously, doesn't block Claude
+
+## Related Documentation
+
+- [CSharpier Documentation](https://csharpier.com/)
+- [Claude Code Hooks Guide](https://docs.claude.com/en/docs/claude-code/hooks-guide)
+- [PostToolUse Hook Reference](https://docs.claude.com/en/docs/claude-code/hooks#posttooluse)
+
+## See Also
+
+- [cc-handbook-dotnet Plugin](/plugins#cc-handbook-dotnet)
+- [Understanding Building Blocks](/tips-and-tricks/understanding-building-blocks)

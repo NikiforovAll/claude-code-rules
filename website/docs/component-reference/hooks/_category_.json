@@ -1,0 +1,10 @@
+{
+  "label": "Hooks",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "title": "Hooks",
+    "description": "Automated hooks that trigger on specific events in Claude Code",
+    "keywords": ["hooks", "automation", "post-tool-use", "formatting"]
+  }
+}

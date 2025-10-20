@@ -1,0 +1,17 @@
+{
+  "description": "Automatic CSharpier formatting for C# files",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/format-csharp.sh\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

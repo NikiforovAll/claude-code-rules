@@ -1,0 +1,20 @@
+{
+  "name": "handbook-dotnet",
+  "version": "1.0.1",
+  "description": ".NET development tools including automatic CSharpier formatting for C# files",
+  "author": {
+    "name": "nikiforovall",
+    "url": "https://github.com/nikiforovall"
+  },
+  "homepage": "https://nikiforovall.blog/claude-code-rules/",
+  "repository": "https://github.com/nikiforovall/claude-code-rules",
+  "license": "MIT",
+  "keywords": [
+    "dotnet",
+    "csharp",
+    "formatting",
+    "csharpier",
+    "development",
+    "tools"
+  ]
+}

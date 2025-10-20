@@ -20,6 +20,18 @@ Extended features and experimental tools for advanced use cases.
 - Experimental functionality playground
 - Compatible with cc-handbook
 
+## <span className="badge badge--success">cc-handbook-dotnet</span>
+
+.NET development tools with automatic CSharpier formatting for C# files.
+
+**Features:**
+- Automatic C# code formatting after file edits
+- PostToolUse hook integration with CSharpier
+- Non-blocking workflow (warnings don't interrupt Claude)
+
+**Prerequisites:**
+- CSharpier must be installed (`dotnet tool install csharpier`)
+
 ---
 
 ## Understanding Building Blocks
@@ -41,10 +53,13 @@ Use Claude Code's `/plugin` command for the quickest installation:
 /plugin marketplace add nikiforovall/claude-code-rules
 
 # Install core plugin
-/plugin install cc-handbook
+/plugin install handbook
 
 # Install extras plugin
-/plugin install cc-handbook-extras
+/plugin install handbook-extras
+
+# Install .NET plugin
+/plugin install handbook-dotnet
 ```
 
 ### Direct Installation from Source
@@ -61,6 +76,9 @@ cd claude-code-rules
 
 # Install extras plugin
 /plugin install ./plugins/cc-handbook-extras
+
+# Install .NET plugin
+/plugin install ./plugins/cc-handbook-dotnet
 ```
 
 ## Contributing

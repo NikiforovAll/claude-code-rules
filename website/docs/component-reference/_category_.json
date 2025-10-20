@@ -4,7 +4,7 @@
   "link": {
     "type": "generated-index",
     "title": "Component Reference",
-    "description": "Reference documentation for Claude Code Handbook components including commands, agents, and skills",
-    "keywords": ["components", "commands", "agents", "skills", "reference"]
+    "description": "Reference documentation for Claude Code Handbook components including commands, agents, skills, and hooks",
+    "keywords": ["components", "commands", "agents", "skills", "hooks", "reference"]
   }
 }

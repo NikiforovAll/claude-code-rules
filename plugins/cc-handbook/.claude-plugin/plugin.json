@@ -16,7 +16,6 @@
     "development",
     "tools"
   ],
-  "mcpServers": "./.mcp.json",
   "skills": [
     "./skills/skill-creator"
   ]
