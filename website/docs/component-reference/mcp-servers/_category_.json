@@ -1,0 +1,10 @@
+{
+  "label": "MCP Servers",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "title": "MCP Servers",
+    "description": "Model Context Protocol servers integrated with Claude Code plugins",
+    "keywords": ["mcp", "servers", "integrations", "protocol", "context"]
+  }
+}

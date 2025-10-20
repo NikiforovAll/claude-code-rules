@@ -15,22 +15,9 @@ Core plugin with essential tools and best practices for Claude Code development.
 
 Extended features and experimental tools for advanced use cases.
 
-**Features:**
-- Ready for community contributions
-- Experimental functionality playground
-- Compatible with cc-handbook
-
 ## <span className="badge badge--success">cc-handbook-dotnet</span>
 
 .NET development tools and automatic CSharpier formatting for C# files.
-
-**Features:**
-- Automatic C# code formatting after file edits
-- PostToolUse hook integration with CSharpier
-- Non-blocking workflow (warnings don't interrupt Claude)
-
-**Prerequisites:**
-- CSharpier must be installed (`dotnet tool install csharpier`)
 
 ---
 

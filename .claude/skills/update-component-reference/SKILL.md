@@ -1,17 +1,17 @@
 ---
 name: update-component-reference
-description: This skill should be used when the user wants to add components (commands, agents, or skills) to the Component Reference section of the website.
+description: This skill should be used when the user wants to add components (commands, agents, skills, hooks, or MCP servers) to the Component Reference section of the website.
 ---
 
 # Update Component Reference Skill
 
-Add documentation for Claude Code components (commands, agents, skills) to the website's Component Reference section.
+Add documentation for Claude Code components (commands, agents, skills, hooks, MCP servers) to the website's Component Reference section.
 
 ## When to Use
 
 Use this skill when the user requests to:
 - Add a new component to the Component Reference documentation
-- Document a newly created command, agent, or skill
+- Document a newly created command, agent, skill, hook, or MCP server
 - Update component documentation in the reference section
 
 ## Prerequisites Checklist
@@ -22,6 +22,8 @@ Before documenting a component, ensure:
    - Commands: `plugins/cc-handbook/commands/{name}.md`
    - Agents: `plugins/cc-handbook/agents/{name}.md`
    - Skills: `plugins/cc-handbook/skills/{name}/SKILL.md`
+   - Hooks: `plugins/{plugin-name}/hooks/hooks.json` and hook scripts
+   - MCP Servers: `plugins/{plugin-name}/.mcp.json`
 
 2. **For skills only**: Component is registered in plugin.json:
    ```json
@@ -33,7 +35,7 @@ Before documenting a component, ensure:
    }
    ```
 
-3. **Verify plugin name**: Check `.claude-plugin/plugin.json` for the badge (usually "cc-handbook")
+3. **Verify plugin name**: Check `.claude-plugin/plugin.json` for the badge (e.g., "cc-handbook", "cc-handbook-dotnet")
 
 ## Implementation Process
 
@@ -44,6 +46,8 @@ Component documentation goes in: `website/docs/component-reference/{type}/`
 - Commands → `website/docs/component-reference/commands/`
 - Agents → `website/docs/component-reference/agents/`
 - Skills → `website/docs/component-reference/skills/`
+- Hooks → `website/docs/component-reference/hooks/`
+- MCP Servers → `website/docs/component-reference/mcp-servers/`
 
 All category directories and `_category_.json` files already exist for these types.
 
@@ -62,6 +66,8 @@ grep -h "sidebar_position:" website/docs/component-reference/skills/*.mdx | sort
 - Command `/commit` → `commit.mdx`
 - Agent `@backend-architect` → `backend-architect.mdx`
 - Skill `skill-creator` → `skill-creator.mdx`
+- Hook `csharp-formatter` → `csharp-formatter.mdx`
+- MCP Server `context7` → `context7.mdx`
 
 ### Step 4: Write MDX Content
 
@@ -168,27 +174,102 @@ Use the `skill-name` skill when you want to:
 - Related skills
 ```
 
-### Step 5: Verify Import Paths
+#### Hooks Template
 
-Double-check the raw-loader import path matches the component location:
+```mdx
+---
+title: "Hook Name"
+sidebar_position: N
+---
+
+# Hook Name
+
+<span className="badge badge--success">plugin-name</span>
+
+Brief description (1-2 sentences).
+
+## Configuration
+
+```json
+{ hook config from hooks.json }
+```
+
+## Use Cases
+
+- Bullet points
+
+## Installation
+
+Setup notes.
+
+## Related
+
+- Links
+```
+
+#### MCP Servers Template
+
+```mdx
+---
+title: "server-name"
+sidebar_position: N
+---
+
+# Server Name MCP Server
+
+<span className="badge badge--primary">plugin-name</span>
+
+Brief description (1-2 sentences).
+
+## Configuration
+
+```json
+{ config from .mcp.json }
+```
+
+## Coverage
+
+- Bullet list
+
+## Example Usage
+
+```
+"Example query"
+```
+
+## Installation
+
+Setup notes.
+
+## Related
+
+- Links
+```
+
+### Step 5: Verify Import Paths (Commands, Agents, Skills Only)
+
+**Note**: Hooks and MCP Servers show configuration directly (no raw-loader imports needed).
+
+For commands, agents, and skills, double-check the raw-loader import path:
 
 - Commands: `'!!raw-loader!../../../../plugins/cc-handbook/commands/{name}.md'`
 - Agents: `'!!raw-loader!../../../../plugins/cc-handbook/agents/{name}.md'`
 - Skills: `'!!raw-loader!../../../../plugins/cc-handbook/skills/{name}/SKILL.md'` ⚠️ Note the `/SKILL.md` suffix
 
-The import path goes up 4 directories (`../../../../`) from the `.mdx` file to reach the repo root.
+The path goes up 4 directories (`../../../../`) from the `.mdx` file to reach the repo root.
 
 ## Common Pitfalls
 
 1. **Forgetting plugin.json registration for skills**
    - Skills MUST be in plugin.json or they won't be available
-   - Commands and agents are auto-discovered, skills are not
+   - Commands, agents, hooks, and MCP servers are auto-discovered
 
 2. **Incorrect import paths**
    - Skills use `/SKILL.md` suffix: `skills/{name}/SKILL.md`
    - Commands and agents use `.md` directly: `commands/{name}.md`
+   - Hooks and MCP servers don't use raw-loader (show config directly)
 
-3. **Wrong relative path depth**
+3. **Wrong relative path depth (commands, agents, skills only)**
    - Always use 4 levels up: `../../../../`
    - Path starts from the `.mdx` file location
 
@@ -196,18 +277,24 @@ The import path goes up 4 directories (`../../../../`) from the `.mdx` file to r
    - File names should match component names exactly (kebab-case)
    - Title in frontmatter should include prefix (`/` for commands, `@` for agents)
 
+5. **Wrong plugin badge**
+   - Verify badge matches the plugin in `.claude-plugin/plugin.json`
+   - cc-handbook uses `badge--primary`
+   - cc-handbook-dotnet uses `badge--success`
+
 ## Quick Reference
 
-### Import Variable Naming Convention
+### Import Variable Naming Convention (Commands, Agents, Skills)
 Match the component name in PascalCase + "Source":
 - `commit.md` → `CommitCommandSource`
 - `backend-architect.md` → `BackendArchitectAgentSource`
 - `skill-creator/SKILL.md` → `SkillCreatorSource`
 
-### Badge
-Most components use: `<span className="badge badge--primary">cc-handbook</span>`
+**Note**: Hooks and MCP servers don't use imports.
 
-Change the text to match the plugin name if documenting a different plugin.
+### Badge
+- cc-handbook: `<span className="badge badge--primary">cc-handbook</span>`
+- cc-handbook-dotnet: `<span className="badge badge--success">cc-handbook-dotnet</span>`
 
 ## Example Workflow
 

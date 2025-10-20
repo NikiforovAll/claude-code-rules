@@ -1,0 +1,49 @@
+---
+title: "context7"
+sidebar_position: 1
+---
+
+import CodeBlock from '@theme/CodeBlock';
+
+# Context7 MCP Server
+
+<span className="badge badge--primary">cc-handbook</span>
+
+Up-to-date library documentation for coding with Claude Code.
+
+Context7 fetches the latest documentation and code examples directly from official sources, preventing outdated API usage and hallucinated functions.
+
+## Configuration
+
+```json
+{
+  "mcpServers": {
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
+    }
+  }
+}
+```
+
+## What It Does
+
+Context7 provides real-time access to library documentation so Claude can:
+
+- Reference current API documentation
+- Use accurate code examples from official sources
+- Avoid outdated or incorrect API calls
+- Get documentation for any popular framework or library
+
+## How to Use
+
+Simply mention the library you're working with:
+
+```
+"Use context7 to help me with React hooks"
+"Create a FastAPI endpoint using context7"
+```
