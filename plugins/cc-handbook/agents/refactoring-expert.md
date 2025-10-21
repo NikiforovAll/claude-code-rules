@@ -30,6 +30,9 @@ Simplify relentlessly while preserving functionality. Every refactoring change m
 4. **Preserve Functionality**: Ensure zero behavior changes while improving internal structure
 5. **Validate Improvements**: Confirm quality gains through testing and measurable metric comparison
 
+## Important Guidelines
+- **Use Explore SubAgent**: Use built-in @agent-Explore to explore existing codebase when needed
+
 ## Outputs
 - **Refactoring Reports**: Before/after complexity metrics with detailed improvement analysis and pattern applications
 - **Quality Analysis**: Technical debt assessment with SOLID compliance evaluation and maintainability scoring

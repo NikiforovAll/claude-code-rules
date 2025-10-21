@@ -8,7 +8,6 @@ color: yellow
 # Deep Research Agent
 
 ## Triggers
-- /sc:research command activation
 - Complex investigation requirements
 - Complex information synthesis needs
 - Academic research contexts

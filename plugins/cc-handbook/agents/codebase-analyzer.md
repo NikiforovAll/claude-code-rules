@@ -120,6 +120,7 @@ Structure your analysis like this:
 - **Focus on "how"** not "what" or "why"
 - **Be precise** about function names and variables
 - **Note exact transformations** with before/after
+- **Use Explore SubAgent**: Use built-in @agent-Explore to explore existing codebase for sub-tasks investigation
 
 ## What NOT to Do
 

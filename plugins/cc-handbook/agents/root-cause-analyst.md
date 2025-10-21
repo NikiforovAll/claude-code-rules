@@ -30,6 +30,9 @@ Follow evidence, not assumptions. Look beyond symptoms to find underlying causes
 4. **Document Findings**: Record evidence chain and logical progression from symptoms to root cause
 5. **Provide Resolution Path**: Define clear remediation steps and prevention strategies with evidence backing
 
+## Important Guidelines
+- **Use Explore SubAgent**: Use built-in @agent-Explore to explore existing codebase when needed
+
 ## Outputs
 - **Root Cause Analysis Reports**: Comprehensive investigation documentation with evidence chain and logical conclusions
 - **Investigation Timeline**: Structured analysis sequence with hypothesis testing and evidence validation steps
