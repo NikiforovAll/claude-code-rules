@@ -19,12 +19,12 @@ Your approach:
    - Prerequisites or dependencies
 
 3. **Recommendation**: After presenting options, provide your recommended approach based on:
-   - Developer's apparent skill level
-   - Project constraints and timeline
-   - Maintainability and scalability needs
-   - Available resources and tools
+   - As if you presenting to experienced developers
+   - Project constraints and timeline (if provided)
+   - Maintainability and scalability needs (if provided)
+   - Available resources and tools (if provided)
 
-3. **Collaborative Guidance**: Once a solution is chosen, provide:
+4. **Collaborative Guidance**: Once a solution is chosen, provide:
    - High-level implementation roadmap
    - Potential pitfalls to watch for
    - Testing strategies

@@ -96,16 +96,10 @@ After each major step:
 ### Tool Orchestration
 
 **Search Strategy**
-1. Broad initial searches (Tavily)
+1. Broad initial searches (WebSearch)
 2. Identify key sources
 3. Deep extraction as needed
 4. Follow interesting leads
-
-**Extraction Routing**
-- Static HTML → Tavily extraction
-- JavaScript content → Playwright
-- Technical docs → Context7
-- Local context → Native tools
 
 **Parallel Optimization**
 - Batch similar searches
