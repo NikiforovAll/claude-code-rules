@@ -1,4 +1,4 @@
-# 🤖 Claude Code Handbook
+# 📖 [Claude Code Handbook](https://nikiforovall.blog/claude-code-rules/)
 
 A collection of [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) recommendations and practices.
 
@@ -12,6 +12,7 @@ This repository contains two plugins:
 
 - **`cc-handbook`** - Core plugin with best practices, commands, agents, and MCP integrations
 - **`cc-handbook-extras`** - Experimental and extended features plugin
+- **`cc-handbook-dotnet`** - .NET-specific development skillset
 
 Plus a marketplace for centralized plugin discovery and installation.
 
@@ -28,4 +29,7 @@ Use Claude Code's `/plugin` command for the quickest installation:
 
 # Install extras plugin
 /plugin install cc-handbook-extras
+
+# Install dotnet plugin
+/plugin install cc-handbook-dotnet
 ```
