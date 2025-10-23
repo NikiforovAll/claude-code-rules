@@ -2,6 +2,14 @@
 
 All notable changes to the Claude Code Handbook plugin are documented in this file.
 
+## [1.2.0] - 2025-10-23
+
+### Added
+- New `@git-diff-analyzer` agent in `cc-handbook-extras` plugin for analyzing git branch differences
+- Agent generates concise, one-page summaries with file statistics and high-level change descriptions
+- Component reference documentation for the git-diff-analyzer agent
+- Uses Haiku model for fast, cost-efficient branch comparisons
+
 ## [1.1.0] - 2025-10-20
 
 ### Added

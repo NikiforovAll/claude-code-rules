@@ -1,0 +1,75 @@
+---
+title: "@git-diff-analyzer"
+sidebar_position: 8
+description: "Analyze differences between git branches and generate clear, concise summaries of code changes"
+---
+
+import GitDiffAnalyzerAgentSource from '!!raw-loader!../../../../plugins/cc-handbook-extras/agents/git-diff-analyzer.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `@git-diff-analyzer` agent
+
+<span className="badge badge--warning">cc-handbook-extras</span>
+
+Fast, focused agent for analyzing git branch differences and generating concise summaries of code changes.
+
+The `@git-diff-analyzer` agent specializes in comparing branches and producing structured, one-page summaries showing file-level changes, statistics, and high-level impact analysis. It uses the Haiku model for speed and cost efficiency, making it ideal for routine PR reviews and quick branch comparisons.
+
+## When to Use This Agent
+
+Use the `@git-diff-analyzer` agent when you need to:
+
+- Generate quick summaries of branch differences for PR descriptions
+- Understand what changed when returning to a work-in-progress branch
+- Create concise change logs for team updates or documentation
+- Compare feature branches against develop/main before merging
+
+## Key Features
+
+- **Default branch**: Automatically compares against 'develop' (configurable)
+- **Structured output**: Consistent one-page format with branch comparison, statistics, file list, and summary
+- **File-level focus**: Shows what changed without diving into code details (unless requested)
+- **Fast execution**: Uses Haiku model for quick analysis
+
+## Agent Specification
+
+<CodeBlock language="markdown">
+{GitDiffAnalyzerAgentSource}
+</CodeBlock>
+
+## Example Usage
+
+**Basic usage** (compares current branch against develop):
+```
+Use @git-diff-analyzer to summarize my changes
+```
+
+**Custom target branch**:
+```
+Use @git-diff-analyzer to compare against main
+```
+
+## Output Format
+
+The agent produces a standardized output:
+
+```
+=== Branch Comparison ===
+Current: feature/authentication
+Target: develop
+
+Statistics: 7 files changed, 487 insertions(+), 123 deletions(-)
+
+=== Changed Files ===
+A  src/auth/LoginComponent.tsx (+145)
+M  src/auth/AuthService.ts (+89, -45)
+M  package.json (+3, -1)
+
+=== Summary ===
+[2-4 sentences describing the high-level purpose and impact]
+```
+
+## Related
+
+- [Use Custom Subagents](../../tips-and-tricks/subagents)
+- [@codebase-analyzer agent](./codebase-analyzer.mdx)
