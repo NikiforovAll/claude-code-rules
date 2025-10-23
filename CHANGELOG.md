@@ -2,6 +2,11 @@
 
 All notable changes to the Claude Code Handbook plugin are documented in this file.
 
+## [1.3.0] - 2025-10-24
+
+### Added
+- New `structured-plan-mode` skill in `cc-handbook-extras` plugin for systematic planning of complex feature implementations
+
 ## [1.2.0] - 2025-10-23
 
 ### Added
