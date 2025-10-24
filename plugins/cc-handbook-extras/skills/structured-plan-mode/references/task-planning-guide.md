@@ -9,7 +9,7 @@ The task template approach is designed to help you systematically break down com
 ## Core Philosophy
 
 ### 1. Research Before Implementation
-Always start with a **Phase 0: Research** phase:
+Always start with a **Research** phase:
 - Understand existing patterns in the codebase
 - Evaluate multiple approaches before committing
 - Document findings and rationale for decisions
@@ -36,14 +36,6 @@ Ask clarifying questions proactively when planning or implementing:
 **Why**: Prevents wasted effort on wrong assumptions and ensures alignment with user needs.
 
 **Tool**: Use the **AskUserQuestion** tool to gather decisions during execution.
-
-### 4. Phased Approach
-Break features into logical phases:
-- **Phase 1**: Foundation (core functionality)
-- **Phase 2**: Integration (connecting to existing systems)
-- **Phase 3**: Advanced features (nice-to-haves)
-
-**Why**: Enables early delivery of core value while deferring optional features.
 
 ## Template Structure Explained
 
@@ -161,7 +153,7 @@ Break features into logical phases:
 
 ### Step 1: Copy the Template
 ```bash
-cp docs/plan-template.md tasks/[feature-name]-plan.md (current project directory)
+cp assets/plan-template.md tasks/[feature-name]-plan.md (current project directory)
 ```
 
 ### Step 2: Fill in the Overview
@@ -169,17 +161,17 @@ cp docs/plan-template.md tasks/[feature-name]-plan.md (current project directory
 - Write a brief feature overview
 - Identify the main phases of work
 
-### Step 3: Create Phase 0 (Research)
+### Step 3: Create Research Section
 **Always start here**, even for "obvious" features:
 1. List what you need to research
 2. Document similar patterns in the codebase
-3. Evaluate multiple approaches (list pros/cons for each - 2-4 options)
+3. Evaluate multiple approaches (list pros/cons for each - 2-3 options)
 4. **Ask clarifying questions** via AskUserQuestion if approaches have different trade-offs
 5. **Get user confirmation** on selected approach
 6. **Document final decision** in "Selected Approach" section
 7. Create high-level implementation plan (5-7 steps)
 
-### Step 4: Break Down Implementation Tasks (AFTER Phase 0 Complete)
+### Step 4: Break Down Implementation Tasks (AFTER Research Complete)
 For each major component:
 1. Create implementation tasks (T001, T002, T003, ...T00N as needed)
 2. Define clear goal and requirements for each
@@ -191,13 +183,13 @@ For each major component:
 - Keep tasks focused (ideally 2-5 days each)
 - Tasks should be independently testable
 - Consider parallelization opportunities
-- ALL tasks should align with the approach selected in Phase 0
+- ALL tasks should align with the approach selected in research
 
 **Why**: Provides clear definition of "done" and prevents scope creep.
 
 ## Common Pitfalls to Avoid
 
-### 1. Skipping Research (Phase 0)
+### 1. Skipping Research
 ❌ **Don't**: Jump straight into implementation.
 ✅ **Do**: Always start with research, even for "simple" features.
 
@@ -281,7 +273,7 @@ When starting a new feature:
 
 1. [ ] Copy `plan-template.md` to `[feature]-plan.md`
 2. [ ] Fill in feature overview and goals
-3. [ ] Create Phase 0 (Research) and complete it first
+3. [ ] Create Research section and complete it first
 4. [ ] Break down implementation into 2-5 day tasks
 5. [ ] Define clear success criteria
 6. [ ] Plan sprints/phases
