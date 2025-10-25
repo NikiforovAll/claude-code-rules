@@ -47,6 +47,12 @@ Learn more: [Understanding Building Blocks](/fundamentals/understanding-building
 
 ---
 
+## Release History
+
+See the [Changelog](/changelog) for detailed release notes and version history.
+
+---
+
 ## Direct Installation from Source
 
 To install directly from the GitHub repository:

@@ -1,7 +1,5 @@
 # Changelog
 
-All notable changes to the Claude Code Handbook plugin are documented in this file.
-
 ## [1.3.1] - 2025-10-24
 
 ### Fixed
