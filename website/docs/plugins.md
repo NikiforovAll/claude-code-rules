@@ -7,17 +7,35 @@ sidebar_position: 3
 
 Claude Code Handbook provides two complementary plugins to enhance your AI-assisted development workflow.
 
+```bash
+# Add the marketplace
+/plugin marketplace add nikiforovall/claude-code-rules
+```
+
 ## <span className="badge badge--primary">cc-handbook</span>
 
 Core plugin with essential tools and best practices for Claude Code development.
+
+
+```bash
+/plugin install cc-handbook
+```
 
 ## <span className="badge badge--secondary">cc-handbook-extras</span>
 
 Extended features and experimental tools for advanced use cases.
 
+```bash
+/plugin install cc-handbook-extras
+```
+
 ## <span className="badge badge--success">cc-handbook-dotnet</span>
 
 .NET development tools and automatic CSharpier formatting for C# files.
+
+```bash
+/plugin install cc-handbook-dotnet
+```
 
 ---
 
@@ -29,27 +47,7 @@ Learn more: [Understanding Building Blocks](/tips-and-tricks/understanding-build
 
 ---
 
-## Installation
-
-### Quick Install via CLI
-
-Use Claude Code's `/plugin` command for the quickest installation:
-
-```bash
-# Add the marketplace (one-time setup)
-/plugin marketplace add nikiforovall/claude-code-rules
-
-# Install core plugin
-/plugin install handbook
-
-# Install extras plugin
-/plugin install handbook-extras
-
-# Install .NET plugin
-/plugin install handbook-dotnet
-```
-
-### Direct Installation from Source
+## Direct Installation from Source
 
 To install directly from the GitHub repository:
 

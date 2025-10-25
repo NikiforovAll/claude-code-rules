@@ -40,11 +40,10 @@ Plugins can be toggled on and off as needed, helping reduce system prompt comple
 
 ## Examples
 
-The Claude Code team maintains official plugin examples that you can learn from or use directly:
-
-[github.com/anthropics/claude-code/tree/main/plugins](https://github.com/anthropics/claude-code/tree/main/plugins)
-
-These examples demonstrate best practices and common patterns for building your own plugins.
+| Plugin Type | Description | Link |
+|-------------|-------------|------|
+| **Official Plugins** | Maintained by the Claude Code team with best practices and common patterns for building your own plugins | [anthropics/claude-code/plugins](https://github.com/anthropics/claude-code/tree/main/plugins) |
+| **Handbook Plugins** | Practical examples implementing the principles described in this handbook | [Claude Code Handbook Plugins](/plugins) |
 
 ## Learn More
 
