@@ -1,6 +1,6 @@
 ---
 title: "Incrementally Evolve Your CC Setup"
-sidebar_position: 10
+sidebar_position: 11
 ---
 
 # Incrementally Evolve Your CC Setup
