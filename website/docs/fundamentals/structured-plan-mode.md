@@ -17,7 +17,7 @@ Structured Plan Mode is a skill that guides you through a 6-phase methodology fo
 ```mermaid
 graph LR
     P1[Phase 1<br/>Setup] --> P2[Phase 2<br/>Research]
-    P2 --> P3[Phase 3<br/>Finalize Proposal]
+    P2 --> P3[Phase 3<br/>Finalize Selected Approach]
     P3 --> P4[Phase 4<br/>Create Tasks]
     P4 --> P5[Phase 5<br/>Implement]
     P5 --> P6[Phase 6<br/>Review]
@@ -49,8 +49,8 @@ Use Structured Plan Mode when:
 The skill enforces strict phase ordering:
 
 1. **Setup** - Create plan skeleton with research section
-2. **Research** - Explore codebase and iterate with user
-3. **Finalize Proposal** - Document selected approach
+2. **Research** - Explore codebase, propose strategies, and iterate with user
+3. **Finalize Selected Approach** - Document selected approach
 4. **Task Creation** - Break down into implementation tasks (T001-T00N)
 5. **Implementation** - Execute and track tasks
 6. **Review** - Document lessons learned
@@ -60,9 +60,9 @@ The skill enforces strict phase ordering:
 | Aspect | Extended Plan Mode | Structured Plan Mode |
 |--------|-------------------|---------------------|
 | **Use Case** | Small/Medium features | Complex implementations requiring systematic planning |
-| **Research** | Use Context Priming | Dedicated Phase 0 with iteration |
+| **Research** | Use Context Priming | Dedicated Research phase with iteration |
 | **User Involvement** | Review plan before implementation + `AskUserQuestion` | Active iteration during research phase using `AskUserQuestion` |
-| **Task Tracking** | `TodoWrite` for all tasks | **Phases** in `TodoWrite`, **Tasks** in plan doc |
+| **Task Tracking** | `TodoWrite` for tasks and milestones | `TodoWrite` for phases 1-4 only; tasks tracked in plan doc |
 | **Best For** | Production code with quality focus | Multi-component features with multiple approaches |
 
 ## Benefits

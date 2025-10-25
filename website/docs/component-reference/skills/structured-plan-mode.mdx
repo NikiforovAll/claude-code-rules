@@ -18,7 +18,7 @@ The `structured-plan-mode` skill provides a phased methodology for breaking down
 ```mermaid
 graph LR
     P1[Phase 1<br/>Setup] --> P2[Phase 2<br/>Research]
-    P2 --> P3[Phase 3<br/>Finalize]
+    P2 --> P3[Phase 3<br/>Finalize Selected Approach]
     P3 --> P4[Phase 4<br/>Create Tasks]
     P4 --> P5[Phase 5<br/>Implement]
     P5 --> P6[Phase 6<br/>Review]
@@ -55,9 +55,9 @@ Use the `structured-plan-mode` skill when you want to:
 
 The skill follows a strict 6-phase workflow:
 
-1. **Phase 1 - Setup**: Create plan skeleton with Phase 0 Research section
+1. **Phase 1 - Setup**: Create plan skeleton with Research section
 2. **Phase 2 - Research**: Explore codebase, propose strategies, iterate with user
-3. **Phase 3 - Finalize**: Document selected approach with rationale
+3. **Phase 3 - Finalize Selected Approach**: Document selected approach with rationale
 4. **Phase 4 - Task Creation**: Break down into implementation tasks (T001-T00N)
 5. **Phase 5 - Implementation**: Track task completion in plan document
 6. **Phase 6 - Review**: Document lessons learned
@@ -156,7 +156,7 @@ Tasks (T001, T002, etc.) are created **only in Phase 4**, after Phase 0 research
 - Use AskUserQuestion to present trade-offs
 - User confirms WebSockets approach
 
-**Phase 3**: Document selected approach with rationale in Phase 0
+**Phase 3**: Document selected approach with rationale in the Selected Approach section
 
 **Phase 4**: Create tasks:
 - T001: Implement WebSocket server
