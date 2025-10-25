@@ -1,0 +1,28 @@
+---
+title: "/tools"
+sidebar_position: 5
+description: "List Claude Code Tools"
+---
+
+import ToolsCommandSource from '!!raw-loader!../../../../plugins/cc-handbook-extras/commands/tools.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `/tools`
+
+<span className="badge badge--secondary">cc-handbook-extras</span>
+
+List available Claude Code tools for various development tasks using the `/tools` command.
+
+This command provides an organized inventory of both built-in tools and custom tools available in your Claude Code environment, including commands, agents, skills, and MCP servers. It helps you discover what capabilities are available for your development workflow.
+
+## Command Specification
+
+<CodeBlock language="markdown">
+{ToolsCommandSource}
+</CodeBlock>
+
+## Use Cases
+
+- **Discover available tools**: Quickly see what tools are available in your Claude Code setup
+- **Custom tool inventory**: Identify custom commands, agents, skills, and MCP servers configured in your project
+- **Development workflow**: Understand the full toolset at your disposal for development tasks

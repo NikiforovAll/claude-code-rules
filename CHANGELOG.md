@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.3.3] - 2025-10-25
+
+### Added
+- Component reference documentation for `/tools` command
+
 ## [1.3.2] - 2025-10-25
 
 ### Added
