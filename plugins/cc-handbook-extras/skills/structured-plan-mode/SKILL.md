@@ -30,15 +30,17 @@ Do NOT use this skill for:
 ### Phase 1: Initial Setup
 
 **Actions:**
-1. Copy `assets/plan-template.md` to `tasks/[feature-name]-plan.md` (current project directory)
-2. Replace `[Feature Name]` with your feature name
-3. Fill in basic overview and context
-4. Create Research section with:
+1. Create `.plans/[feature-name]/` directory (in current project directory)
+2. Copy `assets/plan-template.md` to `.plans/[feature-name]/plan.md`
+3. Create `.plans/[feature-name]/tasks/` directory for task files
+4. Replace `[Feature Name]` with your feature name in plan.md
+5. Fill in basic overview and context
+6. Create Research section with:
    - Goal
    - Context
    - Strategy Proposals (leave empty for now)
    - **Leave "Selected Approach" EMPTY**
-5. Create a todo list by using TodoWrite based on the phases below
+7. Create a todo list by using TodoWrite based on the phases below
 
 
 **TodoWrite tracks ONLY phases 1-4:**
@@ -46,12 +48,12 @@ Do NOT use this skill for:
 - [ ] Phase 1: Setup template with Research section
 - [ ] Phase 2: Conduct research and iterate with user
 - [ ] Phase 3: Finalize selected approach
-- [ ] Phase 4: Create implementation tasks (T001-T00N)
+- [ ] Phase 4: Create implementation tasks (T01-T0N)
 ```
 
 **Mark Phase 1 as completed in TodoWrite**
 
-**Output**: Skeleton plan document with only Research defined and todo list created for phases 1-4
+**Output**: Skeleton plan document with Research section defined and todo list created for phases 1-4
 
 ---
 
@@ -102,33 +104,44 @@ Do NOT use this skill for:
 ### Phase 4: Create Implementation Tasks (ONLY AFTER Phase 1-3 Complete)
 
 **Actions:**
-1. **NOW create T001, T002, T003, ...T00N** based on selected approach
-   - Number of tasks depends on complexity (simple: 1-2, medium: 3-5, complex: 5+)
-   - Break down into manageable chunks (2-5 days each)
-2. Each task should:
-   - Define clear, measurable goal
-   - List concrete requirements
-   - Identify integration points
-   - Specify action items and test scenarios
-   - Document dependencies
-3. Update Progress Summary at top to include all tasks
+**NOW create T01, T02, T03, ...T0N** as separate files in `.plans/[feature-name]/tasks/` based on selected approach
+
+- Number of tasks depends on complexity (simple: 1-2, medium: 3-5, complex: 5+)
+- Break down into manageable chunks (2-5 days each)
+
+**Step-by-Step: Creating a Task File**
+
+For each task you need to create:
+
+1. **Copy the template**:
+   ```bash
+   cp [path-to-task-template.md] .plans/[feature-name]/tasks/T01.md
+   ```
+2. **Update task header**: Replace `T0X` with actual task number (T01, T02, etc.)
+3. **Fill in core sections**:
+   - Goal: One clear, measurable objective
+   - Context: How it relates to the feature and selected approach
+   - Requirements: Detailed specifications with implementation steps
+   - Action Items: Specific checkboxes for work to complete
+4. **Update metadata**: Set Status (🟡 Planned), Effort (Small/Medium/Large), Blocked By
+5. **Add to Progress Summary**: Update plan.md with link: `- [ ] [**T01**: Task Name](tasks/T01.md) - Status: 🟡 Planned`
 
 **Mark Phase 4 as completed in TodoWrite**
 
-**Output**: Complete task breakdown (T001-T00N) aligned with selected approach
+**Output**: Complete task breakdown (T01.md - T0N.md files) in tasks/ folder, all linked from plan.md Progress Summary
 
 ---
 
 ### Phase 5: Track Throughout Implementation
 
-**Note**: Phase 5 is NOT tracked in TodoWrite. Track progress directly in the plan document.
+**Note**: Phase 5 is NOT tracked in TodoWrite. Track progress directly in task files and plan.md.
 
-As you implement tasks (T001, T002, etc.):
-- Check off action items as completed in the plan document
-- Update task status (🟡 Planned → 🟢 In Progress → ✅ Completed)
+As you implement tasks (T01, T02, etc.):
+- Check off action items as completed in the individual task files (tasks/T01.md, tasks/T02.md, etc.)
+- Update task status in both the task file AND the Progress Summary in plan.md (🟡 Planned → 🟢 In Progress → ✅ Completed)
 - Add newly discovered tasks/requirements
-- Fill in "Execution Summary" after each task
-- Note lessons learned
+- Fill in "Execution Summary" in each task file after completing the task
+- Note lessons learned in task files and in plan.md
 
 ---
 
@@ -149,19 +162,20 @@ After feature completion:
 - [ ] Phase 1: Setup template with Research section
 - [ ] Phase 2: Conduct research and iterate with user
 - [ ] Phase 3: Finalize selected approach
-- [ ] Phase 4: Create implementation tasks (T001-T00N)
+- [ ] Phase 4: Create implementation tasks (T01-T0N)
 ```
 
 **Phase-by-Phase Workflow:**
 
 1. **Phase 1 - Setup**:
-   - Copy template skeleton
-   - Create Research section ONLY
-   - DO NOT create T001, T002, T003 yet
+   - Create `.plans/[feature-name]/` and `.plans/[feature-name]/tasks/` directories
+   - Copy plan-template.md to `.plans/[feature-name]/plan.md`
+   - Create Research section ONLY in plan.md
+   - DO NOT create T01, T02, T03 task files yet
    - Mark Phase 1 complete in TodoWrite
 
 2. **Phase 2 - Research & Iterate** (AskUserQuestion REQUIRED):
-   - Explore codebase, document findings
+   - Explore codebase, document findings in plan.md
    - Present 2-3 approach options
    - **Iterate on EACH proposal** via AskUserQuestion (discuss trade-offs, clarify constraints)
    - User may correct assumptions - update research
@@ -171,22 +185,25 @@ After feature completion:
 
 3. **Phase 3 - Finalize**:
    - Present 2-3 researched approaches and ask user to select one
-   - Once user confirms, fill "Selected Approach" section
-   - Mark research as ✅ Completed in plan document
+   - Once user confirms, fill "Selected Approach" section in plan.md
+   - Mark research as ✅ Completed in plan.md
    - Mark Phase 3 complete once documentation is done
 
 4. **Phase 4 - Create Tasks**:
-   - NOW create T001, T002, T003, ...T00N based on selected approach
+   - NOW create T01.md, T02.md, T03.md, ...T0N.md files in `.plans/[feature-name]/tasks/`
+   - Copy task-template.md for each task file
+   - Fill in task details based on selected approach
    - Number of tasks depends on complexity
-   - Update Progress Summary
+   - Update Progress Summary in plan.md with links to task files
    - Mark Phase 4 complete in TodoWrite
 
 5. **Phase 5 - Implementation**:
-   - Track progress in plan document as tasks complete
-   - Update task statuses directly in the markdown file
+   - Track progress in individual task files (tasks/T01.md, etc.)
+   - Update task statuses in both task files AND plan.md Progress Summary
+   - Check off action items in task files as they complete
 
 6. **Phase 6 - Review**:
-   - Document lessons learned in plan document
+   - Document lessons learned in plan.md
 
 
 ## Key Patterns from Successful Use
@@ -214,7 +231,7 @@ Break large tasks into smaller chunks that are independently testable.
 
 ## Reference Materials
 
-For detailed guidance on template sections and best practices, refer to `references/task-planning-guide.md` when needed.
+For detailed guidance on template sections and best practices, refer to `references/usage-guide.md` when needed.
 
 ---
 
@@ -223,5 +240,5 @@ For detailed guidance on template sections and best practices, refer to `referen
 2. **Phases are sequential** - complete Phase 1 before Phase 2, etc.
 3. **Phase 2 is iterative** - use AskUserQuestion multiple times, expect back-and-forth
 4. **User confirms approach** - do NOT fill "Selected Approach" until user confirms
-5. **No premature planning** - T001-T00N created in Phase 4
-6. **Task count is flexible** - create as many as needed (T001, T002, ...T00N)
+5. **No premature planning** - T01-T0N created in Phase 4
+6. **Task count is flexible** - create as many as needed (T01, T02, ...T0N)

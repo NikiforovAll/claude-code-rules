@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.2] - 2025-10-25
+
+### Added
+- Task template file (`task-template.md`) for creating individual task documents in structured-plan-mode skill
+- Step-by-step task creation guidance with 5-step checklist in SKILL.md and usage guide
+
+### Changed
+- Improved plan-template.md clarity with comments for placeholders and updated timestamp format
+- Renamed `task-planning-guide.md` to `usage-guide.md` for better naming consistency
+
 ## [1.3.1] - 2025-10-24
 
 ### Fixed

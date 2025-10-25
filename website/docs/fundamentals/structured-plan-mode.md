@@ -48,12 +48,12 @@ Use Structured Plan Mode when:
 
 The skill enforces strict phase ordering:
 
-1. **Setup** - Create plan skeleton with research section
+1. **Setup** - Create `.plans/[feature-name]/` structure with plan.md and research section
 2. **Research** - Explore codebase, propose strategies, and iterate with user
-3. **Finalize Selected Approach** - Document selected approach
-4. **Task Creation** - Break down into implementation tasks (T001-T00N)
-5. **Implementation** - Execute and track tasks
-6. **Review** - Document lessons learned
+3. **Finalize Selected Approach** - Document selected approach in plan.md
+4. **Task Creation** - Break down into task files (T01.md - T0N.md) in `.plans/[feature-name]/tasks/`
+5. **Implementation** - Execute and track tasks in individual task files
+6. **Review** - Document lessons learned in plan.md
 
 ## Comparison with [Extended Plan Mode](./extended-plan-mode)
 
@@ -128,7 +128,7 @@ graph TB
 
 **Request**: "Add real-time collaboration to document editor"
 
-**Phase 1**: Create plan skeleton
+**Phase 1**: Create plan skeleton with Research section
 
 **Phase 2**:
 - Research WebSocket libraries, existing features
@@ -137,14 +137,14 @@ graph TB
 - Present trade-offs
 - User confirms the end of research
 
-**Phase 3**: Document WebSockets approach with rationale
+**Phase 3**: Document selected WebSockets approach with rationale
 
 - User confirms WebSockets
-- Document rationale and key information for WebSockets approach
+- Document rationale and key findings for WebSockets approach
 
-**Phase 4**: Create tasks (T001: WebSocket server, T002: Client handling, etc.)
+**Phase 4**: Create task files (T01.md: WebSocket server, T02.md: Client handling, etc.) in `.plans/collaboration-feature/tasks/`
 
-**Phase 5-6**: Implement and document lessons
+**Phase 5-6**: Implement and track progress in individual task files, document lessons
 
 ## Learn More
 
