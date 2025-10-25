@@ -43,7 +43,7 @@ Extended features and experimental tools for advanced use cases.
 
 Plugins help you to bundle related customizations, commands, and agents into reusable packages. This modular approach allows you to easily share and install sets of tools tailored for specific workflows or problem domains.
 
-Learn more: [Understanding Building Blocks](/tips-and-tricks/understanding-building-blocks)
+Learn more: [Understanding Building Blocks](/fundamentals/understanding-building-blocks)
 
 ---
 

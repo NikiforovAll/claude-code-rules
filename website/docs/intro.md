@@ -11,7 +11,10 @@ Welcome to **Claude Code Handbook** - your comprehensive guide to mastering Clau
 ## 📚 What You'll Find Here
 
 ### 🎯 [Best Practices](/best-practices)
-Learn structured approaches to development, context engineering techniques, and strategies for successful collaboration with Claude Code.
+Learn the best practices for using Claude Code effectively in your development workflow.
+
+### 📚 [Fundamentals](/fundamentals/understanding-building-blocks)
+Master the essential concepts and building blocks of Claude Code.
 
 ### 💡 [Tips & Tricks](/tips-and-tricks/use-cc-alias)
 Discover practical shortcuts, advanced features, and productivity hacks to enhance your Claude Code workflow.
@@ -24,7 +27,8 @@ Discover and install Claude Code Handbook plugins - tools and agents to enhance 
 
 If you're new to Claude Code, we recommend starting with:
 1. [Best Practices](/best-practices) - Understand the fundamentals
-2. [Tips & Tricks](/tips-and-tricks/use-cc-alias) - Practical shortcuts and productivity hacks
+2. [Fundamentals](/fundamentals/understanding-building-blocks) - Essential concepts and building blocks
+3. [Tips & Tricks](/tips-and-tricks/use-cc-alias) - Practical shortcuts and productivity hacks
 
 ## 🔗 Resources
 
@@ -33,4 +37,4 @@ If you're new to Claude Code, we recommend starting with:
 
 ---
 
-*Start exploring with the navigation menu on the left, or jump directly to [Best Practices](/best-practices) or [Tips & Tricks](/tips-and-tricks/use-cc-alias).*
+*Start exploring with the navigation menu on the left, or jump directly to [Best Practices](/best-practices), [Fundamentals](/fundamentals/understanding-building-blocks), or [Tips & Tricks](/tips-and-tricks/use-cc-alias).*

@@ -1,9 +1,9 @@
 ---
-title: "Install ripgrep for Faster Search"
+title: "Install ripgrep for faster search"
 sidebar_position: 14
 ---
 
-# Install `ripgrep` for Faster Search
+# Install `ripgrep` for faster search
 
 ## Grep Tool
 

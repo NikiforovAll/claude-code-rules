@@ -1,6 +1,6 @@
 ---
 title: "Use Plugins"
-sidebar_position: 11
+sidebar_position: 7
 ---
 
 # Use Plugins
@@ -51,4 +51,4 @@ For detailed information about creating and using plugins, see the [official ann
 
 ## Related Topics
 
-- [Use Agent Skills](/tips-and-tricks/agent-skills) - Learn about model-invoked Skills that extend Claude's capabilities
+- [Use Agent Skills](./agent-skills) - Learn about model-invoked Skills that extend Claude's capabilities

@@ -1,6 +1,6 @@
 ---
 title: "Use Custom Agent Skills"
-sidebar_position: 9
+sidebar_position: 5
 ---
 
 # Use Custom Agent Skills

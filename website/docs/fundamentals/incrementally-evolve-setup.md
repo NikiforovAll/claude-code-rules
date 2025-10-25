@@ -1,6 +1,6 @@
 ---
 title: "Incrementally Evolve Your CC Setup"
-sidebar_position: 12
+sidebar_position: 10
 ---
 
 # Incrementally Evolve Your CC Setup
@@ -106,7 +106,7 @@ The `skill-creator` skill handles:
 
 See the [skill-creator reference](/component-reference/skills/skill-creator) for complete details.
 
-For more on skills, see [Use Agent Skills](/tips-and-tricks/agent-skills)
+For more on skills, see [Use Agent Skills](./agent-skills)
 
 ## Best Practices
 

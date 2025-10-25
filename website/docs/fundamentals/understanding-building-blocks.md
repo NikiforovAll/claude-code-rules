@@ -1,6 +1,6 @@
 ---
 title: "Understanding Building Blocks"
-sidebar_position: 10
+sidebar_position: 6
 ---
 
 # Understanding Building Blocks

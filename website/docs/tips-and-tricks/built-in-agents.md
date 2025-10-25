@@ -72,6 +72,6 @@ Use Explore agent to find error handling code
 
 ## Related
 
-- [Subagents](../subagents.md) - Creating custom agents
+- [Subagents](../fundamentals/subagents.md) - Creating custom agents
 - [Tools List](./tools-list.md) - Available Claude Code tools
-- [Agent Skills](../agent-skills.md) - Advanced agent capabilities
+- [Agent Skills](../fundamentals/agent-skills.md) - Advanced agent capabilities

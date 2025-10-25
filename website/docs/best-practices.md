@@ -41,7 +41,7 @@ But it is good idea to have a good understanding of general prompt engineering p
 * Debate-style questions (ask argument for and against to have more understanding)
 
 :::tip
-In Claude Code you can apply your knowledge of prompt engineering when you create [Custom Slash Commands](./tips-and-tricks/custom-slash-commands) and [Subagents](./tips-and-tricks/subagents)
+In Claude Code you can apply your knowledge of prompt engineering when you create [Custom Slash Commands](./fundamentals/custom-slash-commands) and [Subagents](./fundamentals/subagents)
 :::
 
 More guides at [Prompt Engineering Guide](https://www.promptingguide.ai/), [Learn Prompting](https://learnprompting.org/docs/introduction)
@@ -73,7 +73,7 @@ Explicitly mention relevant tools and resources that could assist Claude in unde
 Hint Claude in the right direction. E.g.: "Hint: you might want to check relevant tests for this functionality"
 :::
 
-See [Manage Context](/tips-and-tricks/manage-context) for more information about context window and strategies for effective context management.
+See [Manage Context](/fundamentals/manage-context) for more information about context window and strategies for effective context management.
 
 ---
 
@@ -84,7 +84,7 @@ Use Claude Code to brainstorm and generate ideas for complex problems. Treat it 
 - Ask Claude to brainstorm multiple approaches and iterate on ideas
 - Use generated ideas as grounding context for subsequent prompts
 - Build on previous suggestions rather than starting from scratch
-- Leverage specialized [agents](/tips-and-tricks/subagents) and [commands](/tips-and-tricks/custom-slash-commands) for problem solving and exploration:
+- Leverage specialized [agents](/fundamentals/subagents) and [commands](/fundamentals/custom-slash-commands) for problem solving and exploration:
   - [`@pair-programmer`](/component-reference/agents/pair-programmer) - explore multiple solution approaches with complexity rankings
   - [`@system-architect`](/component-reference/agents/system-architect) - architectural brainstorming and scalability design
   - [`@root-cause-analyst`](/component-reference/agents/root-cause-analyst) - systematic investigation of complex problems
@@ -113,7 +113,7 @@ Use `/rewind` to backtrack to previous conversation states and try different app
 :::
 
 :::tip
-Commit frequently so you can easily revert changes and try alternative solutions. See [Commit Frequently](/tips-and-tricks/miscellaneous/commit-frequently)
+Commit frequently so you can easily revert changes and try alternative solutions. See [Commit Frequently](/tips-and-tricks/commit-frequently)
 :::
 
 ---

@@ -23,7 +23,7 @@ claude-code-rules/                    # Root monorepo
 │   │   ├── TIPS-AND-TRICKS.md
 │   │   └── README.md
 │   │
-│   └── cc-handbook-extras/           # Extras plugin (empty shell)
+│   └── cc-handbook-extras/           # Extras plugin
 │       ├── .claude-plugin/
 │       │   └── plugin.json          # Name: "cc-handbook-extras"
 │       ├── commands/                 # Ready for contributions
@@ -46,14 +46,7 @@ claude-code-rules/                    # Root monorepo
 
 ## Website
 
-**Location:** `website/`
-
-Docusaurus-based documentation site deployed at [nikiforovall.blog/claude-code-rules](https://nikiforovall.blog/claude-code-rules)
-
-- Source docs in `website/docs/`
-- Configuration in `website/docusaurus.config.js`
-- Build and deploy via standard Docusaurus commands
+This repository includes a Docusaurus-based documentation site located in the `website/` folder. The site serves as the primary source of truth for the Claude Code Handbook content.
 
 ## IMPORTANT
-
 **Do not modify:** `TIPS-AND-TRICKS.md` and `BEST-PRACTICES.md` (obsolete, website is source of truth)
