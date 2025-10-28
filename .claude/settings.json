@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "WebSearch",
-      "Bash(npm run build)"
+      "Bash(npm run build)",
+      "Skill(update-component-reference)",
+      "Skill(version-bump)"
+
     ],
     "deny": [],
     "ask": []

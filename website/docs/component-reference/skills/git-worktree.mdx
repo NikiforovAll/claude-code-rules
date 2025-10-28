@@ -1,0 +1,82 @@
+---
+title: "git-worktree"
+sidebar_position: 3
+description: "Manage Git worktrees for working on multiple branches simultaneously"
+---
+
+import GitWorktreeSource from '!!raw-loader!../../../../plugins/cc-handbook-extras/skills/git-worktree/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `git-worktree` skill
+
+<span className="badge badge--secondary">handbook-extras</span>
+
+Comprehensive Git worktree management for parallel development across multiple branches without stashing changes.
+
+The `git-worktree` skill enables you to create, list, delete, and switch between Git worktrees using a sibling directory pattern. Worktrees eliminate context-switching friction by allowing simultaneous work on different branches in isolated directories, perfect for handling quick bug fixes during feature development or conducting code reviews without interrupting your current work.
+
+## When to Use This Skill
+
+Use the `git-worktree` skill when you want to:
+
+- Work on multiple branches simultaneously without stashing changes
+- Create isolated environments for parallel development tasks
+- Quickly switch contexts between feature work and urgent bug fixes
+- Set up dedicated worktrees for code reviews or testing
+- Manage complex multi-branch workflows efficiently
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{GitWorktreeSource}
+</CodeBlock>
+
+## Key Features
+
+### Sibling Directory Pattern
+
+Worktrees are created outside the main repository using the pattern `../<project>-<branch>`:
+- Main repo: `~/dev/myproject`
+- Worktree: `~/dev/myproject-feature-x`
+- Benefits: Clean separation, no nested repos, IDE-friendly structure
+
+### Hybrid Interface
+
+The skill adapts to your workflow:
+- **Interactive mode**: Use menu-driven prompts when invoked without arguments
+- **Direct mode**: Provide commands and arguments for quick operations
+
+### Comprehensive Operations
+
+- **List**: View all active worktrees with commit details
+- **Create from remote**: Fetch and create worktree from remote branch
+- **Create from local**: Create worktree from existing local branch
+- **Create new branch**: Create worktree with a brand new branch
+- **Delete**: Remove worktrees and clean up metadata
+- **Switch helper**: Get navigation commands for easy worktree switching
+
+## Example Workflows
+
+### Quick Bug Fix During Feature Work
+
+```
+User: "Create worktree from remote branch hotfix-login"
+```
+
+Claude creates a worktree at `../myproject-hotfix-login`, allowing you to fix the bug while keeping your feature work intact in the main repository.
+
+### Parallel Development
+
+```
+User: "List all worktrees"
+```
+
+See all active worktrees with their branches and commits, then navigate between them without losing context.
+
+### Code Review Setup
+
+```
+User: "Create worktree from remote branch feature-authentication"
+```
+
+Review a colleague's branch in isolation while your own work remains untouched.

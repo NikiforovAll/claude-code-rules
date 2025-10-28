@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.0] - 2025-10-29
+
+### Added
+- New `git-worktree` skill for managing Git worktrees in handbook-extras plugin
+
 ## [1.3.3] - 2025-10-25
 
 ### Added
