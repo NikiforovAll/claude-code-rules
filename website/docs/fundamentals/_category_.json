@@ -3,6 +3,7 @@
   "position": 1,
   "link": {
     "type": "generated-index",
+    "slug": "/fundamentals",
     "title": "Fundamentals",
     "description": "Essential concepts and building blocks for mastering Claude Code",
     "keywords": ["fundamentals", "basics", "concepts", "building blocks"]
