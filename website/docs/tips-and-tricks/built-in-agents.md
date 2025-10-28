@@ -46,7 +46,19 @@ Use Explore agent to find error handling code
 
 ---
 
-### 3. **statusline-setup** (Sonnet)
+### 3. **Plan**
+**Purpose:** Fast codebase exploration with thoroughness control
+
+**Tools Available:** Glob, Grep, Read, Bash
+
+**Use Cases:**
+- Finding files by patterns with adjustable depth
+- Understanding codebase before implementation
+- Planning implementation steps for coding tasks
+
+---
+
+### 4. **statusline-setup**
 **Purpose:** Configure Claude Code status line settings
 
 **Tools Available:** Read, Edit
@@ -57,7 +69,7 @@ Use Explore agent to find error handling code
 
 ---
 
-### 4. **output-style-setup** (Sonnet)
+### 5. **output-style-setup**
 **Purpose:** Create and configure custom output styles
 
 **Use Cases:**
