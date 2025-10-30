@@ -5,7 +5,7 @@ sidebar_position: 3
 
 # Plugins
 
-Claude Code Handbook provides two complementary plugins to enhance your AI-assisted development workflow.
+Claude Code Handbook provides four complementary plugins to enhance your AI-assisted development workflow.
 
 ```bash
 # Add the marketplace
@@ -27,6 +27,14 @@ Extended features and experimental tools for advanced use cases.
 
 ```bash
 /plugin install cc-handbook-extras
+```
+
+## <span className="badge badge--info">handbook-qa</span>
+
+Browser automation and QA testing tools with Playwright MCP integration.
+
+```bash
+/plugin install handbook-qa
 ```
 
 ## <span className="badge badge--success">cc-handbook-dotnet</span>
@@ -67,6 +75,9 @@ cd claude-code-rules
 
 # Install extras plugin
 /plugin install ./plugins/cc-handbook-extras
+
+# Install QA plugin
+/plugin install ./plugins/handbook-qa
 
 # Install .NET plugin
 /plugin install ./plugins/cc-handbook-dotnet

@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.0] - 2025-10-30
+
+### Added
+- New `handbook-qa` plugin with Playwright MCP integration for browser automation and QA testing
+
+### Changed
+- Moved Playwright MCP from `cc-handbook` to dedicated `handbook-qa` plugin
+- Moved `backend-architect` and `system-architect` agents from `cc-handbook` to `cc-handbook-extras`
+
 ## [1.4.0] - 2025-10-29
 
 ### Added

@@ -1,7 +1,7 @@
 {
-  "name": "handbook-extras",
+  "name": "handbook-qa",
   "version": "1.5.0",
-  "description": "Extended features and experimental tools for Claude Code Handbook",
+  "description": "Browser automation and QA testing tools with Playwright MCP integration",
   "author": {
     "name": "nikiforovall",
     "url": "https://github.com/nikiforovall"
@@ -10,14 +10,10 @@
   "repository": "https://github.com/nikiforovall/claude-code-rules",
   "license": "MIT",
   "keywords": [
-    "handbook",
-    "extras",
-    "experimental",
-    "extensions",
-    "tools"
-  ],
-  "skills": [
-    "./skills/structured-plan-mode",
-    "./skills/git-worktree"
+    "qa",
+    "testing",
+    "browser-automation",
+    "playwright",
+    "e2e"
   ]
 }

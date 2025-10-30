@@ -8,10 +8,11 @@ Learn practical techniques to enhance your AI-assisted development workflow with
 
 ## Plugins
 
-This repository contains two plugins:
+This repository contains four plugins:
 
 - **`cc-handbook`** - Core plugin with best practices, commands, agents, and MCP integrations
 - **`cc-handbook-extras`** - Experimental and extended features plugin
+- **`handbook-qa`** - Browser automation and QA testing tools with Playwright integration
 - **`cc-handbook-dotnet`** - .NET-specific development skillset
 
 Plus a marketplace for centralized plugin discovery and installation.
@@ -29,6 +30,9 @@ Use Claude Code's `/plugin` command for the quickest installation:
 
 # Install extras plugin
 /plugin install cc-handbook-extras
+
+# Install QA plugin
+/plugin install handbook-qa
 
 # Install dotnet plugin
 /plugin install cc-handbook-dotnet
