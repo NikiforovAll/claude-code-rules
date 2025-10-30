@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.1] - 2025-10-30
+
+### Changed
+- Moved `codebase-analyzer`, `pair-programmer`, and `deep-research-agent` agents from `cc-handbook` to `cc-handbook-extras`
+
 ## [1.5.0] - 2025-10-30
 
 ### Added
