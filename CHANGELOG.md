@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0] - 2025-10-31
+
+### Added
+- New `/review` command for systematic code review with structured feedback
+
+- New `@code-reviewer` agent that invokes `/review` command in separate context
+
 ## [1.5.1] - 2025-10-30
 
 ### Changed

@@ -1,0 +1,52 @@
+---
+title: "/review"
+sidebar_position: 6
+---
+
+import ReviewSource from '!!raw-loader!../../../../plugins/cc-handbook/commands/review.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `/review`
+
+<span className="badge badge--primary">cc-handbook</span>
+
+Systematically review code changes against a base branch with structured, emoji-categorized feedback.
+
+## Usage
+
+```bash
+/review [base-branch=main] [--format inline|summary]
+```
+
+**Examples:**
+```bash
+/review                    # Review against main, detailed format
+/review develop            # Review against develop branch
+/review --summary          # Brief list of findings only
+/review staging --summary  # Custom branch with summary format
+```
+
+## Output Format
+
+Findings are numbered with emoji prefixes for easy tracking:
+
+```
+ISSUE01: 🔧 Missing input validation src/api/users.ts:45
+ISSUE02: ♻️ Extract duplicate logic src/components/Header.tsx:123
+ISSUE03: 🌱 Consider async/await src/services/auth.js:78
+```
+
+**Format modes:**
+- `--inline` (default): Full context with code snippets and detailed explanations
+- `--summary`: Brief one-line descriptions with file paths only
+
+## Command Specification
+
+<CodeBlock language="markdown">
+{ReviewSource}
+</CodeBlock>
+
+## Related
+
+- [`@code-reviewer`](/component-reference/agents/code-reviewer) - Agent version for automatic invocation
+- [Fresh Eyes Pattern](/tips-and-tricks/fresh-eyes-pattern) - Pattern this command implements

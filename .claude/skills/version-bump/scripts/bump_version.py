@@ -105,9 +105,14 @@ class VersionBumper:
 
         # Read marketplace.json
         marketplace_data = self.read_json(self.marketplace_path)
+        # Check top-level version
+        top_level_version = marketplace_data.get('version')
+        if top_level_version:
+            versions['marketplace.version'] = top_level_version
+        # Check metadata version
         marketplace_version = marketplace_data.get('metadata', {}).get('version')
         if marketplace_version:
-            versions['marketplace'] = marketplace_version
+            versions['marketplace.metadata.version'] = marketplace_version
 
         # Read plugin versions from marketplace.json
         for plugin in marketplace_data.get('plugins', []):
@@ -157,8 +162,8 @@ class VersionBumper:
                 print("Aborted by user.")
                 sys.exit(1)
 
-        # Get current version (use marketplace version as source of truth)
-        current_version_str = versions.get('marketplace')
+        # Get current version (use marketplace top-level version as source of truth)
+        current_version_str = versions.get('marketplace.version')
         if not current_version_str:
             raise ValueError("Could not read marketplace version")
 
@@ -174,8 +179,13 @@ class VersionBumper:
 
         # Update marketplace.json
         marketplace_data = self.read_json(self.marketplace_path)
+        # Update top-level version
+        if 'version' in marketplace_data:
+            marketplace_data['version'] = new_version_str
+        # Update metadata version
         if 'metadata' in marketplace_data and 'version' in marketplace_data['metadata']:
             marketplace_data['metadata']['version'] = new_version_str
+        # Update all plugin versions
         for plugin in marketplace_data.get('plugins', []):
             plugin['version'] = new_version_str
         self.write_json(self.marketplace_path, marketplace_data)
