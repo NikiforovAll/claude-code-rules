@@ -15,15 +15,14 @@ Systematically review code changes against a base branch with structured, emoji-
 ## Usage
 
 ```bash
-/review [base-branch=main] [--format inline|summary]
+/review [base-branch=main] [--format inline|summary] [--scope core|full]
 ```
 
 **Examples:**
 ```bash
 /review                    # Review against main, detailed format
 /review develop            # Review against develop branch
-/review --summary          # Brief list of findings only
-/review staging --summary  # Custom branch with summary format
+/review --scope core       # Focus on core issues only
 ```
 
 ## Output Format
