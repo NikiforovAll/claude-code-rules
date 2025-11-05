@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
+# shellcheck shell=bash
 set -euo pipefail
+
+# Check if hook is disabled via environment variable
+if [ "${CC_HANDBOOK_DOTNET_DISABLE_HOOKS:-false}" = "true" ]; then
+    exit 0
+fi
 
 # Read JSON input from stdin
 input=$(cat)
@@ -12,8 +18,8 @@ if [ -z "$file_path" ]; then
     exit 0
 fi
 
-# Only process .cs files
-if [[ ! "$file_path" =~ \.cs$ ]]; then
+# Only process C# files (.cs, .CS, .csx, .CSX)
+if [[ ! "$file_path" =~ \.(cs|CS|csx|CSX)$ ]]; then
     exit 0
 fi
 

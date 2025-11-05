@@ -80,6 +80,25 @@ The hook is configured in `hooks/hooks.json`:
 
 If you have a `.csharpierrc` or `.csharpierrc.json` file in your project, CSharpier will automatically use it.
 
+### Environment Variables
+
+**CC_HANDBOOK_DOTNET_DISABLE_HOOKS**
+
+Disable the automatic CSharpier formatting hook.
+
+```bash
+# Disable globally in your shell
+export CC_HANDBOOK_DOTNET_DISABLE_HOOKS=true
+
+# Or disable for a single Claude Code session
+CC_HANDBOOK_DOTNET_DISABLE_HOOKS=true claude
+```
+
+This is useful when:
+- You want to temporarily disable formatting
+- You're working with generated code that shouldn't be formatted
+- You're debugging formatting issues
+
 ## Contributing
 
 Found a bug or have a suggestion? Please open an issue at:

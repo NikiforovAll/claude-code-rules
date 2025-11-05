@@ -1,6 +1,6 @@
 {
   "name": "handbook-dotnet",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": ".NET development tools including automatic CSharpier formatting for C# files",
   "author": {
     "name": "nikiforovall",

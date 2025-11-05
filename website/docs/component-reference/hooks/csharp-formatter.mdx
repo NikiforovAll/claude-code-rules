@@ -70,6 +70,31 @@ dotnet csharpier format path/to/file.cs --skip-validation --compilation-errors-a
 
 Or make sure `jq` is installed. The hook script requires `jq` for JSON parsing.
 
+## Configuration
+
+### Environment Variables
+
+**CC_HANDBOOK_DOTNET_DISABLE_HOOKS**
+
+Disable the automatic CSharpier formatting hook.
+
+```bash
+# Disable globally in your shell
+export CC_HANDBOOK_DOTNET_DISABLE_HOOKS=true
+
+# Or disable for a single Claude Code session
+CC_HANDBOOK_DOTNET_DISABLE_HOOKS=true claude
+```
+
+This is useful when:
+- You want to temporarily disable formatting
+- You're working with generated code that shouldn't be formatted
+- You're debugging formatting issues
+
+### Custom CSharpier Config
+
+If you have a `.csharpierrc` or `.csharpierrc.json` file in your project, CSharpier will automatically use it.
+
 ## Performance Considerations
 
 - **`--skip-validation`**: Skips re-parsing formatted code for significant speed improvements

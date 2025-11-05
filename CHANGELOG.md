@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.2] - 2025-11-05
+
+### Added
+- CSharpier hook now supports `.CS` (uppercase) and `.csx` (C# script) files
+- `CC_HANDBOOK_DOTNET_DISABLE_HOOKS` environment variable to disable formatter
+- Automated test suite for CSharpier hook
+
 ## [1.6.1] - 2025-11-05
 
 ### Changed

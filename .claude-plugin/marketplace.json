@@ -1,19 +1,19 @@
 {
   "name": "cc-handbook",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "owner": {
     "name": "nikiforovall",
     "email": "nikiforovall@github.com"
   },
   "metadata": {
     "description": "Official marketplace for Claude Code Handbook plugins and extensions",
-    "version": "1.6.1"
+    "version": "1.6.2"
   },
   "repository": "https://github.com/nikiforovall/claude-code-rules",
   "plugins": [
     {
       "name": "handbook",
-      "version": "1.6.1",
+      "version": "1.6.2",
       "description": "Core Claude Code handbook with best practices and essential tools",
       "author": {
         "name": "nikiforovall",
@@ -34,7 +34,7 @@
     },
     {
       "name": "handbook-extras",
-      "version": "1.6.1",
+      "version": "1.6.2",
       "description": "Extended features and experimental tools for Claude Code Handbook",
       "author": {
         "name": "nikiforovall",
@@ -53,7 +53,7 @@
     },
     {
       "name": "handbook-qa",
-      "version": "1.6.1",
+      "version": "1.6.2",
       "description": "Browser automation and QA testing tools with Playwright MCP integration",
       "author": {
         "name": "nikiforovall",
@@ -73,7 +73,7 @@
     },
     {
       "name": "handbook-dotnet",
-      "version": "1.6.1",
+      "version": "1.6.2",
       "description": ".NET development tools including automatic CSharpier formatting for C# files",
       "author": {
         "name": "nikiforovall",
