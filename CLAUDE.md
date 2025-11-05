@@ -31,7 +31,7 @@ claude-code-rules/                    # Root monorepo
 │   │   ├── hooks/
 │   │   └── README.md
 │   │
-│   ├── handbook-qa/                  # QA and browser automation plugin
+│   ├── cc-handbook-qa/               # QA and browser automation plugin
 │   │   ├── .claude-plugin/
 │   │   │   └── plugin.json          # Name: "handbook-qa"
 │   │   ├── .mcp.json                 # Playwright MCP server

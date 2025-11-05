@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.6.1] - 2025-11-05
+
+### Changed
+- Renamed `handbook-qa` plugin folder to `cc-handbook-qa` for consistent naming convention
+
 ## [1.6.0] - 2025-10-31
 
 ### Added

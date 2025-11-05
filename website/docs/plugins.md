@@ -29,12 +29,12 @@ Extended features and experimental tools for advanced use cases.
 /plugin install cc-handbook-extras
 ```
 
-## <span className="badge badge--info">handbook-qa</span>
+## <span className="badge badge--info">cc-handbook-qa</span>
 
 Browser automation and QA testing tools with Playwright MCP integration.
 
 ```bash
-/plugin install handbook-qa
+/plugin install cc-handbook-qa
 ```
 
 ## <span className="badge badge--success">cc-handbook-dotnet</span>
@@ -77,7 +77,7 @@ cd claude-code-rules
 /plugin install ./plugins/cc-handbook-extras
 
 # Install QA plugin
-/plugin install ./plugins/handbook-qa
+/plugin install ./plugins/cc-handbook-qa
 
 # Install .NET plugin
 /plugin install ./plugins/cc-handbook-dotnet
