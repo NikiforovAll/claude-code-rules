@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.7.0] - 2025-01-05
+
+### Changed
+- Moved Context7 plugin to dedicated `cc-handbook-context7` plugin
+
+## [1.6.3] - 2025-11-05
+
+### Changed
+- Moved Context7 MCP server from `cc-handbook` to new dedicated plugin `cc-handbook-context7`
+
+### Added
+- New `cc-handbook-context7` plugin for Context7 MCP server integration
+- Dedicated plugin structure for better modularity and separation of concerns
+
+### Removed
+- `.mcp.json` file from `cc-handbook` plugin (Context7 now in separate plugin)
+
 ## [1.6.2] - 2025-11-05
 
 ### Added

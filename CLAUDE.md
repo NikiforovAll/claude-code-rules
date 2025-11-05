@@ -18,7 +18,6 @@ claude-code-rules/                    # Root monorepo
 │   │   ├── commands/                 # 5 slash commands
 │   │   ├── agents/                   # 2 specialized agents
 │   │   ├── hooks/
-│   │   ├── .mcp.json                 # 1 MCP server (context7)
 │   │   ├── BEST-PRACTICES.md
 │   │   ├── TIPS-AND-TRICKS.md
 │   │   └── README.md
@@ -37,14 +36,20 @@ claude-code-rules/                    # Root monorepo
 │   │   ├── .mcp.json                 # Playwright MCP server
 │   │   └── README.md
 │   │
-│   └── cc-handbook-dotnet/           # .NET development plugin
+│   ├── cc-handbook-dotnet/           # .NET development plugin
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json          # Name: "handbook-dotnet"
+│   │   ├── .mcp.json                 # Microsoft Docs MCP server
+│   │   ├── hooks/
+│   │   └── README.md
+│   │
+│   └── cc-handbook-context7/         # Context7 documentation plugin
 │       ├── .claude-plugin/
-│       │   └── plugin.json          # Name: "handbook-dotnet"
-│       ├── .mcp.json                 # Microsoft Docs MCP server
-│       ├── hooks/
+│       │   └── plugin.json          # Name: "handbook-context7"
+│       ├── .mcp.json                 # Context7 MCP server
 │       └── README.md
 │
-├── marketplace/                      # Marketplace configuration
+├── .claude-plugin/                   # Marketplace configuration
 │   └── marketplace.json              # Catalogs all plugins
 │
 ├── website/                          # Docusaurus documentation site
