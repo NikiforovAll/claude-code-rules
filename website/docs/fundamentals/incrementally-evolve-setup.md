@@ -117,3 +117,8 @@ For more on skills, see [Use Agent Skills](./agent-skills)
 * **Share with Your Team** - Project-level skills in `.claude/skills/` are shared via git. Your improvements help everyone.
 
 * **Review Periodically** - Every few weeks, review your skills and commands: Are they still relevant? Can they be simplified? Should they be combined or split?
+
+
+:::tip Advanced: Customize Your Collaboration Pattern
+You can leverage Claude's built-in tools like `TodoWrite` or `AskUserQuestion` to create custom workflows. For example, instruct Claude to "always use TodoWrite to track multi-step tasks" or "use AskUserQuestion to clarify ambiguous requirements before implementing." These tools become building blocks for your personalized collaboration style.
+:::
