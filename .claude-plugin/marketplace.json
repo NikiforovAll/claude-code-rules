@@ -1,19 +1,19 @@
 {
   "name": "cc-handbook",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "owner": {
     "name": "nikiforovall",
     "email": "nikiforovall@github.com"
   },
   "metadata": {
     "description": "Official marketplace for Claude Code Handbook plugins and extensions",
-    "version": "1.10.0"
+    "version": "1.10.1"
   },
   "repository": "https://github.com/nikiforovall/claude-code-rules",
   "plugins": [
     {
       "name": "handbook",
-      "version": "1.10.0",
+      "version": "1.10.1",
       "description": "Core Claude Code handbook with best practices and essential tools",
       "author": {
         "name": "nikiforovall",
@@ -34,7 +34,7 @@
     },
     {
       "name": "handbook-extras",
-      "version": "1.10.0",
+      "version": "1.10.1",
       "description": "Extended features and experimental tools for Claude Code Handbook",
       "author": {
         "name": "nikiforovall",
@@ -53,7 +53,7 @@
     },
     {
       "name": "handbook-qa",
-      "version": "1.10.0",
+      "version": "1.10.1",
       "description": "Browser automation and QA testing tools with Playwright MCP integration",
       "author": {
         "name": "nikiforovall",
@@ -73,7 +73,7 @@
     },
     {
       "name": "handbook-dotnet",
-      "version": "1.10.0",
+      "version": "1.10.1",
       "description": ".NET development tools including automatic CSharpier formatting for C# files",
       "author": {
         "name": "nikiforovall",
@@ -94,7 +94,7 @@
     },
     {
       "name": "handbook-context7",
-      "version": "1.10.0",
+      "version": "1.10.1",
       "description": "Context7 MCP server for fetching latest library documentation from official sources",
       "author": {
         "name": "nikiforovall",
@@ -114,7 +114,7 @@
     },
     {
       "name": "handbook-sounds",
-      "version": "1.10.0",
+      "version": "1.10.1",
       "description": "Audio feedback for Claude Code events on Windows using PowerShell sounds",
       "author": {
         "name": "nikiforovall",
@@ -136,7 +136,7 @@
     },
     {
       "name": "handbook-git-worktree",
-      "version": "1.10.0",
+      "version": "1.10.1",
       "description": "Git worktree management for working on multiple branches simultaneously",
       "author": {
         "name": "nikiforovall",
@@ -157,7 +157,7 @@
     },
     {
       "name": "handbook-structured-plan-mode",
-      "version": "1.10.0",
+      "version": "1.10.1",
       "description": "Structured planning methodology for complex feature implementations through systematic task decomposition",
       "author": {
         "name": "nikiforovall",

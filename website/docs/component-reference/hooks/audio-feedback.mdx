@@ -1,7 +1,7 @@
 ---
 title: "Audio Feedback"
 sidebar_position: 2
-description: "Play system sounds when Claude finishes responding on Windows"
+description: "Play system sounds when Claude finishes responding or sends notifications on Windows"
 ---
 
 import CodeBlock from '@theme/CodeBlock';
@@ -10,20 +10,30 @@ import CodeBlock from '@theme/CodeBlock';
 
 <span className="badge badge--handbook-sounds">handbook-sounds</span>
 
-Play Windows system sounds when Claude finishes responding.
+Play Windows system sounds when Claude finishes responding or sends notifications.
 
 ## Hook Configuration
 
 ```json
 {
-  "description": "Audio feedback when Claude finishes responding",
+  "description": "Audio feedback when Claude finishes responding and sends notifications",
   "hooks": {
     "Stop": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/play-sound.sh\""
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/play-sound.sh\" --stop"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/play-sound.sh\" --notification"
           }
         ]
       }
@@ -31,6 +41,11 @@ Play Windows system sounds when Claude finishes responding.
   }
 }
 ```
+
+## When Sounds Play
+
+- **Stop Hook**: Plays when Claude finishes responding to your prompt (default: `notify.wav`)
+- **Notification Hook**: Plays when Claude sends notifications (default: `Windows Exclamation.wav`) - permission requests, idle timeout after 60+ seconds
 
 ## Prerequisites
 
@@ -45,25 +60,34 @@ Play Windows system sounds when Claude finishes responding.
 export CC_HANDBOOK_SOUNDS_DISABLE_HOOKS=true
 ```
 
-### Customize Sound
+### Customize Sounds
 
-Set the `CC_HANDBOOK_SOUNDS_FILE` environment variable:
+Customize sounds independently for each hook type:
 
+**Stop Hook** (when Claude finishes responding):
 ```bash
-# default sound
-export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/notify.wav"
+export CC_HANDBOOK_STOP_SOUNDS_FILE="C:/Windows/Media/notify.wav"
+```
 
-# Use a different Windows system sound
-export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/chimes.wav"
-export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/tada.wav"
-export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/Windows Notify System Generic.wav"
-export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/Windows Ding.wav"
-export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/Windows Exclamation.wav"
-export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/Windows Notify Messaging.wav"
-export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/Windows Notify System Generic.wav"
+**Notification Hook** (permission requests, idle timeout):
+```bash
+export CC_HANDBOOK_NOTIFICATION_SOUNDS_FILE="C:/Windows/Media/Windows Exclamation.wav"
+```
 
-# Or use a custom WAV file
-export CC_HANDBOOK_SOUNDS_FILE="C:/path/to/your/custom-sound.wav"
+**Available Windows system sounds:**
+```bash
+# Subtle sounds
+export CC_HANDBOOK_STOP_SOUNDS_FILE="C:/Windows/Media/notify.wav"
+export CC_HANDBOOK_STOP_SOUNDS_FILE="C:/Windows/Media/Windows Notify System Generic.wav"
+
+# Attention-grabbing sounds
+export CC_HANDBOOK_NOTIFICATION_SOUNDS_FILE="C:/Windows/Media/Windows Exclamation.wav"
+export CC_HANDBOOK_NOTIFICATION_SOUNDS_FILE="C:/Windows/Media/Windows Ding.wav"
+export CC_HANDBOOK_NOTIFICATION_SOUNDS_FILE="C:/Windows/Media/chimes.wav"
+
+# Or use custom WAV files
+export CC_HANDBOOK_STOP_SOUNDS_FILE="C:/path/to/your/custom-stop.wav"
+export CC_HANDBOOK_NOTIFICATION_SOUNDS_FILE="C:/path/to/your/custom-notification.wav"
 ```
 
 ## Troubleshooting
@@ -75,3 +99,4 @@ export CC_HANDBOOK_SOUNDS_FILE="C:/path/to/your/custom-sound.wav"
 ## Related
 
 - [Stop Hook Reference](https://docs.claude.com/en/docs/claude-code/hooks#stop)
+- [Notification Hook Reference](https://docs.claude.com/en/docs/claude-code/hooks#notification)

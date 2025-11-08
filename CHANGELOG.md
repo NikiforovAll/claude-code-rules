@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.10.1] - 2025-01-08
+
+### Changed
+- Updated `handbook-sounds` plugin with stop and notification support
+
 ## [1.10.0] - 2025-01-08
 
 ### Added

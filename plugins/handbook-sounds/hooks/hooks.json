@@ -1,12 +1,22 @@
 {
-  "description": "Audio feedback when Claude finishes responding",
+  "description": "Audio feedback when Claude finishes responding and sends notifications",
   "hooks": {
     "Stop": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/play-sound.sh\""
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/play-sound.sh\" --stop"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/play-sound.sh\" --notification"
           }
         ]
       }
