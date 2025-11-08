@@ -1,0 +1,15 @@
+{
+  "description": "Audio feedback when Claude finishes responding",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/play-sound.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}

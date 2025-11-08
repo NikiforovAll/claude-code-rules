@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.8.0] - 2025-11-08
+
+### Added
+- New `cc-handbook-sounds` plugin with audio feedback for Windows
+- Environment variable support for custom sound files (`CC_HANDBOOK_SOUNDS_FILE`)
+
 ## [1.7.0] - 2025-01-05
 
 ### Changed

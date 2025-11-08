@@ -5,7 +5,7 @@ sidebar_position: 3
 
 # Plugins
 
-Claude Code Handbook provides five complementary plugins to enhance your AI-assisted development workflow.
+Claude Code Handbook provides complementary plugins to enhance your AI-assisted development workflow.
 
 ```bash
 # Add the marketplace
@@ -53,6 +53,14 @@ Context7 MCP server for fetching latest library documentation from official sour
 /plugin install cc-handbook-context7
 ```
 
+## <span className="badge badge--danger">cc-handbook-sounds</span>
+
+Audio feedback for Claude Code events on Windows using PowerShell sounds.
+
+```bash
+/plugin install cc-handbook-sounds
+```
+
 ---
 
 ## Understanding Building Blocks
@@ -92,6 +100,9 @@ cd claude-code-rules
 
 # Install Context7 plugin
 /plugin install ./plugins/cc-handbook-context7
+
+# Install sounds plugin
+/plugin install ./plugins/cc-handbook-sounds
 ```
 
 ## Contributing

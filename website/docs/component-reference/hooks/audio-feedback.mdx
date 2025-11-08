@@ -1,0 +1,74 @@
+---
+title: "Audio Feedback"
+sidebar_position: 2
+description: "Play system sounds when Claude finishes responding on Windows"
+---
+
+import CodeBlock from '@theme/CodeBlock';
+
+# Audio Feedback Hook
+
+<span className="badge badge--danger">cc-handbook-sounds</span>
+
+Play Windows system sounds when Claude finishes responding.
+
+## Hook Configuration
+
+```json
+{
+  "description": "Audio feedback when Claude finishes responding",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/play-sound.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Prerequisites
+
+- Windows OS
+- PowerShell (included with Windows)
+
+## Configuration
+
+### Disable Sounds
+
+```bash
+export CC_HANDBOOK_SOUNDS_DISABLE_HOOKS=true
+```
+
+### Customize Sound
+
+Set the `CC_HANDBOOK_SOUNDS_FILE` environment variable:
+
+```bash
+# Use a different Windows system sound
+export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/Windows Ding.wav"
+
+# Or use a custom WAV file
+export CC_HANDBOOK_SOUNDS_FILE="C:/path/to/your/custom-sound.wav"
+```
+
+**Available Windows system sounds:**
+- `C:/Windows/Media/Windows Notify System Generic.wav` (default)
+- `C:/Windows/Media/Windows Notify Messaging.wav`
+- `C:/Windows/Media/Windows Ding.wav`
+- `C:/Windows/Media/notify.wav`
+
+## Troubleshooting
+
+**No sound plays**: Check volume, verify sound file exists, ensure PowerShell is in PATH
+
+**Too loud/quiet**: Adjust in Windows Settings > System > Sound
+
+## Related
+
+- [Stop Hook Reference](https://docs.claude.com/en/docs/claude-code/hooks#stop)
