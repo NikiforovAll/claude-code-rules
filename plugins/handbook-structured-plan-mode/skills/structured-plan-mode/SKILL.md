@@ -103,6 +103,12 @@ Do NOT use this skill for:
 
 ### Phase 4: Create Implementation Tasks (ONLY AFTER Phase 1-3 Complete)
 
+**IMPORTANT**: Before creating tasks, read `references/task-planning-guide.md` to understand:
+- How to break down work into appropriate task sizes
+- Task file structure and required sections
+- Best practices for defining clear requirements and action items
+- How to set proper dependencies between tasks
+
 **Actions:**
 **NOW create T01, T02, T03, ...T0N** as separate files in `.plans/[feature-name]/tasks/` based on selected approach
 
@@ -132,16 +138,113 @@ For each task you need to create:
 
 ---
 
-### Phase 5: Track Throughout Implementation
+### Phase 5: Working with Tasks (Implementation)
 
 **Note**: Phase 5 is NOT tracked in TodoWrite. Track progress directly in task files and plan.md.
 
-As you implement tasks (T01, T02, etc.):
-- Check off action items as completed in the individual task files (tasks/T01.md, tasks/T02.md, etc.)
-- Update task status in both the task file AND the Progress Summary in plan.md (🟡 Planned → 🟢 In Progress → ✅ Completed)
-- Add newly discovered tasks/requirements
-- Fill in "Execution Summary" in each task file after completing the task
-- Note lessons learned in task files and in plan.md
+**IMPORTANT**: Before starting work on ANY task, read `references/task-planning-guide.md` for:
+- Task structure guidance and best practices
+- How to maintain task files during execution
+- Examples of effective task documentation
+- Common pitfalls to avoid
+
+**When to consult task-planning-guide.md:**
+- Before starting a new task (every time)
+- When unclear about task file structure or what to document
+- When encountering challenges during task execution
+- When adding new tasks mid-implementation
+
+#### Task Execution Discipline
+
+**CRITICAL RULE**: Work on ONE task at a time. Do NOT start the next task until the current task is FULLY completed.
+
+**Task Status Flow:**
+1. 🟡 **Planned** → Task created but not started
+2. 🟢 **In Progress** → Currently working on this task (only ONE task should be in this state)
+3. ✅ **Completed** → All action items done, both locations updated, Execution Summary filled
+4. 🔴 **Blocked** → Cannot proceed due to dependency or external issue (move to next task until unblocked)
+
+#### Task Lifecycle: Step-by-Step
+
+**Starting a Task:**
+1. **Read `references/task-planning-guide.md`** - Review relevant sections before beginning work
+2. Choose next task from plan.md Progress Summary (respecting dependencies)
+3. Update status to 🟢 **In Progress** in TWO places:
+   - Task file metadata: `**Status**: 🟢 **In Progress**`
+   - plan.md Progress Summary: `- [ ] [**T01**: Task Name](tasks/T01.md) - Status: 🟢 In Progress`
+
+**During Task Execution:**
+4. Work through Action Items, checking off boxes as you complete them:
+   ```markdown
+   - [x] Create API endpoint
+   - [x] Add request validation
+   - [ ] Add error handling  ← Currently working here
+   - [ ] Write tests
+   ```
+5. Update task file in real-time as work progresses
+6. If you discover new requirements, add them to Action Items
+
+**Completing a Task:**
+7. Verify ALL action items are checked: `[x]`
+8. Fill in "Execution Summary" section in task file:
+   ```markdown
+   ## Execution Summary
+   **Completed**: 2025-01-08 14:30
+
+   **What was implemented**:
+   - Added /api/users endpoint with validation
+   - Implemented error handling for edge cases
+
+   **Challenges encountered**:
+   - Had to refactor auth middleware to support new endpoint
+   ```
+9. Update status to ✅ **Completed** in TWO places:
+   - Task file metadata: `**Status**: ✅ **Completed**`
+   - plan.md Progress Summary: `- [x] [**T01**: Task Name](tasks/T01.md) - Status: ✅ Completed`
+10. **Explicitly ask user**: "Task T01 is complete. Ready to move to T02?"
+11. **ONLY after user confirms** proceed to next task
+
+#### Dual-Tracking Example
+
+When completing T01, you must update BOTH locations:
+
+**In `tasks/T01.md`** (lines 7-9):
+```markdown
+**Status**: ✅ **Completed**
+**Effort**: Medium
+**Blocked By**: None
+```
+
+**In `plan.md` Progress Summary** (line ~18):
+```markdown
+- [x] [**T01**: Add API endpoint](tasks/T01.md) - Status: ✅ Completed
+```
+
+**Why dual-tracking?**
+- plan.md provides high-level overview of all tasks at a glance
+- Task files provide detailed implementation notes for deep dives
+- Both serve different purposes and audiences
+
+#### Handling Blocked Tasks
+
+If you cannot complete a task:
+1. Update status to 🔴 **Blocked** in both locations
+2. Update "Blocked By" field in task file metadata
+3. Document blocking reason in task file
+4. Move to next non-blocked task
+5. Return when blocker is resolved
+
+#### Discovering New Tasks Mid-Implementation
+
+If you discover additional work during Phase 5:
+1. Create new task file (e.g., `T06.md`) in tasks/ directory
+2. Fill in all sections using task-template.md
+3. Add link to plan.md Progress Summary
+4. Update dependent tasks if needed
+
+---
+
+**Remember**: ONE task at a time. Complete it FULLY (all checkboxes, both locations updated, Execution Summary filled), then ASK USER for confirmation before moving to the next.
 
 ---
 
@@ -190,6 +293,7 @@ After feature completion:
    - Mark Phase 3 complete once documentation is done
 
 4. **Phase 4 - Create Tasks**:
+   - **Read `references/task-planning-guide.md` before creating tasks**
    - NOW create T01.md, T02.md, T03.md, ...T0N.md files in `.plans/[feature-name]/tasks/`
    - Copy task-template.md for each task file
    - Fill in task details based on selected approach
@@ -197,10 +301,15 @@ After feature completion:
    - Update Progress Summary in plan.md with links to task files
    - Mark Phase 4 complete in TodoWrite
 
-5. **Phase 5 - Implementation**:
-   - Track progress in individual task files (tasks/T01.md, etc.)
-   - Update task statuses in both task files AND plan.md Progress Summary
-   - Check off action items in task files as they complete
+5. **Phase 5 - Implementation** (ONE task at a time):
+   - **Read `references/task-planning-guide.md` before starting EACH task**
+   - Work on ONE task until FULLY completed (all checkboxes, both locations updated, Execution Summary filled)
+   - Update status in TWO places: task file metadata AND plan.md Progress Summary
+   - Track progress: 🟡 Planned → 🟢 In Progress → ✅ Completed
+   - Check off action items as you complete them
+   - Fill Execution Summary before marking complete
+   - **Explicitly ask user for confirmation** before moving to next task
+   - ONLY after user confirms proceed to next task
 
 6. **Phase 6 - Review**:
    - Document lessons learned in plan.md
@@ -231,14 +340,27 @@ Break large tasks into smaller chunks that are independently testable.
 
 ## Reference Materials
 
-For detailed guidance on template sections and best practices, refer to `references/usage-guide.md` when needed.
+**CRITICAL**: `references/task-planning-guide.md` is NOT just for planning - read it throughout implementation.
+
+**Read `references/task-planning-guide.md`:**
+- **Phase 4**: Before creating task files (understand task structure, sizing, dependencies)
+- **Phase 5**: Before starting EACH task (review best practices, avoid common pitfalls)
+- **During execution**: When updating task files, adding action items, or documenting progress
+- **When stuck**: Consult checklist for good task planning and common pitfalls section
+
+**Additional reference:**
+- `references/usage-guide.md` - Detailed template section explanations
 
 ---
 
 **Remember**:
-1. **TodoWrite tracks PHASES**
+1. **TodoWrite tracks PHASES** - not individual subtasks
 2. **Phases are sequential** - complete Phase 1 before Phase 2, etc.
 3. **Phase 2 is iterative** - use AskUserQuestion multiple times, expect back-and-forth
 4. **User confirms approach** - do NOT fill "Selected Approach" until user confirms
 5. **No premature planning** - T01-T0N created in Phase 4
 6. **Task count is flexible** - create as many as needed (T01, T02, ...T0N)
+7. **ONE task at a time** - Complete current task FULLY (all checkboxes, both locations, Execution Summary) before starting next
+8. **Dual-tracking required** - Update status in BOTH task file AND plan.md
+9. **Explicit user confirmation** - Ask user for approval before moving to next task
+10. **Read task-planning-guide.md** - Before Phase 4, before EACH task in Phase 5, and when stuck

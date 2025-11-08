@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.10.0] - 2025-01-08
+
+### Added
+- New `handbook-structured-plan-mode` plugin for systematic planning and tracking of complex feature implementations
+- Task execution discipline with explicit user confirmation before moving between tasks
+- Task lifecycle documentation with step-by-step guidance for task management
+- Mermaid diagrams removed from skill documentation (replaced with text explanations)
+
+### Changed
+- Improved structured-plan-mode skill with one-task-at-a-time execution discipline
+- Enhanced task management documentation with clear lifecycle steps and dual-tracking examples
+- Added emphasis on reading task-planning-guide.md throughout Phase 4 and Phase 5
+- Removed skills array from handbook-extras plugin.json (structured-plan-mode moved to dedicated plugin)
+- Updated component reference documentation and website plugins page for new plugin
+
 ## [1.9.0] - 2025-01-08
 
 ### Added

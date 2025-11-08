@@ -83,3 +83,8 @@
   --ifm-badge-background-color: #9c27b0;
   --ifm-badge-color: white;
 }
+
+.badge--handbook-structured-plan-mode {
+  --ifm-badge-background-color: #00897b;
+  --ifm-badge-color: white;
+}

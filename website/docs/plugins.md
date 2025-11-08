@@ -53,6 +53,14 @@ Git worktree management for working on multiple branches simultaneously.
 /plugin install handbook-git-worktree
 ```
 
+## [<span className="badge badge--handbook-structured-plan-mode">handbook-structured-plan-mode</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-structured-plan-mode/README.md)
+
+Structured planning methodology for complex feature implementations through systematic task decomposition.
+
+```bash
+/plugin install handbook-structured-plan-mode
+```
+
 ## [<span className="badge badge--handbook-context7">handbook-context7</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-context7/README.md)
 
 Context7 MCP server for fetching latest library documentation from official sources.
@@ -114,6 +122,9 @@ cd claude-code-rules
 
 # Install git-worktree plugin
 /plugin install ./plugins/handbook-git-worktree
+
+# Install structured-plan-mode plugin
+/plugin install ./plugins/handbook-structured-plan-mode
 ```
 
 ## Contributing

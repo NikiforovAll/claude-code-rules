@@ -1,7 +1,7 @@
 {
-  "name": "handbook-git-worktree",
+  "name": "handbook-structured-plan-mode",
   "version": "1.10.0",
-  "description": "Git worktree management for working on multiple branches simultaneously",
+  "description": "Structured planning methodology for complex feature implementations through systematic task decomposition",
   "author": {
     "name": "nikiforovall",
     "url": "https://github.com/nikiforovall"
@@ -10,14 +10,14 @@
   "repository": "https://github.com/nikiforovall/claude-code-rules",
   "license": "MIT",
   "keywords": [
-    "git",
-    "worktree",
-    "branches",
-    "productivity",
+    "planning",
+    "task-management",
+    "project-management",
     "workflow",
-    "parallel-development"
+    "feature-development",
+    "productivity"
   ],
   "skills": [
-    "./skills/git-worktree"
+    "./skills/structured-plan-mode"
   ]
 }
