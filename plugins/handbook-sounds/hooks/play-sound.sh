@@ -9,7 +9,7 @@ fi
 
 # Completion sound when Claude finishes responding
 # Can be customized via CC_HANDBOOK_SOUNDS_FILE environment variable
-sound_file="${CC_HANDBOOK_SOUNDS_FILE:-C:/Windows/Media/Windows Notify System Generic.wav}"
+sound_file="${CC_HANDBOOK_SOUNDS_FILE:-C:/Windows/Media/notify.wav}"
 
 # Play sound using PowerShell with -NoProfile to avoid oh-my-posh conflicts
 # Use -NonInteractive to prevent any prompts

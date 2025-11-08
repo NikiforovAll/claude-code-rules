@@ -50,18 +50,21 @@ export CC_HANDBOOK_SOUNDS_DISABLE_HOOKS=true
 Set the `CC_HANDBOOK_SOUNDS_FILE` environment variable:
 
 ```bash
+# default sound
+export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/notify.wav"
+
 # Use a different Windows system sound
+export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/chimes.wav"
+export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/tada.wav"
+export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/Windows Notify System Generic.wav"
 export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/Windows Ding.wav"
+export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/Windows Exclamation.wav"
+export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/Windows Notify Messaging.wav"
+export CC_HANDBOOK_SOUNDS_FILE="C:/Windows/Media/Windows Notify System Generic.wav"
 
 # Or use a custom WAV file
 export CC_HANDBOOK_SOUNDS_FILE="C:/path/to/your/custom-sound.wav"
 ```
-
-**Available Windows system sounds:**
-- `C:/Windows/Media/Windows Notify System Generic.wav` (default)
-- `C:/Windows/Media/Windows Notify Messaging.wav`
-- `C:/Windows/Media/Windows Ding.wav`
-- `C:/Windows/Media/notify.wav`
 
 ## Troubleshooting
 
