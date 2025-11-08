@@ -19,7 +19,7 @@
         "name": "nikiforovall",
         "url": "https://github.com/nikiforovall"
       },
-      "source": "./plugins/cc-handbook",
+      "source": "./plugins/handbook",
       "category": "productivity",
       "tags": [
         "handbook",
@@ -40,7 +40,7 @@
         "name": "nikiforovall",
         "url": "https://github.com/nikiforovall"
       },
-      "source": "./plugins/cc-handbook-extras",
+      "source": "./plugins/handbook-extras",
       "category": "extensions",
       "tags": [
         "experimental",
@@ -59,7 +59,7 @@
         "name": "nikiforovall",
         "url": "https://github.com/nikiforovall"
       },
-      "source": "./plugins/cc-handbook-qa",
+      "source": "./plugins/handbook-qa",
       "category": "testing",
       "tags": [
         "qa",
@@ -79,7 +79,7 @@
         "name": "nikiforovall",
         "url": "https://github.com/nikiforovall"
       },
-      "source": "./plugins/cc-handbook-dotnet",
+      "source": "./plugins/handbook-dotnet",
       "category": "development",
       "tags": [
         "dotnet",
@@ -100,7 +100,7 @@
         "name": "nikiforovall",
         "url": "https://github.com/nikiforovall"
       },
-      "source": "./plugins/cc-handbook-context7",
+      "source": "./plugins/handbook-context7",
       "category": "productivity",
       "tags": [
         "documentation",
@@ -120,7 +120,7 @@
         "name": "nikiforovall",
         "url": "https://github.com/nikiforovall"
       },
-      "source": "./plugins/cc-handbook-sounds",
+      "source": "./plugins/handbook-sounds",
       "category": "productivity",
       "tags": [
         "sounds",

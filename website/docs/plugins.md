@@ -18,7 +18,7 @@ Core plugin with essential tools and best practices for Claude Code development.
 
 
 ```bash
-/plugin install cc-handbook
+/plugin install handbook
 ```
 
 ## <span className="badge badge--secondary">cc-handbook-extras</span>
@@ -26,7 +26,7 @@ Core plugin with essential tools and best practices for Claude Code development.
 Extended features and experimental tools for advanced use cases.
 
 ```bash
-/plugin install cc-handbook-extras
+/plugin install handbook-extras
 ```
 
 ## <span className="badge badge--info">cc-handbook-qa</span>
@@ -34,7 +34,7 @@ Extended features and experimental tools for advanced use cases.
 Browser automation and QA testing tools with Playwright MCP integration.
 
 ```bash
-/plugin install cc-handbook-qa
+/plugin install handbook-qa
 ```
 
 ## <span className="badge badge--success">cc-handbook-dotnet</span>
@@ -42,7 +42,7 @@ Browser automation and QA testing tools with Playwright MCP integration.
 .NET development tools and automatic CSharpier formatting for C# files.
 
 ```bash
-/plugin install cc-handbook-dotnet
+/plugin install handbook-dotnet
 ```
 
 ## <span className="badge badge--warning">cc-handbook-context7</span>
@@ -50,7 +50,7 @@ Browser automation and QA testing tools with Playwright MCP integration.
 Context7 MCP server for fetching latest library documentation from official sources.
 
 ```bash
-/plugin install cc-handbook-context7
+/plugin install handbook-context7
 ```
 
 ## <span className="badge badge--danger">cc-handbook-sounds</span>
@@ -58,7 +58,7 @@ Context7 MCP server for fetching latest library documentation from official sour
 Audio feedback for Claude Code events on Windows using PowerShell sounds.
 
 ```bash
-/plugin install cc-handbook-sounds
+/plugin install handbook-sounds
 ```
 
 ---
@@ -87,22 +87,22 @@ git clone https://github.com/nikiforovall/claude-code-rules.git
 cd claude-code-rules
 
 # Install core plugin
-/plugin install ./plugins/cc-handbook
+/plugin install ./plugins/handbook
 
 # Install extras plugin
-/plugin install ./plugins/cc-handbook-extras
+/plugin install ./plugins/handbook-extras
 
 # Install QA plugin
-/plugin install ./plugins/cc-handbook-qa
+/plugin install ./plugins/handbook-qa
 
 # Install .NET plugin
-/plugin install ./plugins/cc-handbook-dotnet
+/plugin install ./plugins/handbook-dotnet
 
 # Install Context7 plugin
-/plugin install ./plugins/cc-handbook-context7
+/plugin install ./plugins/handbook-context7
 
 # Install sounds plugin
-/plugin install ./plugins/cc-handbook-sounds
+/plugin install ./plugins/handbook-sounds
 ```
 
 ## Contributing

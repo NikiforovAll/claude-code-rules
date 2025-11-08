@@ -23,9 +23,9 @@ The monorepo maintains versions across multiple locations that must stay synchro
 1. `.claude-plugin/marketplace.json` - Marketplace metadata version
 2. `.claude-plugin/marketplace.json` - Plugin entries (currently 3 plugins)
 3. Individual plugin.json files for each plugin:
-   - `plugins/cc-handbook/.claude-plugin/plugin.json`
-   - `plugins/cc-handbook-extras/.claude-plugin/plugin.json`
-   - `plugins/cc-handbook-dotnet/.claude-plugin/plugin.json`
+   - `plugins/handbook/.claude-plugin/plugin.json`
+   - `plugins/handbook-extras/.claude-plugin/plugin.json`
+   - `plugins/handbook-dotnet/.claude-plugin/plugin.json`
 
 The skill automatically discovers all plugins from the marketplace manifest and updates them dynamically, ensuring all locations are updated atomically and remain consistent.
 
@@ -125,9 +125,9 @@ After successful completion:
 
    Changes made:
    - .claude-plugin/marketplace.json
-   - plugins/cc-handbook/.claude-plugin/plugin.json
-   - plugins/cc-handbook-extras/.claude-plugin/plugin.json
-   - plugins/cc-handbook-dotnet/.claude-plugin/plugin.json
+   - plugins/handbook/.claude-plugin/plugin.json
+   - plugins/handbook-extras/.claude-plugin/plugin.json
+   - plugins/handbook-dotnet/.claude-plugin/plugin.json
    - CHANGELOG.md
 
    Next steps:
@@ -174,9 +174,9 @@ Claude: "Version bump completed successfully!
 
 Files updated:
 - .claude-plugin/marketplace.json
-- plugins/cc-handbook/.claude-plugin/plugin.json
-- plugins/cc-handbook-extras/.claude-plugin/plugin.json
-- plugins/cc-handbook-dotnet/.claude-plugin/plugin.json
+- plugins/handbook/.claude-plugin/plugin.json
+- plugins/handbook-extras/.claude-plugin/plugin.json
+- plugins/handbook-dotnet/.claude-plugin/plugin.json
 - CHANGELOG.md
 
 Next steps:

@@ -79,7 +79,7 @@ One of the fastest ways to evolve your setup is using skills - reusable componen
 
 ### The `skill-creator` Skill
 
-The cc-handbook plugin includes [`skill-creator`](/component-reference/skills/skill-creator), a skill that helps you design and implement new skills following Anthropic's best practices.
+The handbook plugin includes [`skill-creator`](/component-reference/skills/skill-creator), a skill that helps you design and implement new skills following Anthropic's best practices.
 
 **Benefits:**
 - **Rapid Development**: Quickly scaffold well-structured skills

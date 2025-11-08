@@ -34,13 +34,18 @@ dotnet csharpier --version
 
 ## Installation
 
-Enable the plugin in your Claude Code project:
+Via marketplace (recommended):
 
 ```bash
-claude plugin enable cc-handbook-dotnet
+/plugin marketplace add nikiforovall/claude-code-rules
+/plugin install handbook-dotnet
 ```
 
-Or add it to your project's marketplace configuration.
+Or directly from source:
+
+```bash
+/plugin install https://github.com/nikiforovall/claude-code-rules/tree/main/plugins/handbook-dotnet
+```
 
 ## How It Works
 

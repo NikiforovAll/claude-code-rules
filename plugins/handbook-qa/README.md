@@ -17,7 +17,7 @@ This plugin provides Playwright MCP integration for browser automation, end-to-e
 ## Plugin Structure
 
 ```
-cc-handbook-qa/
+handbook-qa/
 ├── .claude-plugin/
 │   └── plugin.json       # Plugin manifest
 └── .mcp.json             # Playwright MCP configuration
@@ -25,8 +25,17 @@ cc-handbook-qa/
 
 ## Installation
 
+Via marketplace (recommended):
+
 ```bash
-claude plugins install https://github.com/nikiforovall/claude-code-rules/tree/main/plugins/cc-handbook-qa
+/plugin marketplace add nikiforovall/claude-code-rules
+/plugin install handbook-qa
+```
+
+Or directly from source:
+
+```bash
+/plugin install https://github.com/nikiforovall/claude-code-rules/tree/main/plugins/handbook-qa
 ```
 
 ## Usage

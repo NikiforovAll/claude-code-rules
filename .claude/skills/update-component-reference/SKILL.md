@@ -19,9 +19,9 @@ Use this skill when the user requests to:
 Before documenting a component, ensure:
 
 1. **Component exists** in the appropriate plugin directory:
-   - Commands: `plugins/cc-handbook/commands/{name}.md`
-   - Agents: `plugins/cc-handbook/agents/{name}.md`
-   - Skills: `plugins/cc-handbook/skills/{name}/SKILL.md`
+   - Commands: `plugins/handbook/commands/{name}.md`
+   - Agents: `plugins/handbook/agents/{name}.md`
+   - Skills: `plugins/handbook/skills/{name}/SKILL.md`
    - Hooks: `plugins/{plugin-name}/hooks/hooks.json` and hook scripts
    - MCP Servers: `plugins/{plugin-name}/.mcp.json`
 
@@ -81,7 +81,7 @@ title: "/command-name"
 sidebar_position: N
 ---
 
-import CommandNameSource from '!!raw-loader!../../../../plugins/cc-handbook/commands/command-name.md'
+import CommandNameSource from '!!raw-loader!../../../../plugins/handbook/commands/command-name.md'
 import CodeBlock from '@theme/CodeBlock';
 
 # Use `/command-name`
@@ -112,7 +112,7 @@ title: "@agent-name"
 sidebar_position: N
 ---
 
-import AgentNameSource from '!!raw-loader!../../../../plugins/cc-handbook/agents/agent-name.md'
+import AgentNameSource from '!!raw-loader!../../../../plugins/handbook/agents/agent-name.md'
 import CodeBlock from '@theme/CodeBlock';
 
 # Use `@agent-name` agent
@@ -143,7 +143,7 @@ title: "skill-name"
 sidebar_position: N
 ---
 
-import SkillNameSource from '!!raw-loader!../../../../plugins/cc-handbook/skills/skill-name/SKILL.md'
+import SkillNameSource from '!!raw-loader!../../../../plugins/handbook/skills/skill-name/SKILL.md'
 import CodeBlock from '@theme/CodeBlock';
 
 # Use `skill-name` skill
@@ -252,9 +252,9 @@ Setup notes.
 
 For commands, agents, and skills, double-check the raw-loader import path:
 
-- Commands: `'!!raw-loader!../../../../plugins/cc-handbook/commands/{name}.md'`
-- Agents: `'!!raw-loader!../../../../plugins/cc-handbook/agents/{name}.md'`
-- Skills: `'!!raw-loader!../../../../plugins/cc-handbook/skills/{name}/SKILL.md'` ⚠️ Note the `/SKILL.md` suffix
+- Commands: `'!!raw-loader!../../../../plugins/handbook/commands/{name}.md'`
+- Agents: `'!!raw-loader!../../../../plugins/handbook/agents/{name}.md'`
+- Skills: `'!!raw-loader!../../../../plugins/handbook/skills/{name}/SKILL.md'` ⚠️ Note the `/SKILL.md` suffix
 
 The path goes up 4 directories (`../../../../`) from the `.mdx` file to reach the repo root.
 
@@ -300,10 +300,10 @@ Match the component name in PascalCase + "Source":
 
 **User**: "Add the new @pair-programmer agent to the documentation"
 
-1. **Verify** component exists: `plugins/cc-handbook/agents/pair-programmer.md` ✓
+1. **Verify** component exists: `plugins/handbook/agents/pair-programmer.md` ✓
 2. **Check** it's an agent (auto-discovered, no plugin.json needed) ✓
 3. **Find** next sidebar_position in `website/docs/component-reference/agents/`
 4. **Create** `website/docs/component-reference/agents/pair-programmer.mdx`
 5. **Write** content using agent template
-6. **Import** using: `'!!raw-loader!../../../../plugins/cc-handbook/agents/pair-programmer.md'`
+6. **Import** using: `'!!raw-loader!../../../../plugins/handbook/agents/pair-programmer.md'`
 7. **Verify** documentation renders correctly

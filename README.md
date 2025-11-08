@@ -8,12 +8,14 @@ Learn practical techniques to enhance your AI-assisted development workflow with
 
 ## Plugins
 
-This repository contains four plugins:
+This repository contains next plugins:
 
-- **`cc-handbook`** - Core plugin with best practices, commands, agents, and MCP integrations
-- **`cc-handbook-extras`** - Experimental and extended features plugin
-- **`cc-handbook-qa`** - Browser automation and QA testing tools with Playwright integration
-- **`cc-handbook-dotnet`** - .NET-specific development skillset
+- **`handbook`** - Core plugin with best practices, commands, agents, and MCP integrations
+- **`handbook-extras`** - Experimental and extended features plugin
+- **`handbook-qa`** - Browser automation and QA testing tools with Playwright integration
+- **`handbook-dotnet`** - .NET-specific development skillset
+- **`handbook-context7`** - Context7 MCP server for fetching latest library documentation
+- **`handbook-sounds`** - Audio feedback for Claude Code events on Windows
 
 Plus a marketplace for centralized plugin discovery and installation.
 
@@ -26,14 +28,20 @@ Use Claude Code's `/plugin` command for the quickest installation:
 /plugin marketplace add nikiforovall/claude-code-rules
 
 # Install core plugin
-/plugin install cc-handbook
+/plugin install handbook
 
 # Install extras plugin
-/plugin install cc-handbook-extras
+/plugin install handbook-extras
 
 # Install QA plugin
-/plugin install cc-handbook-qa
+/plugin install handbook-qa
 
 # Install dotnet plugin
-/plugin install cc-handbook-dotnet
+/plugin install handbook-dotnet
+
+# Install context7 plugin
+/plugin install handbook-context7
+
+# Install sounds plugin
+/plugin install handbook-sounds
 ```

@@ -12,7 +12,7 @@ This is a Claude Code plugin monorepo containing multiple distributable plugins 
 claude-code-rules/                    # Root monorepo
 │
 ├── plugins/                          # Plugin directory
-│   ├── cc-handbook/                  # Core plugin
+│   ├── handbook/                     # Core plugin
 │   │   ├── .claude-plugin/
 │   │   │   └── plugin.json          # Name: "handbook"
 │   │   ├── commands/                 # 5 slash commands
@@ -22,7 +22,7 @@ claude-code-rules/                    # Root monorepo
 │   │   ├── TIPS-AND-TRICKS.md
 │   │   └── README.md
 │   │
-│   ├── cc-handbook-extras/           # Extras plugin
+│   ├── handbook-extras/              # Extras plugin
 │   │   ├── .claude-plugin/
 │   │   │   └── plugin.json          # Name: "handbook-extras"
 │   │   ├── commands/                 # Ready for contributions
@@ -30,27 +30,33 @@ claude-code-rules/                    # Root monorepo
 │   │   ├── hooks/
 │   │   └── README.md
 │   │
-│   ├── cc-handbook-qa/               # QA and browser automation plugin
+│   ├── handbook-qa/                  # QA and browser automation plugin
 │   │   ├── .claude-plugin/
 │   │   │   └── plugin.json          # Name: "handbook-qa"
 │   │   ├── .mcp.json                 # Playwright MCP server
 │   │   └── README.md
 │   │
-│   ├── cc-handbook-dotnet/           # .NET development plugin
+│   ├── handbook-dotnet/              # .NET development plugin
 │   │   ├── .claude-plugin/
 │   │   │   └── plugin.json          # Name: "handbook-dotnet"
 │   │   ├── .mcp.json                 # Microsoft Docs MCP server
 │   │   ├── hooks/
 │   │   └── README.md
 │   │
-│   └── cc-handbook-context7/         # Context7 documentation plugin
+│   ├── handbook-context7/            # Context7 documentation plugin
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json          # Name: "handbook-context7"
+│   │   ├── .mcp.json                 # Context7 MCP server
+│   │   └── README.md
+│   │
+│   └── handbook-sounds/              # Audio feedback plugin
 │       ├── .claude-plugin/
-│       │   └── plugin.json          # Name: "handbook-context7"
-│       ├── .mcp.json                 # Context7 MCP server
+│       │   └── plugin.json          # Name: "handbook-sounds"
+│       ├── hooks/
 │       └── README.md
 │
 ├── .claude-plugin/                   # Marketplace configuration
-│   └── marketplace.json              # Catalogs all plugins
+│   └── marketplace.json              # Catalogs all plugins (Marketplace name: "cc-handbook")
 │
 ├── website/                          # Docusaurus documentation site
 │   ├── docs/                         # Source documentation

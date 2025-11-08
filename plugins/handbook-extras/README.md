@@ -2,7 +2,7 @@
 
 Extended features and experimental tools for Claude Code Handbook.
 
-This is a companion plugin to `cc-handbook` providing additional, experimental, or domain-specific features.
+This is a companion plugin to `handbook` providing additional, experimental, or domain-specific features.
 
 ## Current Status
 
@@ -20,7 +20,7 @@ To add new features to this extras plugin:
 ## Plugin Structure
 
 ```
-cc-handbook-extras/
+handbook-extras/
 ├── .claude-plugin/
 │   └── plugin.json       # Plugin manifest
 ├── commands/             # Custom slash commands
@@ -31,8 +31,17 @@ cc-handbook-extras/
 
 ## Installation
 
+Via marketplace (recommended):
+
 ```bash
-claude plugins install https://github.com/nikiforovall/claude-code-rules/tree/main/plugins/cc-handbook-extras
+/plugin marketplace add nikiforovall/claude-code-rules
+/plugin install handbook-extras
+```
+
+Or directly from source:
+
+```bash
+/plugin install https://github.com/nikiforovall/claude-code-rules/tree/main/plugins/handbook-extras
 ```
 
 ## License
