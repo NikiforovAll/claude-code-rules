@@ -47,3 +47,39 @@
 .header-github-link:hover {
   opacity: 0.6;
 }
+
+/* Plugin-specific badge styles */
+.badge--handbook {
+  --ifm-badge-background-color: #d27354;
+  --ifm-badge-color: white;
+}
+
+.badge--handbook-extras {
+  --ifm-badge-background-color: #6c757d;
+  --ifm-badge-color: white;
+}
+
+.badge--handbook-qa {
+  --ifm-badge-background-color: #5b9bd5;
+  --ifm-badge-color: white;
+}
+
+.badge--handbook-dotnet {
+  --ifm-badge-background-color: #28a745;
+  --ifm-badge-color: white;
+}
+
+.badge--handbook-context7 {
+  --ifm-badge-background-color: #ffba00;
+  --ifm-badge-color: black;
+}
+
+.badge--handbook-sounds {
+  --ifm-badge-background-color: #fa383e;
+  --ifm-badge-color: white;
+}
+
+.badge--handbook-git-worktree {
+  --ifm-badge-background-color: #9c27b0;
+  --ifm-badge-color: white;
+}

@@ -1,6 +1,6 @@
 {
   "name": "handbook-extras",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "Extended features and experimental tools for Claude Code Handbook",
   "author": {
     "name": "nikiforovall",
@@ -17,7 +17,6 @@
     "tools"
   ],
   "skills": [
-    "./skills/structured-plan-mode",
-    "./skills/git-worktree"
+    "./skills/structured-plan-mode"
   ]
 }

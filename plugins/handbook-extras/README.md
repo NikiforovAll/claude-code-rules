@@ -1,49 +1,31 @@
-# Claude Code Handbook Extras Plugin
+# Handbook Extras
 
 Extended features and experimental tools for Claude Code Handbook.
 
-This is a companion plugin to `handbook` providing additional, experimental, or domain-specific features.
+Companion plugin to `handbook` providing additional, experimental, or domain-specific features.
 
-## Current Status
+## Features
 
-This plugin is in its initial release and ready for community contributions.
+**Commands:**
+- `/five-whys` - Root cause analysis using the Five Whys technique
+- `/explain` - Clear explanations of code and concepts
+- `/tools` - List available Claude Code tools
+- `/prompt-generator` - Generate effective prompts for Claude
 
-## Contributing
+**Agents:**
+- `deep-research-agent` - Comprehensive research with adaptive strategies
+- `backend-architect` - Design reliable backend systems
+- `git-diff-analyzer` - Analyze git branch differences
+- `codebase-analyzer` - Understand how existing code works
+- `system-architect` - Design scalable system architecture
+- `pair-programmer` - Collaborative problem-solving
 
-To add new features to this extras plugin:
-
-1. Create a new command or agent in the appropriate directory (`commands/`, `agents/`, etc.)
-2. Update the plugin version in `.claude-plugin/plugin.json`
-3. Test the plugin locally: `claude plugins install .`
-4. Submit a pull request with your changes
-
-## Plugin Structure
-
-```
-handbook-extras/
-├── .claude-plugin/
-│   └── plugin.json       # Plugin manifest
-├── commands/             # Custom slash commands
-├── agents/               # Specialized agents
-├── hooks/                # Event handlers
-└── .mcp.json (optional) # MCP server configurations
-```
+**Skills:**
+- `structured-plan-mode` - Systematic task decomposition for complex features
 
 ## Installation
-
-Via marketplace (recommended):
 
 ```bash
 /plugin marketplace add nikiforovall/claude-code-rules
 /plugin install handbook-extras
 ```
-
-Or directly from source:
-
-```bash
-/plugin install https://github.com/nikiforovall/claude-code-rules/tree/main/plugins/handbook-extras
-```
-
-## License
-
-MIT

@@ -12,7 +12,7 @@ Claude Code Handbook provides complementary plugins to enhance your AI-assisted 
 /plugin marketplace add nikiforovall/claude-code-rules
 ```
 
-## <span className="badge badge--primary">cc-handbook</span>
+## [<span className="badge badge--handbook">handbook</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook/README.md)
 
 Core plugin with essential tools and best practices for Claude Code development.
 
@@ -21,7 +21,7 @@ Core plugin with essential tools and best practices for Claude Code development.
 /plugin install handbook
 ```
 
-## <span className="badge badge--secondary">cc-handbook-extras</span>
+## [<span className="badge badge--handbook-extras">handbook-extras</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-extras/README.md)
 
 Extended features and experimental tools for advanced use cases.
 
@@ -29,15 +29,7 @@ Extended features and experimental tools for advanced use cases.
 /plugin install handbook-extras
 ```
 
-## <span className="badge badge--info">cc-handbook-qa</span>
-
-Browser automation and QA testing tools with Playwright MCP integration.
-
-```bash
-/plugin install handbook-qa
-```
-
-## <span className="badge badge--success">cc-handbook-dotnet</span>
+## [<span className="badge badge--handbook-dotnet">handbook-dotnet</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-dotnet/README.md)
 
 .NET development tools and automatic CSharpier formatting for C# files.
 
@@ -45,7 +37,23 @@ Browser automation and QA testing tools with Playwright MCP integration.
 /plugin install handbook-dotnet
 ```
 
-## <span className="badge badge--warning">cc-handbook-context7</span>
+## [<span className="badge badge--handbook-sounds">handbook-sounds</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-sounds/README.md)
+
+Audio feedback for Claude Code events on Windows using PowerShell sounds.
+
+```bash
+/plugin install handbook-sounds
+```
+
+## [<span className="badge badge--handbook-git-worktree">handbook-git-worktree</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-git-worktree/README.md)
+
+Git worktree management for working on multiple branches simultaneously.
+
+```bash
+/plugin install handbook-git-worktree
+```
+
+## [<span className="badge badge--handbook-context7">handbook-context7</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-context7/README.md)
 
 Context7 MCP server for fetching latest library documentation from official sources.
 
@@ -53,12 +61,12 @@ Context7 MCP server for fetching latest library documentation from official sour
 /plugin install handbook-context7
 ```
 
-## <span className="badge badge--danger">cc-handbook-sounds</span>
+## [<span className="badge badge--handbook-qa">handbook-qa</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-qa/README.md)
 
-Audio feedback for Claude Code events on Windows using PowerShell sounds.
+Browser automation and QA testing tools with Playwright MCP integration.
 
 ```bash
-/plugin install handbook-sounds
+/plugin install handbook-qa
 ```
 
 ---
@@ -103,6 +111,9 @@ cd claude-code-rules
 
 # Install sounds plugin
 /plugin install ./plugins/handbook-sounds
+
+# Install git-worktree plugin
+/plugin install ./plugins/handbook-git-worktree
 ```
 
 ## Contributing

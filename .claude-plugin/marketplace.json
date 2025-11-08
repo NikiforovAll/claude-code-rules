@@ -1,19 +1,19 @@
 {
   "name": "cc-handbook",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "owner": {
     "name": "nikiforovall",
     "email": "nikiforovall@github.com"
   },
   "metadata": {
     "description": "Official marketplace for Claude Code Handbook plugins and extensions",
-    "version": "1.8.0"
+    "version": "1.9.0"
   },
   "repository": "https://github.com/nikiforovall/claude-code-rules",
   "plugins": [
     {
       "name": "handbook",
-      "version": "1.8.0",
+      "version": "1.9.0",
       "description": "Core Claude Code handbook with best practices and essential tools",
       "author": {
         "name": "nikiforovall",
@@ -34,7 +34,7 @@
     },
     {
       "name": "handbook-extras",
-      "version": "1.8.0",
+      "version": "1.9.0",
       "description": "Extended features and experimental tools for Claude Code Handbook",
       "author": {
         "name": "nikiforovall",
@@ -53,7 +53,7 @@
     },
     {
       "name": "handbook-qa",
-      "version": "1.8.0",
+      "version": "1.9.0",
       "description": "Browser automation and QA testing tools with Playwright MCP integration",
       "author": {
         "name": "nikiforovall",
@@ -73,7 +73,7 @@
     },
     {
       "name": "handbook-dotnet",
-      "version": "1.8.0",
+      "version": "1.9.0",
       "description": ".NET development tools including automatic CSharpier formatting for C# files",
       "author": {
         "name": "nikiforovall",
@@ -94,7 +94,7 @@
     },
     {
       "name": "handbook-context7",
-      "version": "1.8.0",
+      "version": "1.9.0",
       "description": "Context7 MCP server for fetching latest library documentation from official sources",
       "author": {
         "name": "nikiforovall",
@@ -114,7 +114,7 @@
     },
     {
       "name": "handbook-sounds",
-      "version": "1.8.0",
+      "version": "1.9.0",
       "description": "Audio feedback for Claude Code events on Windows using PowerShell sounds",
       "author": {
         "name": "nikiforovall",
@@ -130,6 +130,27 @@
         "windows",
         "powershell",
         "accessibility"
+      ],
+      "homepage": "https://nikiforovall.blog/claude-code-rules/",
+      "strict": true
+    },
+    {
+      "name": "handbook-git-worktree",
+      "version": "1.9.0",
+      "description": "Git worktree management for working on multiple branches simultaneously",
+      "author": {
+        "name": "nikiforovall",
+        "url": "https://github.com/nikiforovall"
+      },
+      "source": "./plugins/handbook-git-worktree",
+      "category": "productivity",
+      "tags": [
+        "git",
+        "worktree",
+        "branches",
+        "workflow",
+        "parallel-development",
+        "productivity"
       ],
       "homepage": "https://nikiforovall.blog/claude-code-rules/",
       "strict": true

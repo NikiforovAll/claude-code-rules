@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.9.0] - 2025-01-08
+
+### Added
+- New `handbook-git-worktree` plugin for Git worktree management
+
+### Changed
+- Enhanced documentation navigation with improved plugin badges and sidebar organization
+- Simplified plugin README files for better readability
+
 ## [1.8.0] - 2025-11-08
 
 ### Added
