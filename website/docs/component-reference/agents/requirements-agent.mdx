@@ -1,0 +1,83 @@
+---
+title: "@requirements-agent"
+sidebar_position: 10
+---
+
+import RequirementsAgentSource from '!!raw-loader!../../../../plugins/handbook-agent-spec-kit/agents/requirements-agent.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `@requirements-agent` agent
+
+<span className="badge badge--handbook-agent-spec-kit">handbook-agent-spec-kit</span>
+
+Expert business analyst that transforms feature ideas into structured requirements documents with user stories and EARS-format acceptance criteria.
+
+The `@requirements-agent` creates comprehensive requirements documents with 4-8 requirements, each containing user stories and 3-7 EARS acceptance criteria. It focuses on WHAT needs to be built, not HOW, and covers edge cases, error conditions, and security considerations.
+
+## When to Use
+
+Use the `@requirements-agent` when you want to:
+
+- Transform a rough feature idea into structured requirements
+- Create user stories with testable acceptance criteria
+- Document business requirements before technical design
+- Ensure comprehensive coverage of feature scope
+
+## Key Features
+
+- **EARS Syntax**: Uses Easy Approach to Requirements Syntax (WHEN/IF/WHERE/WHILE + THEN)
+- **User Stories**: Follows proper format (role, capability, benefit)
+- **Comprehensive Coverage**: Addresses edge cases, errors, security, and performance
+- **Testable Criteria**: Makes requirements measurable and verifiable
+- **Immediate Creation**: Creates complete requirements without sequential questions
+
+## Usage Examples
+
+**Basic usage:**
+```
+@requirements-agent create requirements for user authentication
+```
+
+**With specific feature:**
+```
+@requirements-agent I need requirements for a real-time chat feature
+```
+
+## Output Structure
+
+Creates `specs/{feature_name}/requirements.md` with:
+
+```markdown
+# Requirements Document
+
+## Introduction
+[2-3 paragraphs explaining feature, business value, users, problem]
+
+## Requirements
+
+### Requirement 1: [Descriptive Name]
+**User Story:** As a [role], I want [capability], so that [benefit]
+
+#### Acceptance Criteria
+1. WHEN [trigger event] THEN [system] SHALL [response]
+2. IF [precondition] THEN [system] SHALL [behavior]
+[3-7 criteria per requirement]
+```
+
+## EARS Format Examples
+
+- `WHEN user clicks submit button THEN system SHALL validate all required fields`
+- `IF validation fails THEN system SHALL display specific error messages`
+- `WHEN user session expires THEN system SHALL redirect to login page`
+- `WHERE user has admin privileges THEN system SHALL display management options`
+
+## Agent Specification
+
+<CodeBlock language="markdown">
+{RequirementsAgentSource}
+</CodeBlock>
+
+## Related
+
+- [`tech-design-agent`](./tech-design-agent) - Next phase: create technical design
+- [`spec-driven`](/component-reference/skills/spec-driven) - Orchestrator that coordinates this agent

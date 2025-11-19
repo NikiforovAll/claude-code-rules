@@ -1,0 +1,105 @@
+---
+title: "@implementation-agent"
+sidebar_position: 13
+---
+
+import ImplementationAgentSource from '!!raw-loader!../../../../plugins/handbook-agent-spec-kit/agents/implementation-agent.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `@implementation-agent` agent
+
+<span className="badge badge--handbook-agent-spec-kit">handbook-agent-spec-kit</span>
+
+Strict implementation agent that executes coding tasks following requirements exactly without improvisation, asking for clarification when needed.
+
+The `@implementation-agent` operates in strict Implementation Mode where it follows instructions exactly as provided without any improvisation, interpretation, or application of best practices unless explicitly requested. It completes ONE task per session and marks completion in tasks.md.
+
+## When to Use
+
+Use the `@implementation-agent` when you want to:
+
+- Execute individual coding tasks from approved specifications
+- Implement exactly what is specified without assumptions
+- Complete one focused task per session
+- Update task progress systematically
+- Request clarification for unclear requirements
+
+**Prerequisites**: Approved requirements.md, design.md, and tasks.md must exist
+
+## Key Features
+
+- **Zero Improvisation**: Implements ONLY what is explicitly stated
+- **One Task Per Session**: Completes single task, then suggests new session
+- **Pre-Implementation Protocol**: 6-step checklist before coding
+- **Clarification First**: Asks questions when requirements unclear
+- **Task Tracking**: Updates tasks.md after completion
+- **Strict Adherence**: No security, validation, or features beyond specs
+
+## Usage Examples
+
+**Implement specific task:**
+```
+@implementation-agent implement task 2.1 from specs/auth-feature/tasks.md
+```
+
+**With task number:**
+```
+@implementation-agent execute task 3 for user authentication
+```
+
+## Pre-Implementation Protocol
+
+Before writing ANY code, the agent:
+
+1. **Reads** requirements.md, design.md, tasks.md
+2. **Verifies** all referenced files and resources exist
+3. **Checks** requirements completeness
+4. **Confirms** scope boundaries
+5. **Lists** assumptions to verify
+6. **Asks** for clarification if needed
+
+## Zero Improvisation Policy
+
+**Forbidden without explicit requirements:**
+- Security measures (encryption, hashing, authentication)
+- Input validation or error handling beyond specs
+- Default data or initial users
+- Database relationships not in design
+- UI/UX improvements beyond design
+- Performance optimizations, logging, monitoring
+
+**Literal implementation examples:**
+- "Create a login form" → create ONLY form structure as specified
+- "Validate password length" → validate ONLY length as specified
+
+## Task Completion Process
+
+After completing a task:
+
+1. **Updates tasks.md**: Moves task from Pending to Completed
+2. **Changes checkbox**: From `- [ ]` to `- [x]`
+3. **Updates Progress Summary**: New counts and percentage
+4. **Requests review**: Asks user to review implementation
+5. **Suggests new session**: Recommends starting fresh for next task
+
+## Agent Specification
+
+<CodeBlock language="markdown">
+{ImplementationAgentSource}
+</CodeBlock>
+
+## Key Principles
+
+1. **Strict Adherence** - Follow specifications exactly
+2. **Zero Improvisation** - Never add functionality not specified
+3. **Clarity First** - Ask before implementing when in doubt
+4. **One Task Focus** - Complete only current task
+5. **User Control** - User decides what gets implemented
+6. **Verification First** - Complete pre-checks before coding
+
+## Related
+
+- [`tasks-agent`](./tasks-agent) - Previous phase: create task list
+- [`requirements-agent`](./requirements-agent) - Provides requirements specifications
+- [`tech-design-agent`](./tech-design-agent) - Provides technical design
+- [`spec-driven`](/component-reference/skills/spec-driven) - Orchestrator that coordinates this agent

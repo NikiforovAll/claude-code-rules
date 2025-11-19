@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.11.0] - 2025-01-19
+
+### Added
+- New `handbook-agent-spec-kit` plugin for spec-driven development workflow
+
 ## [1.10.1] - 2025-01-08
 
 ### Changed

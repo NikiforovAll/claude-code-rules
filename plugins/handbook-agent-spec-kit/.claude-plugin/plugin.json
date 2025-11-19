@@ -1,0 +1,22 @@
+{
+  "name": "handbook-agent-spec-kit",
+  "version": "1.11.0",
+  "description": "Spec-driven development workflow system with structured phases: Requirements → Design → Tasks → Implementation",
+  "author": {
+    "name": "Vitalii Matviichuk",
+    "url": "https://github.com/vmatviichuk"
+  },
+  "homepage": "https://nikiforovall.blog/claude-code-rules/",
+  "repository": "https://github.com/nikiforovall/claude-code-rules",
+  "license": "MIT",
+  "keywords": [
+    "spec-driven",
+    "workflow",
+    "planning",
+    "agents",
+    "requirements",
+    "design",
+    "implementation",
+    "project-management"
+  ]
+}

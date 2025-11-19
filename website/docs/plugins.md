@@ -61,6 +61,22 @@ Structured planning methodology for complex feature implementations through syst
 /plugin install handbook-structured-plan-mode
 ```
 
+## [<span className="badge badge--handbook-agent-spec-kit">handbook-agent-spec-kit</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-agent-spec-kit/README.md)
+
+Spec-driven development workflow system with structured phases: Requirements → Design → Tasks → Implementation.
+
+**Components:**
+- **Skill:** [`spec-driven`](/component-reference/skills/spec-driven) - Orchestrator that coordinates the entire workflow with approval gates
+- **Agents:**
+  - [`requirements-agent`](/component-reference/agents/requirements-agent) - Creates requirements documents with EARS acceptance criteria
+  - [`tech-design-agent`](/component-reference/agents/tech-design-agent) - Creates comprehensive technical design documents
+  - [`tasks-agent`](/component-reference/agents/tasks-agent) - Converts designs into actionable coding tasks
+  - [`implementation-agent`](/component-reference/agents/implementation-agent) - Executes tasks with strict zero-improvisation policy
+
+```bash
+/plugin install handbook-agent-spec-kit
+```
+
 ## [<span className="badge badge--handbook-context7">handbook-context7</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-context7/README.md)
 
 Context7 MCP server for fetching latest library documentation from official sources.
@@ -125,6 +141,9 @@ cd claude-code-rules
 
 # Install structured-plan-mode plugin
 /plugin install ./plugins/handbook-structured-plan-mode
+
+# Install agent-spec-kit plugin
+/plugin install ./plugins/handbook-agent-spec-kit
 ```
 
 ## Contributing

@@ -1,0 +1,113 @@
+---
+title: "@tasks-agent"
+sidebar_position: 12
+---
+
+import TasksAgentSource from '!!raw-loader!../../../../plugins/handbook-agent-spec-kit/agents/tasks-agent.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `@tasks-agent` agent
+
+<span className="badge badge--handbook-agent-spec-kit">handbook-agent-spec-kit</span>
+
+Expert development lead that converts technical designs into actionable, incremental coding tasks for implementation.
+
+The `@tasks-agent` breaks down designs into discrete, manageable coding tasks (1-4 hours each) organized by phases. It creates a step-by-step implementation guide with progress tracking, requirements traceability, and test integration.
+
+## When to Use
+
+Use the `@tasks-agent` when you want to:
+
+- Convert technical design into specific coding tasks
+- Create incremental implementation plan
+- Track progress through task completion
+- Ensure requirements traceability
+- Plan testing throughout implementation
+
+**Prerequisites**: Approved requirements.md and design.md must exist
+
+## Key Features
+
+- **Incremental Tasks**: 1-4 hour coding tasks that build on each other
+- **Progress Tracking**: Summary with completion percentage
+- **Requirements Traceability**: Every task references specific requirements
+- **Test Integration**: Testing included throughout implementation
+- **Coding Only**: Excludes manual testing, deployment, non-coding activities
+- **Three Sections**: Progress Summary, Completed Tasks, Pending Tasks
+
+## Usage Examples
+
+**Basic usage:**
+```
+@tasks-agent create implementation plan for user authentication
+```
+
+**With design reference:**
+```
+@tasks-agent break down specs/auth-feature/design.md into tasks
+```
+
+## Output Structure
+
+Creates `specs/{feature_name}/tasks.md` with:
+
+```markdown
+# Implementation Plan
+
+## Progress Summary
+- Total Tasks: 5
+- Completed: 0
+- Remaining: 5
+- Progress: 0%
+
+---
+
+## Completed Tasks ✓
+
+_No tasks completed yet._
+
+---
+
+## Pending Tasks
+
+### Phase 1: Foundation
+
+- [ ] 1. Create project structure
+  - Initialize files and directories
+  - Files: src/index.ts, package.json
+  - Requirements: 1.1
+
+### Phase 2: Core Implementation
+
+- [ ] 2. Implement authentication service
+  [Detailed sub-items...]
+  - Requirements: 2.1, 2.3
+```
+
+## Task Sequencing Strategy
+
+- **Phase 1: Foundation** - Structure, interfaces, basic models
+- **Phase 2: Core Implementation** - Business logic with unit tests
+- **Phase 3: Integration** - Component wiring, API layer, integration tests
+- **Phase 4: Validation & Completion** - Error handling, E2E tests, cleanup
+
+## Quality Standards
+
+- Maximum 2 levels of nesting (no 1.1.1 or deeper)
+- Each task 1-4 hours to complete
+- Only coding activities included
+- Requirements properly referenced
+- Testing integrated throughout
+- Tasks organized by logical phases
+
+## Agent Specification
+
+<CodeBlock language="markdown">
+{TasksAgentSource}
+</CodeBlock>
+
+## Related
+
+- [`tech-design-agent`](./tech-design-agent) - Previous phase: create design
+- [`implementation-agent`](./implementation-agent) - Next phase: execute tasks
+- [`spec-driven`](/component-reference/skills/spec-driven) - Orchestrator that coordinates this agent

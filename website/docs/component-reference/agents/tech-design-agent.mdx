@@ -1,0 +1,95 @@
+---
+title: "@tech-design-agent"
+sidebar_position: 11
+---
+
+import TechDesignAgentSource from '!!raw-loader!../../../../plugins/handbook-agent-spec-kit/agents/tech-design-agent.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `@tech-design-agent` agent
+
+<span className="badge badge--handbook-agent-spec-kit">handbook-agent-spec-kit</span>
+
+Expert software architect that creates comprehensive technical design documents addressing all requirements with clear implementation guidance.
+
+The `@tech-design-agent` transforms requirements into detailed technical designs with architecture diagrams, component specifications, data models, error handling strategies, and testing approaches. It focuses on HOW to build the solution while ensuring all requirements are addressed.
+
+## When to Use
+
+Use the `@tech-design-agent` when you want to:
+
+- Create technical architecture from approved requirements
+- Design system components and their interactions
+- Define data models and persistence strategy
+- Plan error handling and testing approaches
+- Document implementation guidance for developers
+
+**Prerequisites**: Approved requirements.md must exist
+
+## Key Features
+
+- **Comprehensive Design**: Addresses every requirement with technical solutions
+- **Architecture Diagrams**: Includes Mermaid diagrams for visualization
+- **Component Specifications**: Defines responsibilities and interfaces
+- **Data Modeling**: Specifies structures, relationships, validation
+- **Error Handling**: Identifies failure points and recovery strategies
+- **Testing Strategy**: Covers unit, integration, and E2E testing
+
+## Usage Examples
+
+**Basic usage:**
+```
+@tech-design-agent create design for user authentication
+```
+
+**With requirements reference:**
+```
+@tech-design-agent design the system based on specs/auth-feature/requirements.md
+```
+
+## Output Structure
+
+Creates `specs/{feature_name}/design.md` with:
+
+```markdown
+# Design Document
+
+## Overview
+[Technical approach, key decisions, integration summary]
+
+## Architecture
+[Components, relationships, data flow, dependencies]
+
+## Components and Interfaces
+[Detailed specifications, responsibilities, interfaces]
+
+## Data Models
+[Structures, relationships, validation, persistence]
+
+## Error Handling
+[Failure points, error responses, logging, recovery]
+
+## Testing Strategy
+[Unit, integration, E2E, performance testing]
+```
+
+## Design Principles
+
+- **Separation of Concerns**: Single, well-defined responsibilities
+- **Loose Coupling**: Well-defined interfaces between components
+- **High Cohesion**: Related functionality grouped together
+- **Testability**: Design enables easy unit and integration testing
+- **Maintainability**: Structure supports future changes
+- **Security by Design**: Security built into architecture
+
+## Agent Specification
+
+<CodeBlock language="markdown">
+{TechDesignAgentSource}
+</CodeBlock>
+
+## Related
+
+- [`requirements-agent`](./requirements-agent) - Previous phase: create requirements
+- [`tasks-agent`](./tasks-agent) - Next phase: create implementation tasks
+- [`spec-driven`](/component-reference/skills/spec-driven) - Orchestrator that coordinates this agent

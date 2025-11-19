@@ -88,3 +88,8 @@
   --ifm-badge-background-color: #00897b;
   --ifm-badge-color: white;
 }
+
+.badge--handbook-agent-spec-kit {
+  --ifm-badge-background-color: #1976d2;
+  --ifm-badge-color: white;
+}
