@@ -1,0 +1,65 @@
+---
+title: "/reflect"
+sidebar_position: 7
+description: "Create a reflective analysis of the current Claude Code session, focusing on techniques, patterns, lessons learned, and workflow improvements"
+---
+
+import ReflectCommandSource from '!!raw-loader!../../../../plugins/handbook-extras/commands/reflect.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `/reflect`
+
+<span className="badge badge--handbook-extras">handbook-extras</span>
+
+Create reflective analyses of your Claude Code sessions to improve your development workflow and capture lessons learned.
+
+The `/reflect` command helps you step back and analyze the **meta aspects** of your work session - not what you built, but how you built it. It generates a structured markdown reflection covering techniques used, what worked well, lessons learned, and actionable improvements for future sessions.
+
+## When to Use
+
+Use `/reflect` to:
+
+- **After completing a significant task**: Capture insights while they're fresh
+- **When encountering repeated challenges**: Document patterns to avoid in the future
+- **For team knowledge sharing**: Create reusable workflow improvements
+- **During skill development**: Track your growth in using Claude Code effectively
+
+## Command Specification
+
+<CodeBlock language="markdown">
+{ReflectCommandSource}
+</CodeBlock>
+
+## Output
+
+The command creates a markdown file at `.claude/reflections/<date>-<name>.md` with structured sections including:
+
+- **What Went Well**: Effective techniques and approaches
+- **What Went Wrong**: Areas for improvement
+- **Lessons Learned**: Key insights from the session
+- **Action Items**: Specific improvements to apply next time
+- **Tips & Tricks**: Claude Code patterns discovered
+- **Generalization Opportunities**: Potential for reusable components
+
+## Benefits
+
+- **Continuous improvement**: Build better workflows over time
+- **Team learning**: Share effective patterns across your team
+- **Pattern recognition**: Identify what works and what doesn't
+- **Skill development**: Accelerate mastery of Claude Code
+- **Documentation**: Create a searchable knowledge base of sessions
+
+## Example Usage
+
+After debugging a complex API integration:
+
+```
+/reflect
+```
+
+This might generate: `.claude/reflections/2025-01-25-api-debugging.md` documenting your problem-solving approach, tool usage patterns, and lessons learned about API troubleshooting with Claude Code.
+
+## Related Commands
+
+- `/explain` - Get detailed explanations of code and concepts
+- `/five-whys` - Perform root cause analysis on problems

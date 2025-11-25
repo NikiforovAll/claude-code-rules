@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.12.0] - 2025-11-25
+
+### Added
+- New `/reflect` command in handbook-extras for creating reflective session analyses focusing on techniques, patterns, and lessons learned
+
 ## [1.11.0] - 2025-01-19
 
 ### Added
