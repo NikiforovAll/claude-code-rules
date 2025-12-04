@@ -1,6 +1,6 @@
 ---
 name: dotnet-run-file
-description: Run script-like C# programs using dotnet run file.cs. Use this skill when users want to execute C# code directly, write one-liner scripts via stdin, or learn about run file directives.
+description: Run script-like CSharp programs using dotnet run file.cs. Use this skill when users want to execute CSharp code directly, write one-liner scripts via stdin, or learn about run file directives.
 ---
 
 # .NET Run Files
