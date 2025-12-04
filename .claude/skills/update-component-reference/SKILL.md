@@ -35,7 +35,7 @@ Before documenting a component, ensure:
    }
    ```
 
-3. **Verify plugin name**: Check `.claude-plugin/plugin.json` for the badge (e.g., "cc-handbook", "cc-handbook-dotnet")
+3. **Verify plugin name**: Check `.claude-plugin/plugin.json` for the badge (e.g., "handbook", "handbook-dotnet")
 
 ## Implementation Process
 
@@ -86,7 +86,7 @@ import CodeBlock from '@theme/CodeBlock';
 
 # Use `/command-name`
 
-<span className="badge badge--primary">cc-handbook</span>
+<span className="badge badge--handbook">handbook</span>
 
 Brief description of what this command does (1-2 sentences).
 
@@ -117,7 +117,7 @@ import CodeBlock from '@theme/CodeBlock';
 
 # Use `@agent-name` agent
 
-<span className="badge badge--primary">cc-handbook</span>
+<span className="badge badge--handbook">handbook</span>
 
 Brief description of what this agent specializes in (1-2 sentences).
 
@@ -148,7 +148,7 @@ import CodeBlock from '@theme/CodeBlock';
 
 # Use `skill-name` skill
 
-<span className="badge badge--primary">cc-handbook</span>
+<span className="badge badge--handbook">handbook</span>
 
 Brief description of what this skill provides (1-2 sentences).
 
@@ -184,7 +184,7 @@ sidebar_position: N
 
 # Hook Name
 
-<span className="badge badge--success">plugin-name</span>
+<span className="badge badge--{plugin-name}">{plugin-name}</span>
 
 Brief description (1-2 sentences).
 
@@ -217,7 +217,7 @@ sidebar_position: N
 
 # Server Name MCP Server
 
-<span className="badge badge--primary">plugin-name</span>
+<span className="badge badge--{plugin-name}">{plugin-name}</span>
 
 Brief description (1-2 sentences).
 
@@ -278,9 +278,8 @@ The path goes up 4 directories (`../../../../`) from the `.mdx` file to reach th
    - Title in frontmatter should include prefix (`/` for commands, `@` for agents)
 
 5. **Wrong plugin badge**
-   - Verify badge matches the plugin in `.claude-plugin/plugin.json`
-   - cc-handbook uses `badge--primary`
-   - cc-handbook-dotnet uses `badge--success`
+   - Badge class follows pattern: `badge--{plugin-name}`
+   - Badge text is the plugin name (e.g., "handbook", "handbook-dotnet")
 
 ## Quick Reference
 
@@ -293,8 +292,11 @@ Match the component name in PascalCase + "Source":
 **Note**: Hooks and MCP servers don't use imports.
 
 ### Badge
-- cc-handbook: `<span className="badge badge--primary">cc-handbook</span>`
-- cc-handbook-dotnet: `<span className="badge badge--success">cc-handbook-dotnet</span>`
+Badge format: `<span className="badge badge--{plugin-name}">{plugin-name}</span>`
+
+Examples:
+- handbook: `<span className="badge badge--handbook">handbook</span>`
+- handbook-dotnet: `<span className="badge badge--handbook-dotnet">handbook-dotnet</span>`
 
 ## Example Workflow
 

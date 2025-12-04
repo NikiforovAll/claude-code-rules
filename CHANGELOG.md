@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.13.0] - 2025-12-04
+
+### Added
+- New `dotnet-run-file` skill in handbook-dotnet plugin for C# scripting with `dotnet run file.cs`
+- Stdin execution patterns for Claude Code friendly one-liners
+
+### Changed
+- Updated `update-component-reference` skill with correct badge format (`badge--{plugin-name}`)
+
 ## [1.12.0] - 2025-11-25
 
 ### Added
