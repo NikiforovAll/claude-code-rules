@@ -1,0 +1,48 @@
+---
+title: "/save-prompt"
+sidebar_position: 8
+---
+
+import SavePromptSource from '!!raw-loader!../../../../plugins/handbook-extras/commands/save-prompt.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `/save-prompt`
+
+<span className="badge badge--handbook-extras">handbook-extras</span>
+
+Generalize the current discussion into a reusable prompt and save it as a file.
+
+This command analyzes your conversation with Claude to extract the core intent and patterns, then creates a reusable prompt template that can be applied to similar scenarios in the future. It's perfect for capturing workflows you find yourself repeating.
+
+## When to Use
+
+Use `/save-prompt` when you want to:
+
+- **Capture a successful workflow** - Turn a productive session into a reusable template
+- **Create custom prompts** - Build your own prompt library from real interactions
+- **Standardize patterns** - Extract repeatable task patterns for team use
+
+## Command Specification
+
+<CodeBlock language="markdown">
+{SavePromptSource}
+</CodeBlock>
+
+## Output Format
+
+The command generates a `.prompt.md` file with frontmatter:
+
+```markdown
+---
+name: action-oriented-name
+description: Brief description of the prompt's goal
+argument-hint: Expected inputs description
+---
+The generalized prompt content with placeholders...
+```
+
+## Example Use Cases
+
+- After debugging a complex issue, save the troubleshooting approach
+- After implementing a feature pattern, capture it as a template
+- After a code review session, save the review methodology

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.14.0] - 2025-12-04
+
+### Added
+- New `/save-prompt` command in handbook-extras for generalizing discussions into reusable prompts
+
 ## [1.13.0] - 2025-12-04
 
 ### Added
