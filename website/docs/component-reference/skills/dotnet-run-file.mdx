@@ -1,0 +1,54 @@
+---
+title: "dotnet-run-file"
+sidebar_position: 6
+---
+
+import DotnetRunFileSource from '!!raw-loader!../../../../plugins/handbook-dotnet/skills/dotnet-run-file/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `dotnet-run-file` skill
+
+<span className="badge badge--handbook-dotnet">handbook-dotnet</span>
+
+Run script-like C# programs directly using .NET 10's `dotnet run file.cs` feature without creating project files.
+
+This skill helps you execute C# code quickly via stdin (ideal for Claude Code one-liners), understand run file directives, and create executable shell scripts in C#.
+
+## When to Use This Skill
+
+Use the `dotnet-run-file` skill when you want to:
+
+- Execute C# code quickly without creating a project
+- Write one-liner scripts via stdin (ideal for Claude Code)
+- Learn about run file directives (`#:package`, `#:sdk`, `#:property`)
+- Create executable shell scripts in C#
+- Convert a run file to a full project
+
+## Quick Examples
+
+```bash
+# Run a .cs file
+dotnet run app.cs
+
+# One-liner via stdin
+echo 'Console.WriteLine("Hello");' | dotnet run -
+
+# Multi-line with heredoc
+dotnet run - << 'EOF'
+var now = DateTime.Now;
+Console.WriteLine($"Time: {now}");
+EOF
+
+# With NuGet package
+dotnet run - << 'EOF'
+#:package Humanizer@*
+using Humanizer;
+Console.WriteLine(TimeSpan.FromMinutes(90).Humanize());
+EOF
+```
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{DotnetRunFileSource}
+</CodeBlock>
