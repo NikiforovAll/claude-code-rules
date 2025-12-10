@@ -348,9 +348,6 @@ Break large tasks into smaller chunks that are independently testable.
 - **During execution**: When updating task files, adding action items, or documenting progress
 - **When stuck**: Consult checklist for good task planning and common pitfalls section
 
-**Additional reference:**
-- `references/usage-guide.md` - Detailed template section explanations
-
 ---
 
 **Remember**:

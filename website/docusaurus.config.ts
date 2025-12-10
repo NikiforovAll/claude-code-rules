@@ -73,7 +73,7 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: 'img/cch-social.png',
+    image: 'img/cch-social-og-v2.png',
     colorMode: {
       respectPrefersColorScheme: true,
     },
