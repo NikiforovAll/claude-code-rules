@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.15.0] - 2025-12-13
+
+### Added
+- New `handbook-nano-banana` plugin for Python scripting and Gemini image generation using uv
+
 ## [1.14.0] - 2025-12-04
 
 ### Added
