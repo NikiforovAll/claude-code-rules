@@ -93,6 +93,14 @@ Browser automation and QA testing tools with Playwright MCP integration.
 /plugin install handbook-qa
 ```
 
+## [<span className="badge badge--handbook-nano-banana">handbook-nano-banana</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-nano-banana/README.md)
+
+Python scripting and Gemini image generation using uv with inline script dependencies.
+
+```bash
+/plugin install handbook-nano-banana
+```
+
 ---
 
 ## Understanding Building Blocks
@@ -144,6 +152,9 @@ cd claude-code-rules
 
 # Install agent-spec-kit plugin
 /plugin install ./plugins/handbook-agent-spec-kit
+
+# Install nano-banana plugin
+/plugin install ./plugins/handbook-nano-banana
 ```
 
 ## Contributing

@@ -93,3 +93,8 @@
   --ifm-badge-background-color: #1976d2;
   --ifm-badge-color: white;
 }
+
+.badge--handbook-nano-banana {
+  --ifm-badge-background-color: #e91e63;
+  --ifm-badge-color: white;
+}
