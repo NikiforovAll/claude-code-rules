@@ -298,6 +298,13 @@ Examples:
 - handbook: `<span className="badge badge--handbook">handbook</span>`
 - handbook-dotnet: `<span className="badge badge--handbook-dotnet">handbook-dotnet</span>`
 
+## Adding a New Plugin
+
+When documenting components from a **new plugin**, also update:
+
+1. **Badge CSS**: Add style to `website/src/css/custom.css` (pick unique color)
+2. **Plugin index**: Add entry to `website/docs/plugins.md` (both main list and Direct Installation section)
+
 ## Example Workflow
 
 **User**: "Add the new @pair-programmer agent to the documentation"
