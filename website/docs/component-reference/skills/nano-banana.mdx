@@ -1,0 +1,42 @@
+---
+title: "nano-banana"
+sidebar_position: 7
+---
+
+import NanoBananaSource from '!!raw-loader!../../../../plugins/handbook-nano-banana/skills/nano-banana/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `nano-banana` skill
+
+<span className="badge badge--handbook-nano-banana">handbook-nano-banana</span>
+
+Python scripting and Gemini image generation using uv with inline script dependencies.
+
+This skill provides a streamlined workflow for generating and editing images using Google's Gemini models, following the same iterative approach as browser automation skills but for AI image generation.
+
+## When to Use This Skill
+
+Use the `nano-banana` skill when you want to:
+
+- Generate images using Gemini's image generation models
+- Edit existing images with AI
+- Run Python scripts with uv using heredocs
+- Create self-contained scripts with inline dependencies
+
+## Key Features
+
+- **Heredoc execution**: Run Python inline without creating files
+- **Inline dependencies**: Self-contained scripts with `# /// script` metadata
+- **Iterative workflow**: Write → run → evaluate → repeat pattern
+- **Multiple models**: Support for both fast (gemini-2.5-flash-image) and pro (gemini-3-pro-image-preview) models
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{NanoBananaSource}
+</CodeBlock>
+
+## Related
+
+- [Gemini Image Generation Documentation](https://ai.google.dev/gemini-api/docs/image-generation)
+- [uv Script Dependencies](https://docs.astral.sh/uv/guides/scripts/#declaring-script-dependencies)
