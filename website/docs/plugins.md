@@ -37,6 +37,14 @@ Extended features and experimental tools for advanced use cases.
 /plugin install handbook-dotnet
 ```
 
+## [<span className="badge badge--handbook-microsoft-docs">handbook-microsoft-docs</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-microsoft-docs/README.md)
+
+Microsoft Learn MCP server for searching and fetching official Microsoft and Azure documentation.
+
+```bash
+/plugin install handbook-microsoft-docs
+```
+
 ## [<span className="badge badge--handbook-sounds">handbook-sounds</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-sounds/README.md)
 
 Audio feedback for Claude Code events on Windows using PowerShell sounds.
@@ -137,6 +145,9 @@ cd claude-code-rules
 
 # Install .NET plugin
 /plugin install ./plugins/handbook-dotnet
+
+# Install Microsoft Docs plugin
+/plugin install ./plugins/handbook-microsoft-docs
 
 # Install Context7 plugin
 /plugin install ./plugins/handbook-context7

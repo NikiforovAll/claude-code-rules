@@ -6,19 +6,6 @@ Learn practical techniques to enhance your AI-assisted development workflow with
 
 ![](./assets/handbook-demo.png)
 
-## Plugins
-
-This repository contains next plugins:
-
-- **`handbook`** - Core plugin with best practices, commands, agents, and MCP integrations
-- **`handbook-extras`** - Experimental and extended features plugin
-- **`handbook-qa`** - Browser automation and QA testing tools with Playwright integration
-- **`handbook-dotnet`** - .NET-specific development skillset
-- **`handbook-context7`** - Context7 MCP server for fetching latest library documentation
-- **`handbook-sounds`** - Audio feedback for Claude Code events on Windows
-
-Plus a marketplace for centralized plugin discovery and installation.
-
 ## Quick Start
 
 Use Claude Code's `/plugin` command for the quickest installation:
@@ -26,22 +13,20 @@ Use Claude Code's `/plugin` command for the quickest installation:
 ```bash
 # Add the marketplace (one-time setup)
 /plugin marketplace add nikiforovall/claude-code-rules
-
-# Install core plugin
-/plugin install handbook
-
-# Install extras plugin
-/plugin install handbook-extras
-
-# Install QA plugin
-/plugin install handbook-qa
-
-# Install dotnet plugin
-/plugin install handbook-dotnet
-
-# Install context7 plugin
-/plugin install handbook-context7
-
-# Install sounds plugin
-/plugin install handbook-sounds
 ```
+
+## Plugins
+
+| Plugin | Description |
+|--------|-------------|
+| `handbook` | Core Claude Code handbook with best practices and essential tools |
+| `handbook-extras` | Extended features and experimental tools |
+| `handbook-qa` | Browser automation and QA testing with Playwright MCP |
+| `handbook-dotnet` | .NET development tools with CSharpier formatting |
+| `handbook-microsoft-docs` | Microsoft Learn MCP server for Azure/Microsoft docs |
+| `handbook-context7` | Context7 MCP server for library documentation |
+| `handbook-sounds` | Audio feedback for Claude Code events (Windows) |
+| `handbook-git-worktree` | Git worktree management for parallel branch work |
+| `handbook-structured-plan-mode` | Structured planning for complex implementations |
+| `handbook-agent-spec-kit` | Spec-driven development workflow system |
+| `handbook-nano-banana` | Gemini image generation with prompt crafting guidance |

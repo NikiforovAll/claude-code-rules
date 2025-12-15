@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "microsoft_docs_mcp": {
+      "type": "http",
+      "url": "https://learn.microsoft.com/api/mcp"
+    }
+  }
+}
