@@ -122,7 +122,14 @@ config=types.GenerateContentConfig(
 ## Models
 
 - `gemini-2.5-flash-image` - Fast, general purpose image generation
-- `gemini-3-pro-image-preview` - Advanced, professional asset production
+- `gemini-3-pro-image-preview` - Advanced, professional asset production (Nano Banana Pro)
+
+**Default to `gemini-3-pro-image-preview` (Nano Banana Pro)** for all image generation unless:
+- The user explicitly requests a different model
+- The user wants to save budget/costs
+- The user specifies a simpler or quick generation task
+
+Nano Banana Pro provides higher quality results and should be the recommended choice.
 
 ## Text + Image Output
 

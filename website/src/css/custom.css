@@ -98,3 +98,8 @@
   --ifm-badge-background-color: #e91e63;
   --ifm-badge-color: white;
 }
+
+.badge--handbook-microsoft-docs {
+  --ifm-badge-background-color: #1a6b2e;
+  --ifm-badge-color: white;
+}

@@ -1,0 +1,20 @@
+{
+  "name": "handbook-microsoft-docs",
+  "version": "1.16.0",
+  "description": "Microsoft Learn MCP server for searching and fetching official Microsoft and Azure documentation",
+  "author": {
+    "name": "nikiforovall",
+    "url": "https://github.com/nikiforovall"
+  },
+  "homepage": "https://nikiforovall.blog/claude-code-rules/",
+  "repository": "https://github.com/nikiforovall/claude-code-rules",
+  "license": "MIT",
+  "keywords": [
+    "microsoft",
+    "azure",
+    "documentation",
+    "mcp",
+    "api-reference",
+    "learn"
+  ]
+}

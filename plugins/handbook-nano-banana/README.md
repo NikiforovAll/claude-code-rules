@@ -55,3 +55,7 @@ EOF
 ```bash
 claude plugins add cc-handbook/handbook-nano-banana
 ```
+
+## Resources
+- [Official Prompting Guide](https://blog.google/products/gemini/prompting-tips-nano-banana-pro/) - Learn how to structure your prompts effectively.
+- [How to prompt Nano Banana Pro](https://www.fofr.ai/nano-banana-pro-guide)

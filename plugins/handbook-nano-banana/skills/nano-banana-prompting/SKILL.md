@@ -107,6 +107,14 @@ Present the generated prompt to the user with:
 
 Offer to refine based on feedback.
 
+### Step 6: Generate the Image
+
+After the user is satisfied with the prompt, recommend using the **nano-banana** skill to generate the actual image. Inform the user:
+
+> "Your prompt is ready! Would you like me to generate the image now? I can use the nano-banana skill to create it."
+
+If the user agrees, invoke the `nano-banana` skill with the crafted prompt.
+
 ## Quick Reference: Technique Selection
 
 ```
