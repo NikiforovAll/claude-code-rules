@@ -103,3 +103,8 @@
   --ifm-badge-background-color: #1a6b2e;
   --ifm-badge-color: white;
 }
+
+.badge--handbook-glab {
+  --ifm-badge-background-color: #fc6d26;
+  --ifm-badge-color: white;
+}

@@ -1,0 +1,50 @@
+---
+title: "glab"
+sidebar_position: 9
+---
+
+import GlabSkillSource from '!!raw-loader!../../../../plugins/handbook-glab/skills/glab-skill/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `glab` skill
+
+<span className="badge badge--handbook-glab">handbook-glab</span>
+
+Expert guidance for using the GitLab CLI (glab) to manage merge requests, issues, CI/CD pipelines, and repositories from the command line.
+
+## When to Use This Skill
+
+Use the `glab` skill when you want to:
+
+- Create, review, approve, or merge GitLab merge requests
+- Create and manage GitLab issues
+- Monitor, trigger, or troubleshoot CI/CD pipelines
+- Clone, fork, or manage repositories via CLI
+- Access the GitLab API for advanced operations
+
+## Example Queries
+
+- "Create a merge request for this branch"
+- "List my assigned issues"
+- "Check the pipeline status"
+- "How do I approve an MR?"
+- "Show me MRs waiting for my review"
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{GlabSkillSource}
+</CodeBlock>
+
+## Reference Files
+
+The skill includes comprehensive reference documentation:
+
+- **commands-detailed.md** - Complete command reference with all flags and options
+- **quick-reference.md** - Condensed cheat sheet for common operations
+- **troubleshooting.md** - Error scenarios and solutions
+
+## Related
+
+- [GitLab CLI Documentation](https://docs.gitlab.com/ee/editor_extensions/gitlab_cli/)
+- [glab GitHub Repository](https://gitlab.com/gitlab-org/cli)
