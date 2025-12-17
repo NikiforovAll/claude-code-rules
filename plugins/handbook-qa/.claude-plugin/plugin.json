@@ -1,6 +1,6 @@
 {
   "name": "handbook-qa",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "description": "Browser automation and QA testing tools with Playwright MCP integration",
   "author": {
     "name": "nikiforovall",

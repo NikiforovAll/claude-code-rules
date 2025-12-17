@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.17.0] - 2025-12-17
+
+### Added
+- New `handbook-glab` plugin for GitLab CLI (glab) integration with expertise in managing merge requests, issues, CI/CD pipelines, and repositories
+
+## [1.16.0] - 2025-12-17
+
+### Added
+- New `handbook-microsoft-docs` plugin for Microsoft Learn documentation access via MCP server
+
 ## [1.15.0] - 2025-12-13
 
 ### Added

@@ -109,6 +109,14 @@ Python scripting and Gemini image generation using uv with inline script depende
 /plugin install handbook-nano-banana
 ```
 
+## [<span className="badge badge--handbook-glab">handbook-glab</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-glab/README.md)
+
+GitLab CLI (glab) expertise for managing merge requests, issues, CI/CD pipelines, and repositories.
+
+```bash
+/plugin install handbook-glab
+```
+
 ---
 
 ## Understanding Building Blocks
@@ -166,6 +174,9 @@ cd claude-code-rules
 
 # Install nano-banana plugin
 /plugin install ./plugins/handbook-nano-banana
+
+# Install glab plugin
+/plugin install ./plugins/handbook-glab
 ```
 
 ## Contributing
