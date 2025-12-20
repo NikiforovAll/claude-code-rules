@@ -1,6 +1,6 @@
 {
   "name": "handbook-context7",
-  "version": "1.17.0",
+  "version": "1.19.0",
   "description": "Context7 MCP server for fetching latest library documentation from official sources",
   "author": {
     "name": "nikiforovall",

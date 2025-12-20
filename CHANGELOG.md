@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.19.0] - 2025-12-20
+
+### Added
+- New `dotnet-dependency` skill in handbook-dotnet plugin for investigating dependencies and security auditing
+
+## [1.18.0] - 2025-12-20
+
+### Added
+- New `dotnet-test` skill in handbook-dotnet plugin for selective unit testing with xUnit focus
+
 ## [1.17.0] - 2025-12-17
 
 ### Added

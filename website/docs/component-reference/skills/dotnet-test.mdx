@@ -1,0 +1,54 @@
+---
+title: "dotnet-test"
+sidebar_position: 10
+---
+
+import DotnetTestSource from '!!raw-loader!../../../../plugins/handbook-dotnet/skills/dotnet-test/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `dotnet-test` skill
+
+<span className="badge badge--handbook-dotnet">handbook-dotnet</span>
+
+Run .NET tests selectively using a build-first, test-targeted workflow optimized for development speed with xUnit focus.
+
+This skill helps you run targeted tests during development, filter tests by method or class name, and understand test output and filtering options.
+
+## When to Use This Skill
+
+Use the `dotnet-test` skill when you want to:
+
+- Run targeted tests during development
+- Filter tests by method or class name
+- Understand test output and filtering options
+- Debug failing or hanging tests
+
+## Quick Examples
+
+```bash
+# Step 1: Build solution with minimal output
+dotnet build -p:WarningLevel=0 /clp:ErrorsOnly
+
+# Step 2: Run specific project tests (skip build)
+dotnet test path/to/Tests.csproj --no-build -v detailed
+
+# Step 3: Filter by method name
+dotnet test --no-build --filter "Name~MyTestMethod"
+
+# Filter by class name
+dotnet test --no-build --filter "ClassName=MyNamespace.MyTestClass"
+
+# Show ITestOutputHelper output
+dotnet test --no-build --logger "console;verbosity=detailed"
+```
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{DotnetTestSource}
+</CodeBlock>
+
+## References
+
+- [dotnet test command](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test) - Official Microsoft documentation
+- [Selective unit tests](https://learn.microsoft.com/en-us/dotnet/core/testing/selective-unit-tests) - Filter expression syntax and examples
