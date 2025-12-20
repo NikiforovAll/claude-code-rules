@@ -1,6 +1,6 @@
 {
   "name": "handbook-dotnet",
-  "version": "1.17.0",
+  "version": "1.19.0",
   "description": ".NET development tools including automatic CSharpier formatting for C# files and dotnet run file support",
   "author": {
     "name": "nikiforovall",
@@ -17,9 +17,15 @@
     "development",
     "tools",
     "scripting",
-    "run-files"
+    "run-files",
+    "testing",
+    "xunit",
+    "dependencies",
+    "nuget"
   ],
   "skills": [
-    "./skills/dotnet-run-file"
+    "./skills/dotnet-run-file",
+    "./skills/dotnet-test",
+    "./skills/dotnet-dependency"
   ]
 }

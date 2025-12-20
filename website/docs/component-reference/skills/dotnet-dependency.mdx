@@ -1,0 +1,58 @@
+---
+title: "dotnet-dependency"
+sidebar_position: 11
+---
+
+import DotnetDependencySource from '!!raw-loader!../../../../plugins/handbook-dotnet/skills/dotnet-dependency/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `dotnet-dependency` skill
+
+<span className="badge badge--handbook-dotnet">handbook-dotnet</span>
+
+Investigate and manage .NET project dependencies using built-in dotnet CLI commands.
+
+This skill helps you understand why packages are included, list all project dependencies, find outdated or vulnerable packages, and trace transitive dependencies.
+
+## When to Use This Skill
+
+Use the `dotnet-dependency` skill when you want to:
+
+- Understand why a specific NuGet package is included (`dotnet nuget why`)
+- List all project dependencies (NuGet packages or project references)
+- Find outdated or vulnerable packages
+- Trace transitive dependencies
+
+## Quick Examples
+
+```bash
+# Why is this package included?
+dotnet nuget why Newtonsoft.Json
+
+# List NuGet packages
+dotnet list package
+
+# Include transitive dependencies
+dotnet list package --include-transitive
+
+# List project references
+dotnet list reference --project path/to/Project.csproj
+
+# Find outdated packages
+dotnet list package --outdated
+
+# Auto-update with dotnet-outdated (third-party)
+dotnet outdated -u
+```
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{DotnetDependencySource}
+</CodeBlock>
+
+## References
+
+- [dotnet nuget why](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-nuget-why)
+- [dotnet list reference](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-reference-list)
+- [dotnet list package](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-list-package)
