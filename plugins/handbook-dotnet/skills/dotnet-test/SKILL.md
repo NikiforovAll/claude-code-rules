@@ -17,7 +17,7 @@ Follow this workflow to run tests efficiently:
 Build the entire solution with minimal output to catch compile errors early:
 
 ```bash
-dotnet build -p:WarningLevel=0 /clp:ErrorsOnly --verbosity quiet
+dotnet build -p:WarningLevel=0 /clp:ErrorsOnly --verbosity minimal
 ```
 
 ### Step 2: Run Specific Project Tests
@@ -25,7 +25,7 @@ dotnet build -p:WarningLevel=0 /clp:ErrorsOnly --verbosity quiet
 Run tests for the specific test project with `--no-build` to skip redundant compilation:
 
 ```bash
-dotnet test path/to/project --no-build --verbosity quiet
+dotnet test path/to/project --no-build --verbosity minimal
 ```
 
 ### Step 3: Filter When Targeting Specific Tests
@@ -47,13 +47,13 @@ dotnet test --no-build --filter "Name~Create|Name~Update"
 
 ### Commands
 
-| Command                                                            | Purpose                              |
-| ------------------------------------------------------------------ | ------------------------------------ |
-| `dotnet build -p:WarningLevel=0 /clp:ErrorsOnly --verbosity quiet` | Build solution with minimal output   |
-| `dotnet test path/to/Tests.csproj --no-build`                      | Run project tests (skip build)       |
-| `dotnet test --no-build --logger "console;verbosity=detailed"`     | Show ITestOutputHelper output        |
-| `dotnet test --no-build --filter "..."`                            | Run filtered tests                   |
-| `dotnet test --no-build --list-tests`                              | List available tests without running |
+| Command                                                              | Purpose                              |
+| -------------------------------------------------------------------- | ------------------------------------ |
+| `dotnet build -p:WarningLevel=0 /clp:ErrorsOnly --verbosity minimal` | Build solution with minimal output   |
+| `dotnet test path/to/Tests.csproj --no-build`                        | Run project tests (skip build)       |
+| `dotnet test --no-build --logger "console;verbosity=detailed"`       | Show ITestOutputHelper output        |
+| `dotnet test --no-build --filter "..."`                              | Run filtered tests                   |
+| `dotnet test --no-build --list-tests`                                | List available tests without running |
 
 ### Filter Operators
 
@@ -103,6 +103,24 @@ To see output from xUnit's `ITestOutputHelper`, use the console logger with deta
 
 ```bash
 dotnet test --no-build --logger "console;verbosity=detailed"
+```
+
+### Reducing Output Noise
+
+Verbosity levels for `dotnet test`:
+
+| Level      | Flag      | Description                     |
+| ---------- | --------- | ------------------------------- |
+| quiet      | `-v q`    | Minimal output (pass/fail only) |
+| minimal    | `-v m`    | Clean summary, no test output   |
+| normal     | `-v n`    | Default, shows discovered tests |
+| detailed   | `-v d`    | Shows more details              |
+| diagnostic | `-v diag` | Most verbose                    |
+
+To see test output, use grep to filter out discovery messages (for xUnit):
+
+```bash
+dotnet test --no-build --logger "console;verbosity=detailed" 2>&1 | grep -v "Discovered \[execution\]"
 ```
 
 ## Framework Differences

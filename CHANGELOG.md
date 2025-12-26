@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.19.1] - 2025-12-25
+
+### Added
+- New `handbook-csharp-lsp` plugin for C# Language Server Protocol support using csharp-ls for code intelligence features (go to definition, find references, hover, document symbols, workspace symbols, call hierarchy)
+
 ## [1.19.0] - 2025-12-20
 
 ### Added
