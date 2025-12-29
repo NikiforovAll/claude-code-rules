@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.19.2] - 2025-12-29
+
+### Changed
+- handbook-dotnet: Enhanced `dotnet-dependency` skill with package search, add/remove packages, and dotnet tools management commands
+
 ## [1.19.1] - 2025-12-25
 
 ### Added

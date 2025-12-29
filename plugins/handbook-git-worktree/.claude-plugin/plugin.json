@@ -1,6 +1,6 @@
 {
   "name": "handbook-git-worktree",
-  "version": "1.19.1",
+  "version": "1.19.2",
   "description": "Git worktree management for working on multiple branches simultaneously",
   "author": {
     "name": "nikiforovall",

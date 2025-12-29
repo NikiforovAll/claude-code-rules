@@ -1,7 +1,7 @@
 ---
 name: dotnet-dependency
 description: This skill should be used when investigating .NET project dependencies, understanding why packages are included, listing references, or auditing for outdated/vulnerable packages.
-allowed-tools: Bash(dotnet nuget why:*), Bash(dotnet list:*), Bash(dotnet outdated:*), Read, Grep, Glob
+allowed-tools: Bash(dotnet nuget why:*), Bash(dotnet list:*), Bash(dotnet outdated:*), Bash(dotnet package search:*), Bash(dotnet add package:*), Bash(dotnet remove package:*), Bash(dotnet tool:*), Read, Grep, Glob
 ---
 
 # .NET Dependencies
@@ -12,23 +12,98 @@ Investigate and manage .NET project dependencies using built-in dotnet CLI comma
 
 Invoke when the user needs to:
 
+- Search for NuGet packages or find latest versions
+- Add, update, or remove package references
 - Understand why a specific NuGet package is included
 - List all project dependencies (NuGet packages or project references)
 - Find outdated or vulnerable packages
 - Trace transitive dependencies
+- Manage dotnet tools (search, install, update)
 
 ## Quick Reference
 
-| Command                                     | Purpose                               |
-| ------------------------------------------- | ------------------------------------- |
-| `dotnet nuget why <package>`                | Show dependency graph for a package   |
-| `dotnet list package`                       | List NuGet packages                   |
-| `dotnet list package --include-transitive`  | Include transitive dependencies       |
-| `dotnet list reference --project <project>` | List project-to-project references    |
-| `dotnet list package --outdated`            | Find packages with newer versions     |
-| `dotnet list package --vulnerable`          | Find packages with security issues    |
-| `dotnet outdated`                           | (Third-party) Check outdated packages |
-| `dotnet outdated -u`                        | (Third-party) Auto-update packages    |
+| Command                                     | Purpose                                |
+| ------------------------------------------- | -------------------------------------- |
+| `dotnet package search <term>`              | Search NuGet for packages              |
+| `dotnet package search <name> --exact-match`| List all versions of a package         |
+| `dotnet add package <id>`                   | Add/update package to latest version   |
+| `dotnet add package <id> -v <ver>`          | Add/update package to specific version |
+| `dotnet remove package <id>`                | Remove package reference               |
+| `dotnet nuget why <package>`                | Show dependency graph for a package    |
+| `dotnet list package`                       | List NuGet packages                    |
+| `dotnet list package --include-transitive`  | Include transitive dependencies        |
+| `dotnet list reference --project <project>` | List project-to-project references     |
+| `dotnet list package --outdated`            | Find packages with newer versions      |
+| `dotnet list package --vulnerable`          | Find packages with security issues     |
+| `dotnet outdated`                           | (Third-party) Check outdated packages  |
+| `dotnet outdated -u`                        | (Third-party) Auto-update packages     |
+| `dotnet tool search <term>`                 | Search for dotnet tools                |
+| `dotnet tool update <id>`                   | Update local tool to latest            |
+| `dotnet tool update --all`                  | Update all local tools                 |
+
+## Search NuGet Packages
+
+Find packages and check latest versions directly from CLI:
+
+```bash
+# Search for packages by keyword
+dotnet package search Serilog --take 5
+
+# Find latest version of a specific package
+dotnet package search Aspire.Hosting.AppHost --take 1
+
+# Include prerelease versions
+dotnet package search ModelContextProtocol --prerelease --take 3
+
+# List ALL available versions of a package (version history)
+dotnet package search Newtonsoft.Json --exact-match
+
+# JSON output for scripting
+dotnet package search Serilog --format json --take 3
+```
+
+## Add and Update Packages
+
+```bash
+# Add package (installs latest stable version)
+dotnet add package Serilog
+
+# Add specific version
+dotnet add package Serilog -v 4.0.0
+
+# Add prerelease version
+dotnet add package ModelContextProtocol --prerelease
+
+# Add to specific project
+dotnet add src/MyProject/MyProject.csproj package Serilog
+
+# Update existing package to latest (same command as add)
+dotnet add package Serilog
+
+# Remove package
+dotnet remove package Serilog
+```
+
+**Note**: `dotnet add package` both adds new packages and updates existing ones to the specified (or latest) version.
+
+## Manage Dotnet Tools
+
+```bash
+# Search for tools
+dotnet tool search dotnet-outdated --take 3
+
+# Update a local tool (from manifest)
+dotnet tool update cake.tool
+
+# Update with prerelease
+dotnet tool update aspire.cli --prerelease
+
+# Update all local tools
+dotnet tool update --all
+
+# Update global tool
+dotnet tool update -g dotnet-ef
+```
 
 ## Investigate Package Dependencies
 
@@ -115,6 +190,10 @@ For security auditing (vulnerable, deprecated, outdated packages), load **refere
 
 ## References
 
+- [dotnet package search](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-package-search)
+- [dotnet add package](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-add-package)
+- [dotnet remove package](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-remove-package)
 - [dotnet nuget why](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-nuget-why)
 - [dotnet list reference](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-reference-list)
 - [dotnet list package](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-list-package)
+- [dotnet tool](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-tool)

@@ -1,6 +1,6 @@
 {
   "name": "handbook-csharp-lsp",
-  "version": "1.19.1",
+  "version": "1.19.2",
   "description": "C# Language Server Protocol support using csharp-ls for code intelligence features",
   "author": {
     "name": "nikiforovall",
