@@ -14,6 +14,7 @@ Claude Code supports common keyboard shortcuts to help you edit commands efficie
 | `Ctrl+W` | Delete word |
 | `Ctrl+U` | Delete line |
 | `Ctrl+K` | Delete to end |
+| `Ctrl+S` | Stash prompt (saves draft, auto-restores later) |
 | `↑/↓` | Previous/Next command |
 | `Tab` | Auto-complete |
 | `Ctrl+R` | Search command history |
