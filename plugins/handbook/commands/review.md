@@ -18,12 +18,18 @@ If $1 is empty or not provided, use `main` as the default base branch.
 Use the following command to get the diff:
 
 ```bash
-git --no-pager diff --no-prefix $(git merge-base <base-branch> HEAD)
+git --no-pager diff --no-prefix <base-branch>...HEAD
 ```
 
 Where `<base-branch>` is either the value of $1 or `main` if $1 is not provided.
 
-This will show all changes between the common ancestor of the base branch and your current HEAD, including both committed and uncommitted changes.
+This shows all committed changes on HEAD since it diverged from the base branch.
+
+To also include uncommitted changes, add a second diff:
+
+```bash
+git --no-pager diff --no-prefix
+```
 
 ## Review Guidelines
 

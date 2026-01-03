@@ -1,6 +1,6 @@
 {
   "name": "handbook-nano-banana",
-  "version": "1.19.2",
+  "version": "1.19.3",
   "description": "Python scripting and Gemini image generation using uv with inline script dependencies",
   "author": {
     "name": "nikiforovall",

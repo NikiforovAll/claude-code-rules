@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.19.3] - 2026-01-03
+
+### Changed
+- handbook: Updated `/review` command to use three-dot diff syntax for clearer branch comparison
+
 ## [1.19.2] - 2025-12-29
 
 ### Changed
