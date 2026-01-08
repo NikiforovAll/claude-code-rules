@@ -33,15 +33,20 @@ dotnet test path/to/project --no-build --verbosity minimal
 Narrow down to specific tests using filter expressions:
 
 ```bash
-# By method name (contains)
-dotnet test --no-build --filter "Name~MyTestMethod"
+# By method name using FullyQualifiedName (recommended)
+dotnet test --no-build --filter "FullyQualifiedName~MyTestMethod"
 
-# By class name (exact match)
-dotnet test --no-build --filter "ClassName=MyNamespace.MyTestClass"
+# By class name using FullyQualifiedName (recommended)
+dotnet test --no-build --filter "FullyQualifiedName~MyTestClass"
+
+# By parameter values in Theory tests (xUnit)
+dotnet test --no-build --filter "DisplayName~paramValue"
 
 # Combined filters
-dotnet test --no-build --filter "Name~Create|Name~Update"
+dotnet test --no-build --filter "FullyQualifiedName~Create|FullyQualifiedName~Update"
 ```
+
+**Note**: Properties `Name~` and `ClassName=` may not work reliably. Use `FullyQualifiedName~` instead.
 
 ## Quick Reference
 
@@ -68,24 +73,30 @@ dotnet test --no-build --filter "Name~Create|Name~Update"
 
 ### xUnit Filter Properties
 
-| Property             | Description                   | Example                                  |
-| -------------------- | ----------------------------- | ---------------------------------------- |
-| `FullyQualifiedName` | Full test name with namespace | `FullyQualifiedName~MyNamespace.MyClass` |
-| `DisplayName`        | Test display name             | `DisplayName=My_Test_Name`               |
-| `Name`               | Method name                   | `Name~ShouldCreate`                      |
-| `Category`           | Trait category                | `Category=Unit`                          |
+| Property             | Description                                    | Reliability  | Example                                                |
+| -------------------- | ---------------------------------------------- | ------------ | ------------------------------------------------------ |
+| `FullyQualifiedName` | Full test name with namespace                  | ✅ Reliable   | `FullyQualifiedName~MyNamespace.MyClass`               |
+| `DisplayName`        | Test display name (includes Theory parameters) | ✅ Reliable   | `DisplayName~My_Test_Name` or `DisplayName~paramValue` |
+| `Name`               | Method name                                    | ⚠️ Unreliable | Use `FullyQualifiedName~` instead                      |
+| `ClassName`          | Class name                                     | ⚠️ Unreliable | Use `FullyQualifiedName~` instead                      |
+| `Category`           | Trait category                                 | ✅ Reliable   | `Category=Unit`                                        |
+
+**When to use DisplayName**: Essential for filtering Theory tests by their parameter values. xUnit includes all parameter values in the DisplayName (e.g., `MyTest(username: "admin", age: 30)`), making it ideal for running specific test cases. See [references/theory-parameter-filtering.md](references/theory-parameter-filtering.md) for detailed guidance.
 
 ### Common Filter Patterns
 
 ```bash
 # Run tests containing "Create" in method name
-dotnet test --no-build --filter "Name~Create"
+dotnet test --no-build --filter "FullyQualifiedName~Create"
 
 # Run tests in a specific class
-dotnet test --no-build --filter "ClassName=MyNamespace.UserServiceTests"
+dotnet test --no-build --filter "FullyQualifiedName~UserServiceTests"
 
 # Run tests matching namespace pattern
 dotnet test --no-build --filter "FullyQualifiedName~MyApp.Tests.Unit"
+
+# Run Theory tests with specific parameter value
+dotnet test --no-build --filter "DisplayName~admin_user"
 
 # Run tests with specific trait
 dotnet test --no-build --filter "Category=Integration"
@@ -93,8 +104,11 @@ dotnet test --no-build --filter "Category=Integration"
 # Exclude slow tests
 dotnet test --no-build --filter "Category!=Slow"
 
-# Combined: class AND method pattern
-dotnet test --no-build --filter "ClassName=OrderTests&Name~Validate"
+# Combined: class AND parameter value (Theory tests)
+dotnet test --no-build --filter "FullyQualifiedName~OrderTests&DisplayName~USD"
+
+# Multiple parameter values (OR condition)
+dotnet test --no-build --filter "DisplayName~EUR|DisplayName~GBP"
 ```
 
 ### ITestOutputHelper Output
@@ -136,13 +150,15 @@ This skill focuses on **xUnit**. For MSTest or NUnit, filter property names diff
 
 ## Progressive Disclosure
 
-For advanced debugging scenarios, load additional references:
+For advanced scenarios, load additional references:
 
+- **references/theory-parameter-filtering.md** - Filtering xUnit Theory tests by parameter values (string, numeric, boolean, etc.)
 - **references/blame-mode.md** - Debugging test crashes and hangs with `--blame`
 - **references/parallel-execution.md** - Controlling parallel test execution
 
 Load these references when:
 
+- Working with xUnit Theory tests and need to filter by specific parameter values
 - Tests are crashing or hanging unexpectedly
 - Diagnosing test isolation issues
 - Optimizing test run performance
@@ -153,5 +169,6 @@ Invoke when the user needs to:
 
 - Run targeted tests during development
 - Filter tests by method or class name
+- Filter xUnit Theory tests by specific parameter values (e.g., run only admin user test cases)
 - Understand test output and filtering options
 - Debug failing or hanging tests
