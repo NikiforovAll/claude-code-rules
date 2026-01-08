@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.19.4] - 2026-01-08
+
+### Changed
+- Enhanced dotnet-test skill filtering documentation
+
 ## [1.19.3] - 2026-01-03
 
 ### Changed
