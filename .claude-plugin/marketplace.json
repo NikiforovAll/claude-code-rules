@@ -1,19 +1,19 @@
 {
   "name": "cc-handbook",
-  "version": "1.19.4",
+  "version": "1.19.5",
   "owner": {
     "name": "nikiforovall",
     "email": "nikiforovall@github.com"
   },
   "metadata": {
     "description": "Official marketplace for Claude Code Handbook plugins and extensions",
-    "version": "1.19.4"
+    "version": "1.19.5"
   },
   "repository": "https://github.com/nikiforovall/claude-code-rules",
   "plugins": [
     {
       "name": "handbook",
-      "version": "1.19.4",
+      "version": "1.19.5",
       "description": "Core Claude Code handbook with best practices and essential tools",
       "author": {
         "name": "nikiforovall",
@@ -34,7 +34,7 @@
     },
     {
       "name": "handbook-extras",
-      "version": "1.19.4",
+      "version": "1.19.5",
       "description": "Extended features and experimental tools for Claude Code Handbook",
       "author": {
         "name": "nikiforovall",
@@ -53,7 +53,7 @@
     },
     {
       "name": "handbook-qa",
-      "version": "1.19.4",
+      "version": "1.19.5",
       "description": "Browser automation and QA testing tools with Playwright MCP integration",
       "author": {
         "name": "nikiforovall",
@@ -73,7 +73,7 @@
     },
     {
       "name": "handbook-dotnet",
-      "version": "1.19.4",
+      "version": "1.19.5",
       "description": ".NET development tools including CSharpier formatting, dotnet run file support, selective unit testing, and dependency investigation",
       "author": {
         "name": "nikiforovall",
@@ -100,7 +100,7 @@
     },
     {
       "name": "handbook-microsoft-docs",
-      "version": "1.19.4",
+      "version": "1.19.5",
       "description": "Microsoft Learn MCP server for searching and fetching official Microsoft and Azure documentation",
       "author": {
         "name": "nikiforovall",
@@ -121,7 +121,7 @@
     },
     {
       "name": "handbook-context7",
-      "version": "1.19.4",
+      "version": "1.19.5",
       "description": "Context7 MCP server for fetching latest library documentation from official sources",
       "author": {
         "name": "nikiforovall",
@@ -141,7 +141,7 @@
     },
     {
       "name": "handbook-sounds",
-      "version": "1.19.4",
+      "version": "1.19.5",
       "description": "Audio feedback for Claude Code events on Windows using PowerShell sounds",
       "author": {
         "name": "nikiforovall",
@@ -163,7 +163,7 @@
     },
     {
       "name": "handbook-git-worktree",
-      "version": "1.19.4",
+      "version": "1.19.5",
       "description": "Git worktree management for working on multiple branches simultaneously",
       "author": {
         "name": "nikiforovall",
@@ -184,7 +184,7 @@
     },
     {
       "name": "handbook-structured-plan-mode",
-      "version": "1.19.4",
+      "version": "1.19.5",
       "description": "Structured planning methodology for complex feature implementations through systematic task decomposition",
       "author": {
         "name": "nikiforovall",
@@ -205,7 +205,7 @@
     },
     {
       "name": "handbook-agent-spec-kit",
-      "version": "1.19.4",
+      "version": "1.19.5",
       "description": "Spec-driven development workflow system with structured phases: Requirements → Design → Tasks → Implementation",
       "author": {
         "name": "Vitalii Matviichuk",
@@ -228,7 +228,7 @@
     },
     {
       "name": "handbook-nano-banana",
-      "version": "1.19.4",
+      "version": "1.19.5",
       "description": "Python scripting and Gemini image generation using uv with inline script dependencies",
       "author": {
         "name": "nikiforovall",
@@ -249,7 +249,7 @@
     },
     {
       "name": "handbook-glab",
-      "version": "1.19.4",
+      "version": "1.19.5",
       "description": "GitLab CLI (glab) expertise for managing merge requests, issues, CI/CD pipelines, and repositories",
       "author": {
         "name": "nikiforovall",
@@ -271,7 +271,7 @@
     },
     {
       "name": "handbook-csharp-lsp",
-      "version": "1.19.4",
+      "version": "1.19.5",
       "description": "C# Language Server Protocol support using csharp-ls for code intelligence features",
       "author": {
         "name": "nikiforovall",

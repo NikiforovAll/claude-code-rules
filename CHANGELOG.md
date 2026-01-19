@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.19.5] - 2026-01-19
+
+### Changed
+- handbook-glab: Updated glab skill documentation
+
 ## [1.19.4] - 2026-01-08
 
 ### Changed

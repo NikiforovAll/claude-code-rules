@@ -1,6 +1,6 @@
 {
   "name": "handbook-sounds",
-  "version": "1.19.4",
+  "version": "1.19.5",
   "description": "Audio feedback for Claude Code events on Windows using PowerShell sounds",
   "author": {
     "name": "nikiforovall",

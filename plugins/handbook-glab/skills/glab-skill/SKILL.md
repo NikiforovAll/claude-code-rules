@@ -134,6 +134,28 @@ Use JSON output for parsing:
 glab mr list --output=json | jq '.[] | .title'
 ```
 
+### Replying to MR Notes/Threads
+
+`glab mr note` creates standalone comments. To reply within a discussion thread, use the API:
+
+```bash
+# 1. Find the discussion_id containing the note
+glab api "projects/:id/merge_requests/{mr}/discussions" | jq '.[] | select(.notes[].id == {note_id}) | .id'
+
+# 2. Post reply to the discussion thread
+glab api --method POST "projects/:id/merge_requests/{mr}/discussions/{discussion_id}/notes" --field body="Your reply"
+```
+
+Example:
+```bash
+# Get discussion_id for note 13698970
+glab api "projects/:id/merge_requests/1013/discussions" | jq '.[] | select(.notes[].id == 13698970) | {id}'
+# Returns: {"id": "5356c3552e72e7b4c49276eb4dacfe3efe5c2c5c"}
+
+# Reply to that thread
+glab api --method POST "projects/:id/merge_requests/1013/discussions/5356c3552e72e7b4c49276eb4dacfe3efe5c2c5c/notes" --field body="Thanks for the review!"
+```
+
 ### Using the API Command
 
 The `glab api` command provides direct GitLab API access:
