@@ -249,7 +249,7 @@
     },
     {
       "name": "handbook-glab",
-      "version": "1.19.5",
+      "version": "1.19.6",
       "description": "GitLab CLI (glab) expertise for managing merge requests, issues, CI/CD pipelines, and repositories",
       "author": {
         "name": "nikiforovall",
