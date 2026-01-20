@@ -127,6 +127,12 @@ export GITLAB_HOST=gitlab.example.org
 glab repo clone gitlab.example.org/owner/repo
 ```
 
+### Listing Unresolved MR Comments
+
+```bash
+glab api "projects/:id/merge_requests/{mr}/discussions?per_page=100" | jq '[.[] | select(.notes[0].resolvable == true and .notes[0].resolved == false) | {id: .notes[0].id, body: .notes[0].body[0:100], path: .notes[0].position.new_path, line: .notes[0].position.new_line}]'
+```
+
 ### Automation and Scripting
 
 Use JSON output for parsing:
