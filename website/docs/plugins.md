@@ -117,6 +117,14 @@ GitLab CLI (glab) expertise for managing merge requests, issues, CI/CD pipelines
 /plugin install handbook-glab
 ```
 
+## [<span className="badge badge--handbook-elasticsearch">handbook-elasticsearch</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-elasticsearch/README.md)
+
+Elasticsearch and Kibana REST API expertise for querying, indexing, managing indices, cluster health, aggregations, ES|QL, and dashboard deployment.
+
+```bash
+/plugin install handbook-elasticsearch
+```
+
 ---
 
 ## Understanding Building Blocks
@@ -177,6 +185,9 @@ cd claude-code-rules
 
 # Install glab plugin
 /plugin install ./plugins/handbook-glab
+
+# Install elasticsearch plugin
+/plugin install ./plugins/handbook-elasticsearch
 ```
 
 ## Contributing

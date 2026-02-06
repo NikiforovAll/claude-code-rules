@@ -288,6 +288,30 @@
       ],
       "homepage": "https://nikiforovall.blog/claude-code-rules/",
       "strict": true
+    },
+    {
+      "name": "handbook-elasticsearch",
+      "version": "1.19.5",
+      "description": "Elasticsearch and Kibana REST API expertise for querying, indexing, managing indices, cluster health, aggregations, ES|QL, and dashboard deployment",
+      "author": {
+        "name": "nikiforovall",
+        "url": "https://github.com/nikiforovall"
+      },
+      "source": "./plugins/handbook-elasticsearch",
+      "category": "development",
+      "tags": [
+        "elasticsearch",
+        "kibana",
+        "search",
+        "aggregations",
+        "observability",
+        "otel",
+        "opentelemetry",
+        "esql",
+        "rest-api"
+      ],
+      "homepage": "https://nikiforovall.blog/claude-code-rules/",
+      "strict": true
     }
   ]
 }

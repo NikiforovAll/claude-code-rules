@@ -1,0 +1,26 @@
+{
+  "name": "handbook-elasticsearch",
+  "version": "1.19.5",
+  "description": "Elasticsearch and Kibana REST API expertise for querying, indexing, managing indices, cluster health, aggregations, ES|QL, and dashboard deployment",
+  "author": {
+    "name": "nikiforovall",
+    "url": "https://github.com/nikiforovall"
+  },
+  "homepage": "https://nikiforovall.blog/claude-code-rules/",
+  "repository": "https://github.com/nikiforovall/claude-code-rules",
+  "license": "MIT",
+  "keywords": [
+    "elasticsearch",
+    "kibana",
+    "search",
+    "aggregations",
+    "observability",
+    "otel",
+    "opentelemetry",
+    "esql",
+    "rest-api"
+  ],
+  "skills": [
+    "./skills/elasticsearch"
+  ]
+}

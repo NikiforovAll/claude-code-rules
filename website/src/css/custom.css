@@ -108,3 +108,7 @@
   --ifm-badge-background-color: #fc6d26;
   --ifm-badge-color: white;
 }
+.badge--handbook-elasticsearch {
+  --ifm-badge-background-color: #fed10a;
+  --ifm-badge-color: black;
+}

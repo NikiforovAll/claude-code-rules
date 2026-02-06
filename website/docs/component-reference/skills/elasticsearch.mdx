@@ -1,0 +1,60 @@
+---
+title: "elasticsearch"
+sidebar_position: 12
+---
+
+import ElasticsearchSkillSource from '!!raw-loader!../../../../plugins/handbook-elasticsearch/skills/elasticsearch/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `elasticsearch` skill
+
+<span className="badge badge--handbook-elasticsearch">handbook-elasticsearch</span>
+
+Interact with Elasticsearch and Kibana via REST API using curl. Covers search (Query DSL), CRUD operations, index management, mappings, aggregations, cluster health, ILM, ES|QL, Kibana dashboards, and OpenTelemetry data patterns.
+
+## When to Use This Skill
+
+Use the `elasticsearch` skill when you want to:
+
+- Query Elasticsearch indices using Query DSL or ES|QL
+- Index, update, delete, or bulk-load documents
+- Manage indices, mappings, aliases, and templates
+- Write aggregations (metrics, buckets, pipelines)
+- Check cluster health, node stats, and shard allocation
+- Deploy Kibana dashboards and data views programmatically
+- Query OpenTelemetry logs, traces, and metrics
+
+## Example Queries
+
+- "Search for error logs in the last hour"
+- "Create an index with custom mappings"
+- "Show me the top 10 services by error rate"
+- "Check cluster health"
+- "Deploy a Kibana dashboard for latency monitoring"
+- "Find the slowest traces for my-service"
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{ElasticsearchSkillSource}
+</CodeBlock>
+
+## Reference Files
+
+The skill includes comprehensive reference documentation:
+
+- **query-dsl.md** — Full Query DSL (bool, match, term, range, nested, geo, wildcards, runtime fields)
+- **search-api.md** — Search endpoint, ES|QL, EQL, pagination (PIT + search_after)
+- **aggregations.md** — Metric, bucket, and pipeline aggregations with SRE patterns
+- **aggregations-api.md** — Aggregation API patterns with composite pagination
+- **document-api.md** — CRUD, bulk API, delete/update by query
+- **index-api.md** — Index create/delete, reindex, aliases, ILM, shrink/split, rollover
+- **cluster-api.md** — Cluster health, node stats, shard allocation, cat APIs
+- **mapping-api.md** — Field types, dynamic mapping/templates, runtime fields
+- **kibana-api.md** — Data views, dashboards, saved objects, programmatic Lens panels, alerting
+- **otel-data.md** — OpenTelemetry logs/traces/metrics querying, trace-log correlation
+
+## Related
+
+- [Elasticsearch REST API Documentation](https://www.elastic.co/docs/api)
+- [Original elasticsearch-skill](https://github.com/davidgeorgehope/elasticsearch-skill)
