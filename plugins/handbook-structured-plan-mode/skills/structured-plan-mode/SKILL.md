@@ -40,20 +40,18 @@ Do NOT use this skill for:
    - Context
    - Strategy Proposals (leave empty for now)
    - **Leave "Selected Approach" EMPTY**
-7. Create a todo list by using TodoWrite based on the phases below
+7. Register phases 1-4 using TaskCreate (native task system):
 
-
-**TodoWrite tracks ONLY phases 1-4:**
 ```
-- [ ] Phase 1: Setup template with Research section
-- [ ] Phase 2: Conduct research and iterate with user
-- [ ] Phase 3: Finalize selected approach
-- [ ] Phase 4: Create implementation tasks (T01-T0N)
+TaskCreate: subject="Phase 1: Setup template with Research section", activeForm="Setting up plan template"
+TaskCreate: subject="Phase 2: Conduct research and iterate with user", activeForm="Researching codebase"
+TaskCreate: subject="Phase 3: Finalize selected approach", activeForm="Finalizing approach"
+TaskCreate: subject="Phase 4: Create implementation tasks (T01-T0N)", activeForm="Creating implementation tasks"
 ```
 
-**Mark Phase 1 as completed in TodoWrite**
+**Mark Phase 1 as completed via TaskUpdate (status: completed)**
 
-**Output**: Skeleton plan document with Research section defined and todo list created for phases 1-4
+**Output**: Skeleton plan document with Research section defined and native tasks created for phases 1-4
 
 ---
 
@@ -76,7 +74,7 @@ Do NOT use this skill for:
 - Use AskUserQuestion frequently to refine understanding
 - Don't wait for user to say research is done - ASK them proactively
 
-**Mark Phase 2 as completed in TodoWrite when user confirms that research is complete**
+**Mark Phase 2 as in_progress via TaskUpdate when starting, completed when user confirms research is complete**
 
 **Output**: Research with 2-3 Strategy Proposals documented and reviewed with user
 
@@ -95,7 +93,7 @@ Do NOT use this skill for:
 4. Change research status to ✅ **Completed**
 5. Update Progress Summary to show research complete
 
-**Mark Phase 3 as completed in TodoWrite once Selected Approach section is fully documented**
+**Mark Phase 3 as in_progress via TaskUpdate when starting, completed once Selected Approach section is fully documented**
 
 **Output**: Research fully documented with clear decision and rationale
 
@@ -131,16 +129,21 @@ For each task you need to create:
    - Action Items: Specific checkboxes for work to complete
 4. **Update metadata**: Set Status (🟡 Planned), Effort (Small/Medium/Large), Blocked By
 5. **Add to Progress Summary**: Update plan.md with link: `- [ ] [**T01**: Task Name](tasks/T01.md) - Status: 🟡 Planned`
+6. **Register in native task system**: For each task file, call TaskCreate:
+   ```
+   TaskCreate: subject="T01: [Task Name]", description="[Goal from task file]", activeForm="Implementing [task name]"
+   ```
+   If tasks have dependencies, use TaskUpdate to set `addBlockedBy` relationships matching the plan.
 
-**Mark Phase 4 as completed in TodoWrite**
+**Mark Phase 4 as completed via TaskUpdate**
 
-**Output**: Complete task breakdown (T01.md - T0N.md files) in tasks/ folder, all linked from plan.md Progress Summary
+**Output**: Complete task breakdown (T01.md - T0N.md files) in tasks/ folder, all linked from plan.md Progress Summary, all registered as native tasks
 
 ---
 
 ### Phase 5: Working with Tasks (Implementation)
 
-**Note**: Phase 5 is NOT tracked in TodoWrite. Track progress directly in task files and plan.md.
+**Note**: Phase 5 tasks are tracked in task files, plan.md, AND the native task system via TaskUpdate.
 
 **IMPORTANT**: Before starting work on ANY task, read `references/task-planning-guide.md` for:
 - Task structure guidance and best practices
@@ -169,9 +172,10 @@ For each task you need to create:
 **Starting a Task:**
 1. **Read `references/task-planning-guide.md`** - Review relevant sections before beginning work
 2. Choose next task from plan.md Progress Summary (respecting dependencies)
-3. Update status to 🟢 **In Progress** in TWO places:
+3. Update status to 🟢 **In Progress** in THREE places:
    - Task file metadata: `**Status**: 🟢 **In Progress**`
    - plan.md Progress Summary: `- [ ] [**T01**: Task Name](tasks/T01.md) - Status: 🟢 In Progress`
+   - Native task system: `TaskUpdate: taskId=[id], status=in_progress`
 
 **During Task Execution:**
 4. Work through Action Items, checking off boxes as you complete them:
@@ -198,9 +202,10 @@ For each task you need to create:
    **Challenges encountered**:
    - Had to refactor auth middleware to support new endpoint
    ```
-9. Update status to ✅ **Completed** in TWO places:
+9. Update status to ✅ **Completed** in THREE places:
    - Task file metadata: `**Status**: ✅ **Completed**`
    - plan.md Progress Summary: `- [x] [**T01**: Task Name](tasks/T01.md) - Status: ✅ Completed`
+   - Native task system: `TaskUpdate: taskId=[id], status=completed`
 10. **Explicitly ask user**: "Task T01 is complete. Ready to move to T02?"
 11. **ONLY after user confirms** proceed to next task
 
@@ -220,15 +225,20 @@ When completing T01, you must update BOTH locations:
 - [x] [**T01**: Add API endpoint](tasks/T01.md) - Status: ✅ Completed
 ```
 
-**Why dual-tracking?**
+**In native task system:**
+```
+TaskUpdate: taskId=[id for T01], status=completed
+```
+
+**Why triple-tracking?**
 - plan.md provides high-level overview of all tasks at a glance
 - Task files provide detailed implementation notes for deep dives
-- Both serve different purposes and audiences
+- Native tasks enable external viewers (claude-task-viewer) and cross-session visibility via `~/.claude/tasks/`
 
 #### Handling Blocked Tasks
 
 If you cannot complete a task:
-1. Update status to 🔴 **Blocked** in both locations
+1. Update status to 🔴 **Blocked** in all three locations
 2. Update "Blocked By" field in task file metadata
 3. Document blocking reason in task file
 4. Move to next non-blocked task
@@ -240,17 +250,18 @@ If you discover additional work during Phase 5:
 1. Create new task file (e.g., `T06.md`) in tasks/ directory
 2. Fill in all sections using task-template.md
 3. Add link to plan.md Progress Summary
-4. Update dependent tasks if needed
+4. Register via TaskCreate so it appears in native task system
+5. Update dependent tasks if needed
 
 ---
 
-**Remember**: ONE task at a time. Complete it FULLY (all checkboxes, both locations updated, Execution Summary filled), then ASK USER for confirmation before moving to the next.
+**Remember**: ONE task at a time. Complete it FULLY (all checkboxes, three locations updated, Execution Summary filled), then ASK USER for confirmation before moving to the next.
 
 ---
 
 ### Phase 6: Post-Implementation Review
 
-**Note**: Phase 6 is NOT tracked in TodoWrite. Update the plan document directly.
+**Note**: Phase 6 is tracked directly in the plan document.
 
 After feature completion:
 - Fill in "Lessons Learned" section
@@ -260,12 +271,21 @@ After feature completion:
 
 ## Workflow Summary
 
-**TodoWrite tracks ONLY phases 1-4 (not subtasks):**
+**TaskCreate registers phases 1-4 at setup, then T01-T0N at Phase 4:**
+
+Phase tasks (created in Phase 1):
 ```
-- [ ] Phase 1: Setup template with Research section
-- [ ] Phase 2: Conduct research and iterate with user
-- [ ] Phase 3: Finalize selected approach
-- [ ] Phase 4: Create implementation tasks (T01-T0N)
+TaskCreate: "Phase 1: Setup template with Research section"
+TaskCreate: "Phase 2: Conduct research and iterate with user"
+TaskCreate: "Phase 3: Finalize selected approach"
+TaskCreate: "Phase 4: Create implementation tasks (T01-T0N)"
+```
+
+Implementation tasks (created in Phase 4):
+```
+TaskCreate: "T01: [Task Name]"
+TaskCreate: "T02: [Task Name]"
+...
 ```
 
 **Phase-by-Phase Workflow:**
@@ -275,7 +295,8 @@ After feature completion:
    - Copy plan-template.md to `.plans/[feature-name]/plan.md`
    - Create Research section ONLY in plan.md
    - DO NOT create T01, T02, T03 task files yet
-   - Mark Phase 1 complete in TodoWrite
+   - Register phase tasks via TaskCreate
+   - Mark Phase 1 complete via TaskUpdate
 
 2. **Phase 2 - Research & Iterate** (AskUserQuestion REQUIRED):
    - Explore codebase, document findings in plan.md
@@ -284,13 +305,13 @@ After feature completion:
    - User may correct assumptions - update research
    - **If user strongly prefers one approach**, may skip detailed discussion of remaining options
    - **Proactively ask**: "Are you ready to select an approach?"
-   - Mark Phase 2 complete when user confirms
+   - Mark Phase 2 in_progress/complete via TaskUpdate
 
 3. **Phase 3 - Finalize**:
    - Present 2-3 researched approaches and ask user to select one
    - Once user confirms, fill "Selected Approach" section in plan.md
    - Mark research as ✅ Completed in plan.md
-   - Mark Phase 3 complete once documentation is done
+   - Mark Phase 3 in_progress/complete via TaskUpdate
 
 4. **Phase 4 - Create Tasks**:
    - **Read `references/task-planning-guide.md` before creating tasks**
@@ -299,12 +320,14 @@ After feature completion:
    - Fill in task details based on selected approach
    - Number of tasks depends on complexity
    - Update Progress Summary in plan.md with links to task files
-   - Mark Phase 4 complete in TodoWrite
+   - Register each task via TaskCreate with dependencies
+   - Mark Phase 4 complete via TaskUpdate
 
 5. **Phase 5 - Implementation** (ONE task at a time):
    - **Read `references/task-planning-guide.md` before starting EACH task**
-   - Work on ONE task until FULLY completed (all checkboxes, both locations updated, Execution Summary filled)
-   - Update status in TWO places: task file metadata AND plan.md Progress Summary
+   - Mark native task in_progress via TaskUpdate
+   - Work on ONE task until FULLY completed (all checkboxes, three locations updated, Execution Summary filled)
+   - Update status in THREE places: task file metadata, plan.md Progress Summary, AND native task via TaskUpdate
    - Track progress: 🟡 Planned → 🟢 In Progress → ✅ Completed
    - Check off action items as you complete them
    - Fill Execution Summary before marking complete
@@ -351,13 +374,13 @@ Break large tasks into smaller chunks that are independently testable.
 ---
 
 **Remember**:
-1. **TodoWrite tracks PHASES** - not individual subtasks
+1. **TaskCreate/TaskUpdate for external visibility** - phases and tasks registered natively
 2. **Phases are sequential** - complete Phase 1 before Phase 2, etc.
 3. **Phase 2 is iterative** - use AskUserQuestion multiple times, expect back-and-forth
 4. **User confirms approach** - do NOT fill "Selected Approach" until user confirms
 5. **No premature planning** - T01-T0N created in Phase 4
 6. **Task count is flexible** - create as many as needed (T01, T02, ...T0N)
-7. **ONE task at a time** - Complete current task FULLY (all checkboxes, both locations, Execution Summary) before starting next
-8. **Dual-tracking required** - Update status in BOTH task file AND plan.md
+7. **ONE task at a time** - Complete current task FULLY (all checkboxes, three locations, Execution Summary) before starting next
+8. **Triple-tracking required** - Update status in task file, plan.md, AND native task system
 9. **Explicit user confirmation** - Ask user for approval before moving to next task
 10. **Read task-planning-guide.md** - Before Phase 4, before EACH task in Phase 5, and when stuck
