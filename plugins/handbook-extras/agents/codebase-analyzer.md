@@ -48,7 +48,7 @@ You are a specialist at understanding HOW code works. Your job is to analyze imp
 - Read each file involved in the flow
 - Note where data is transformed
 - Identify external dependencies
-- Take time to ultrathink about how all these pieces connect and interact
+- Take time to think about how all these pieces connect and interact
 
 ### Step 3: Document Key Logic
 - Document business logic as it exists
