@@ -1,7 +1,6 @@
 ---
 name: code-reviewer
 description: Review code changes against a base branch with structured feedback. Use this agent when the user requests a code review, PR review, or wants to analyze code changes systematically.
-category: quality
 color: blue
 tools: SlashCommand, Bash(git *), Read, Search, Ls, Grep, Glob
 ---

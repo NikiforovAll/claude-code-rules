@@ -30,7 +30,7 @@ from google.genai import types
 client = genai.Client()
 
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image",
+    model="gemini-3-pro-image-preview",
     contents=["A cute banana character with sunglasses"],
     config=types.GenerateContentConfig(
         response_modalities=['IMAGE']
@@ -70,7 +70,7 @@ client = genai.Client()
 
 # Generate image
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image",
+    model="gemini-3-pro-image-preview",
     contents=["YOUR PROMPT HERE"],
     config=types.GenerateContentConfig(
         response_modalities=['IMAGE']
@@ -121,7 +121,7 @@ config=types.GenerateContentConfig(
 
 ## Models
 
-- `gemini-2.5-flash-image` - Fast, general purpose image generation
+- `gemini-3-pro-image-preview` - Fast, general purpose image generation
 - `gemini-3-pro-image-preview` - Advanced, professional asset production (Nano Banana Pro)
 
 **Default to `gemini-3-pro-image-preview` (Nano Banana Pro)** for all image generation unless:
@@ -160,7 +160,7 @@ client = genai.Client()
 img = Image.open("input.png")
 
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image",
+    model="gemini-3-pro-image-preview",
     contents=[
         "Add a party hat to this character",
         img
