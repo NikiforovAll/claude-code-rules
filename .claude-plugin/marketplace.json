@@ -73,7 +73,7 @@
     },
     {
       "name": "handbook-dotnet",
-      "version": "1.19.5",
+      "version": "1.19.7",
       "description": ".NET development tools including CSharpier formatting, dotnet run file support, selective unit testing, and dependency investigation",
       "author": {
         "name": "nikiforovall",

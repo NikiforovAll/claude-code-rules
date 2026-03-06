@@ -9,6 +9,7 @@
 - Non-blocking warnings
 - Uses `.csharpierrc` config if present
 - **dotnet-run-file skill**: Run C# files directly without projects (.NET 10+)
+- **coverage-report skill**: Generate code coverage reports scoped to branch changes
 
 ## Prerequisites
 
