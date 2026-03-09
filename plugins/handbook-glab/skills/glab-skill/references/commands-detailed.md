@@ -16,9 +16,9 @@ glab mr list --reviewer=@me
 glab mr list
 
 # Filter by state
-glab mr list --state=merged
-glab mr list --state=closed
-glab mr list --state=all
+glab mr list --merged
+glab mr list --closed
+glab mr list --all
 ```
 
 ### Creating Merge Requests
@@ -53,11 +53,11 @@ glab mr create --remove-source-branch
 
 ### Viewing and Interacting with MRs
 ```bash
-# View MR details (opens in browser by default)
+# View MR details (shows in terminal by default)
 glab mr view 123
 
-# View MR in terminal
-glab mr view 123 --web=false
+# View MR in browser
+glab mr view 123 --web
 
 # View MR with comments
 glab mr view 123 --comments
@@ -122,10 +122,10 @@ glab issue list --label=bug
 glab issue list --label="bug,priority:high"
 
 # List closed issues
-glab issue list --state=closed
+glab issue list --closed
 
 # List all issues (open and closed)
-glab issue list --state=all
+glab issue list --all
 
 # Search issues
 glab issue list --search="login error"
@@ -139,8 +139,8 @@ glab issue list --assignee=username
 # Create issue interactively
 glab issue create
 
-# Create issue with title and description
-glab issue create --title "Bug in login" --description "Users cannot log in"
+# Create issue with title and description (--yes skips confirmation prompt)
+glab issue create --title "Bug in login" --description "Users cannot log in" --yes
 
 # Create issue with labels
 glab issue create --title "Feature request" --label="enhancement,feature"
@@ -160,8 +160,9 @@ glab issue view 456 --web
 # Close issue
 glab issue close 456
 
-# Close with a comment
-glab issue close 456 -m "Fixed in MR !123"
+# Close with a comment (close doesn't support -m flag)
+glab issue note 456 -m "Fixed in MR !123"
+glab issue close 456
 
 # Reopen issue
 glab issue reopen 456
@@ -375,10 +376,10 @@ glab api --silent projects/:id/merge_requests
 glab label list
 
 # Create label
-glab label create "bug" --color="#FF0000"
+glab label create --name "bug" --color="#FF0000"
 
 # Create label with description
-glab label create "feature" --color="#00FF00" --description "New features"
+glab label create --name "feature" --color="#00FF00" --description "New features"
 
 # Delete label
 glab label delete "old-label"
@@ -549,8 +550,10 @@ Most glab commands support these common flags:
 - `--web`, `-w` - Open in web browser
 - `--output`, `-o` - Output format (json, text, etc.)
 - `--verbose` - Enable verbose output
-- `--page`, `-p` - Page number for paginated results
-- `--per-page`, `-P` - Number of items per page
+- `--page`, `-p` - Page number for paginated results (list commands)
+- `--per-page`, `-P` - Number of items per page (list commands)
+
+**Note:** For `glab api`, pagination uses URL query parameters (`?per_page=100&page=2`), not flags.
 
 ## Output Formats
 
