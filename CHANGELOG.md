@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.19.9] - 2026-03-12
+
+### Added
+- handbook-dotnet: New `dotnet-verify` skill for managing Verify snapshot tests
+- handbook-dotnet: New `ilspy-decompile` skill for .NET assembly decompilation
+- handbook-dotnet: New `coverage-report` skill for branch-scoped code coverage reports
+- handbook-elasticsearch: New Elasticsearch and Kibana REST API skill
+
+### Changed
+- handbook-glab: Removed allowed-tools from glab skill, added unresolved MR comments example
+- handbook-nano-banana: Updated image generation model to gemini-3-pro-image-preview
+- handbook: Removed category from code-reviewer agent
+- version-bump: Refactored to per-plugin independent versioning
+
 ## [1.19.5] - 2026-01-19
 
 ### Changed
