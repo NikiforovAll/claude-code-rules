@@ -1,6 +1,6 @@
 {
   "name": "handbook-dotnet",
-  "version": "1.19.9",
+  "version": "1.19.10",
   "description": ".NET development tools including automatic CSharpier formatting for C# files and dotnet run file support",
   "author": {
     "name": "nikiforovall",
@@ -24,12 +24,5 @@
     "nuget",
     "ilspy",
     "decompile"
-  ],
-  "skills": [
-    "./skills/dotnet-run-file",
-    "./skills/dotnet-test",
-    "./skills/dotnet-dependency",
-    "./skills/coverage-report",
-    "./skills/ilspy-decompile"
   ]
 }
