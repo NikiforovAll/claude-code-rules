@@ -9,7 +9,7 @@ Claude Code Handbook provides complementary plugins to enhance your AI-assisted 
 
 ```bash
 # Add the marketplace
-/plugin marketplace add nikiforovall/claude-code-rules
+claude plugin marketplace add nikiforovall/claude-code-rules
 ```
 
 ## [<span className="badge badge--handbook">handbook</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook/README.md)
@@ -18,7 +18,7 @@ Core plugin with essential tools and best practices for Claude Code development.
 
 
 ```bash
-/plugin install handbook
+claude plugin install handbook@cc-handbook
 ```
 
 ## [<span className="badge badge--handbook-extras">handbook-extras</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-extras/README.md)
@@ -26,7 +26,7 @@ Core plugin with essential tools and best practices for Claude Code development.
 Extended features and experimental tools for advanced use cases.
 
 ```bash
-/plugin install handbook-extras
+claude plugin install handbook-extras@cc-handbook
 ```
 
 ## [<span className="badge badge--handbook-dotnet">handbook-dotnet</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-dotnet/README.md)
@@ -34,7 +34,7 @@ Extended features and experimental tools for advanced use cases.
 .NET development tools and automatic CSharpier formatting for C# files.
 
 ```bash
-/plugin install handbook-dotnet
+claude plugin install handbook-dotnet@cc-handbook
 ```
 
 ## [<span className="badge badge--handbook-microsoft-docs">handbook-microsoft-docs</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-microsoft-docs/README.md)
@@ -42,7 +42,7 @@ Extended features and experimental tools for advanced use cases.
 Microsoft Learn MCP server for searching and fetching official Microsoft and Azure documentation.
 
 ```bash
-/plugin install handbook-microsoft-docs
+claude plugin install handbook-microsoft-docs@cc-handbook
 ```
 
 ## [<span className="badge badge--handbook-sounds">handbook-sounds</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-sounds/README.md)
@@ -50,7 +50,7 @@ Microsoft Learn MCP server for searching and fetching official Microsoft and Azu
 Audio feedback for Claude Code events on Windows using PowerShell sounds.
 
 ```bash
-/plugin install handbook-sounds
+claude plugin install handbook-sounds@cc-handbook
 ```
 
 ## [<span className="badge badge--handbook-git-worktree">handbook-git-worktree</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-git-worktree/README.md)
@@ -58,7 +58,7 @@ Audio feedback for Claude Code events on Windows using PowerShell sounds.
 Git worktree management for working on multiple branches simultaneously.
 
 ```bash
-/plugin install handbook-git-worktree
+claude plugin install handbook-git-worktree@cc-handbook
 ```
 
 ## [<span className="badge badge--handbook-structured-plan-mode">handbook-structured-plan-mode</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-structured-plan-mode/README.md)
@@ -66,7 +66,7 @@ Git worktree management for working on multiple branches simultaneously.
 Structured planning methodology for complex feature implementations through systematic task decomposition.
 
 ```bash
-/plugin install handbook-structured-plan-mode
+claude plugin install handbook-structured-plan-mode@cc-handbook
 ```
 
 ## [<span className="badge badge--handbook-agent-spec-kit">handbook-agent-spec-kit</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-agent-spec-kit/README.md)
@@ -82,7 +82,7 @@ Spec-driven development workflow system with structured phases: Requirements →
   - [`implementation-agent`](/component-reference/agents/implementation-agent) - Executes tasks with strict zero-improvisation policy
 
 ```bash
-/plugin install handbook-agent-spec-kit
+claude plugin install handbook-agent-spec-kit@cc-handbook
 ```
 
 ## [<span className="badge badge--handbook-context7">handbook-context7</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-context7/README.md)
@@ -90,7 +90,7 @@ Spec-driven development workflow system with structured phases: Requirements →
 Context7 MCP server for fetching latest library documentation from official sources.
 
 ```bash
-/plugin install handbook-context7
+claude plugin install handbook-context7@cc-handbook
 ```
 
 ## [<span className="badge badge--handbook-qa">handbook-qa</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-qa/README.md)
@@ -98,7 +98,7 @@ Context7 MCP server for fetching latest library documentation from official sour
 Browser automation and QA testing tools with Playwright MCP integration.
 
 ```bash
-/plugin install handbook-qa
+claude plugin install handbook-qa@cc-handbook
 ```
 
 ## [<span className="badge badge--handbook-nano-banana">handbook-nano-banana</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-nano-banana/README.md)
@@ -106,7 +106,7 @@ Browser automation and QA testing tools with Playwright MCP integration.
 Python scripting and Gemini image generation using uv with inline script dependencies.
 
 ```bash
-/plugin install handbook-nano-banana
+claude plugin install handbook-nano-banana@cc-handbook
 ```
 
 ## [<span className="badge badge--handbook-glab">handbook-glab</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-glab/README.md)
@@ -114,7 +114,7 @@ Python scripting and Gemini image generation using uv with inline script depende
 GitLab CLI (glab) expertise for managing merge requests, issues, CI/CD pipelines, and repositories.
 
 ```bash
-/plugin install handbook-glab
+claude plugin install handbook-glab@cc-handbook
 ```
 
 ## [<span className="badge badge--handbook-elasticsearch">handbook-elasticsearch</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-elasticsearch/README.md)
@@ -122,7 +122,19 @@ GitLab CLI (glab) expertise for managing merge requests, issues, CI/CD pipelines
 Elasticsearch and Kibana REST API expertise for querying, indexing, managing indices, cluster health, aggregations, ES|QL, and dashboard deployment.
 
 ```bash
-/plugin install handbook-elasticsearch
+claude plugin install handbook-elasticsearch@cc-handbook
+```
+
+## [<span className="badge badge--handbook-code-review">handbook-code-review</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-code-review/README.md)
+
+Code review plugin with two review strategies: disposable subagents for one-shot reviews and persistent team members for iterative reviews.
+
+**Components:**
+- **Skill:** `subagent-review` - One-shot review using three parallel disposable subagents (reuse, quality, efficiency)
+- **Skill:** `team-review` - Review using three persistent named team members for follow-up questions
+
+```bash
+claude plugin install handbook-code-review@cc-handbook
 ```
 
 ---
@@ -151,43 +163,46 @@ git clone https://github.com/nikiforovall/claude-code-rules.git
 cd claude-code-rules
 
 # Install core plugin
-/plugin install ./plugins/handbook
+claude plugin install ./plugins/handbook
 
 # Install extras plugin
-/plugin install ./plugins/handbook-extras
+claude plugin install ./plugins/handbook-extras
 
 # Install QA plugin
-/plugin install ./plugins/handbook-qa
+claude plugin install ./plugins/handbook-qa
 
 # Install .NET plugin
-/plugin install ./plugins/handbook-dotnet
+claude plugin install ./plugins/handbook-dotnet
 
 # Install Microsoft Docs plugin
-/plugin install ./plugins/handbook-microsoft-docs
+claude plugin install ./plugins/handbook-microsoft-docs
 
 # Install Context7 plugin
-/plugin install ./plugins/handbook-context7
+claude plugin install ./plugins/handbook-context7
 
 # Install sounds plugin
-/plugin install ./plugins/handbook-sounds
+claude plugin install ./plugins/handbook-sounds
 
 # Install git-worktree plugin
-/plugin install ./plugins/handbook-git-worktree
+claude plugin install ./plugins/handbook-git-worktree
 
 # Install structured-plan-mode plugin
-/plugin install ./plugins/handbook-structured-plan-mode
+claude plugin install ./plugins/handbook-structured-plan-mode
 
 # Install agent-spec-kit plugin
-/plugin install ./plugins/handbook-agent-spec-kit
+claude plugin install ./plugins/handbook-agent-spec-kit
 
 # Install nano-banana plugin
-/plugin install ./plugins/handbook-nano-banana
+claude plugin install ./plugins/handbook-nano-banana
 
 # Install glab plugin
-/plugin install ./plugins/handbook-glab
+claude plugin install ./plugins/handbook-glab
 
 # Install elasticsearch plugin
-/plugin install ./plugins/handbook-elasticsearch
+claude plugin install ./plugins/handbook-elasticsearch
+
+# Install code-review plugin
+claude plugin install ./plugins/handbook-code-review
 ```
 
 ## Contributing

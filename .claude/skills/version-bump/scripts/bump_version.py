@@ -36,7 +36,7 @@ class VersionBumper:
         self.marketplace_path = repo_root / ".claude-plugin" / "marketplace.json"
 
     def discover_plugins(self) -> List[Dict]:
-        """Discover all plugins from marketplace.json."""
+        """Discover all plugins from marketplace.json, reading versions from plugin.json."""
         marketplace_data = self.read_json(self.marketplace_path)
         plugins = []
 
@@ -46,11 +46,14 @@ class VersionBumper:
 
             if plugin_name and source:
                 plugin_json_path = self.repo_root / source.lstrip('./') / ".claude-plugin" / "plugin.json"
+                version = None
+                if plugin_json_path.exists():
+                    plugin_data = self.read_json(plugin_json_path)
+                    version = plugin_data.get('version', '0.0.0')
                 plugins.append({
                     'name': plugin_name,
                     'path': plugin_json_path,
-                    'version': plugin_entry.get('version'),
-                    'marketplace_entry': plugin_entry
+                    'version': version or '0.0.0',
                 })
 
         return plugins
@@ -111,7 +114,7 @@ class VersionBumper:
         return versions
 
     def bump_plugins(self, bump_type: str, plugin_names: List[str]) -> Dict[str, Dict]:
-        """Bump versions for specified plugins."""
+        """Bump versions for specified plugins (plugin.json only)."""
         plugins = self.discover_plugins()
         plugin_map = {p['name']: p for p in plugins}
 
@@ -120,7 +123,6 @@ class VersionBumper:
             raise ValueError(f"Unknown plugin(s): {', '.join(unknown)}")
 
         results = {}
-        marketplace_data = self.read_json(self.marketplace_path)
 
         for plugin_name in plugin_names:
             plugin_info = plugin_map[plugin_name]
@@ -129,13 +131,6 @@ class VersionBumper:
             new_version = self.bump_version(current_version, bump_type)
             new_version_str = self.format_version(*new_version)
 
-            # Update marketplace.json plugin entry
-            for entry in marketplace_data.get('plugins', []):
-                if entry.get('name') == plugin_name:
-                    entry['version'] = new_version_str
-                    break
-
-            # Update individual plugin.json
             plugin_path = plugin_info['path']
             if plugin_path.exists():
                 plugin_data = self.read_json(plugin_path)
@@ -147,9 +142,6 @@ class VersionBumper:
                 'old_version': current_version_str,
                 'new_version': new_version_str
             }
-
-        self.write_json(self.marketplace_path, marketplace_data)
-        print(f"✓ Updated {self.marketplace_path}")
 
         return results
 

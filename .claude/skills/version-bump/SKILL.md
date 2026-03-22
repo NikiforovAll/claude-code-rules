@@ -16,11 +16,9 @@ Trigger this skill when users mention:
 
 ## Version Locations
 
-Each plugin has versions in two places (kept in sync):
-1. `.claude-plugin/marketplace.json` → plugin entry version
-2. `plugins/<name>/.claude-plugin/plugin.json` → individual plugin version
+Single source of truth: `plugins/<name>/.claude-plugin/plugin.json`
 
-The marketplace top-level `version` and `metadata.version` are schema versions and remain unchanged.
+The marketplace.json is a lightweight registry (no version field) — versions live only in plugin.json.
 
 ## Workflow Instructions
 

@@ -1,317 +1,115 @@
 {
   "name": "cc-handbook",
-  "version": "1.19.5",
   "owner": {
     "name": "nikiforovall",
-    "email": "nikiforovall@github.com"
-  },
-  "metadata": {
-    "description": "Official marketplace for Claude Code Handbook plugins and extensions",
-    "version": "1.19.5"
+    "email": "alexey.nikiforovall@gmail.com"
   },
   "repository": "https://github.com/nikiforovall/claude-code-rules",
   "plugins": [
     {
       "name": "handbook",
-      "version": "1.19.5",
       "description": "Core Claude Code handbook with best practices and essential tools",
-      "author": {
-        "name": "nikiforovall",
-        "url": "https://github.com/nikiforovall"
-      },
       "source": "./plugins/handbook",
       "category": "productivity",
-      "tags": [
-        "handbook",
-        "best-practices",
-        "development",
-        "tools",
-        "commands",
-        "agents"
-      ],
-      "homepage": "https://nikiforovall.blog/claude-code-rules/",
-      "strict": true
+      "tags": ["handbook", "best-practices", "development", "tools", "commands", "agents"]
     },
     {
       "name": "handbook-extras",
-      "version": "1.19.5",
       "description": "Extended features and experimental tools for Claude Code Handbook",
-      "author": {
-        "name": "nikiforovall",
-        "url": "https://github.com/nikiforovall"
-      },
       "source": "./plugins/handbook-extras",
       "category": "extensions",
-      "tags": [
-        "experimental",
-        "extras",
-        "extensions",
-        "community"
-      ],
-      "homepage": "https://nikiforovall.blog/claude-code-rules/",
-      "strict": true
+      "tags": ["experimental", "extras", "extensions", "community"]
     },
     {
       "name": "handbook-qa",
-      "version": "1.19.5",
       "description": "Browser automation and QA testing tools with Playwright MCP integration",
-      "author": {
-        "name": "nikiforovall",
-        "url": "https://github.com/nikiforovall"
-      },
       "source": "./plugins/handbook-qa",
       "category": "testing",
-      "tags": [
-        "qa",
-        "testing",
-        "browser-automation",
-        "playwright",
-        "e2e"
-      ],
-      "homepage": "https://nikiforovall.blog/claude-code-rules/",
-      "strict": true
+      "tags": ["qa", "testing", "browser-automation", "playwright", "e2e"]
     },
     {
       "name": "handbook-dotnet",
-      "version": "1.19.10",
       "description": ".NET development tools including CSharpier formatting, dotnet run file support, selective unit testing, and dependency investigation",
-      "author": {
-        "name": "nikiforovall",
-        "url": "https://github.com/nikiforovall"
-      },
       "source": "./plugins/handbook-dotnet",
       "category": "development",
-      "tags": [
-        "dotnet",
-        "csharp",
-        "formatting",
-        "csharpier",
-        "hooks",
-        "automation",
-        "scripting",
-        "testing",
-        "xunit",
-        "unit-tests",
-        "dependencies",
-        "nuget"
-      ],
-      "homepage": "https://nikiforovall.blog/claude-code-rules/",
-      "strict": true
+      "tags": ["dotnet", "csharp", "formatting", "csharpier", "hooks", "automation", "scripting", "testing", "xunit", "unit-tests", "dependencies", "nuget"]
     },
     {
       "name": "handbook-microsoft-docs",
-      "version": "1.19.5",
       "description": "Microsoft Learn MCP server for searching and fetching official Microsoft and Azure documentation",
-      "author": {
-        "name": "nikiforovall",
-        "url": "https://github.com/nikiforovall"
-      },
       "source": "./plugins/handbook-microsoft-docs",
       "category": "documentation",
-      "tags": [
-        "microsoft",
-        "azure",
-        "documentation",
-        "mcp",
-        "api-reference",
-        "learn"
-      ],
-      "homepage": "https://nikiforovall.blog/claude-code-rules/",
-      "strict": true
+      "tags": ["microsoft", "azure", "documentation", "mcp", "api-reference", "learn"]
     },
     {
       "name": "handbook-context7",
-      "version": "1.19.5",
       "description": "Context7 MCP server for fetching latest library documentation from official sources",
-      "author": {
-        "name": "nikiforovall",
-        "url": "https://github.com/nikiforovall"
-      },
       "source": "./plugins/handbook-context7",
       "category": "productivity",
-      "tags": [
-        "documentation",
-        "context7",
-        "mcp",
-        "library-docs",
-        "api-reference"
-      ],
-      "homepage": "https://nikiforovall.blog/claude-code-rules/",
-      "strict": true
+      "tags": ["documentation", "context7", "mcp", "library-docs", "api-reference"]
     },
     {
       "name": "handbook-sounds",
-      "version": "1.19.5",
       "description": "Audio feedback for Claude Code events on Windows using PowerShell sounds",
-      "author": {
-        "name": "nikiforovall",
-        "url": "https://github.com/nikiforovall"
-      },
       "source": "./plugins/handbook-sounds",
       "category": "productivity",
-      "tags": [
-        "sounds",
-        "audio",
-        "notifications",
-        "feedback",
-        "windows",
-        "powershell",
-        "accessibility"
-      ],
-      "homepage": "https://nikiforovall.blog/claude-code-rules/",
-      "strict": true
+      "tags": ["sounds", "audio", "notifications", "feedback", "windows", "powershell", "accessibility"]
     },
     {
       "name": "handbook-git-worktree",
-      "version": "1.19.5",
       "description": "Git worktree management for working on multiple branches simultaneously",
-      "author": {
-        "name": "nikiforovall",
-        "url": "https://github.com/nikiforovall"
-      },
       "source": "./plugins/handbook-git-worktree",
       "category": "productivity",
-      "tags": [
-        "git",
-        "worktree",
-        "branches",
-        "workflow",
-        "parallel-development",
-        "productivity"
-      ],
-      "homepage": "https://nikiforovall.blog/claude-code-rules/",
-      "strict": true
+      "tags": ["git", "worktree", "branches", "workflow", "parallel-development", "productivity"]
     },
     {
       "name": "handbook-structured-plan-mode",
-      "version": "1.19.5",
       "description": "Structured planning methodology for complex feature implementations through systematic task decomposition",
-      "author": {
-        "name": "nikiforovall",
-        "url": "https://github.com/nikiforovall"
-      },
       "source": "./plugins/handbook-structured-plan-mode",
       "category": "productivity",
-      "tags": [
-        "planning",
-        "task-management",
-        "project-management",
-        "workflow",
-        "feature-development",
-        "productivity"
-      ],
-      "homepage": "https://nikiforovall.blog/claude-code-rules/",
-      "strict": true
+      "tags": ["planning", "task-management", "project-management", "workflow", "feature-development", "productivity"]
     },
     {
       "name": "handbook-agent-spec-kit",
-      "version": "1.19.5",
       "description": "Spec-driven development workflow system with structured phases: Requirements → Design → Tasks → Implementation",
-      "author": {
-        "name": "Vitalii Matviichuk",
-        "url": "https://github.com/vmatviichuk"
-      },
       "source": "./plugins/handbook-agent-spec-kit",
       "category": "productivity",
-      "tags": [
-        "spec-driven",
-        "workflow",
-        "planning",
-        "agents",
-        "requirements",
-        "design",
-        "implementation",
-        "project-management"
-      ],
-      "homepage": "https://nikiforovall.blog/claude-code-rules/",
-      "strict": true
+      "tags": ["spec-driven", "workflow", "planning", "agents", "requirements", "design", "implementation", "project-management"]
     },
     {
       "name": "handbook-nano-banana",
-      "version": "1.19.5",
       "description": "Python scripting and Gemini image generation using uv with inline script dependencies",
-      "author": {
-        "name": "nikiforovall",
-        "url": "https://github.com/nikiforovall"
-      },
       "source": "./plugins/handbook-nano-banana",
       "category": "ai",
-      "tags": [
-        "gemini",
-        "image-generation",
-        "python",
-        "uv",
-        "ai",
-        "scripting"
-      ],
-      "homepage": "https://nikiforovall.blog/claude-code-rules/",
-      "strict": true
+      "tags": ["gemini", "image-generation", "python", "uv", "ai", "scripting"]
     },
     {
       "name": "handbook-glab",
-      "version": "1.19.6",
       "description": "GitLab CLI (glab) expertise for managing merge requests, issues, CI/CD pipelines, and repositories",
-      "author": {
-        "name": "nikiforovall",
-        "url": "https://github.com/nikiforovall"
-      },
       "source": "./plugins/handbook-glab",
       "category": "productivity",
-      "tags": [
-        "gitlab",
-        "glab",
-        "merge-requests",
-        "ci-cd",
-        "pipelines",
-        "issues",
-        "devops"
-      ],
-      "homepage": "https://nikiforovall.blog/claude-code-rules/",
-      "strict": true
+      "tags": ["gitlab", "glab", "merge-requests", "ci-cd", "pipelines", "issues", "devops"]
     },
     {
       "name": "handbook-csharp-lsp",
-      "version": "1.19.5",
       "description": "C# Language Server Protocol support using csharp-ls for code intelligence features",
-      "author": {
-        "name": "nikiforovall",
-        "url": "https://github.com/nikiforovall"
-      },
       "source": "./plugins/handbook-csharp-lsp",
       "category": "development",
-      "tags": [
-        "csharp",
-        "lsp",
-        "language-server",
-        "code-intelligence",
-        "dotnet"
-      ],
-      "homepage": "https://nikiforovall.blog/claude-code-rules/",
-      "strict": true
+      "tags": ["csharp", "lsp", "language-server", "code-intelligence", "dotnet"]
     },
     {
       "name": "handbook-elasticsearch",
-      "version": "1.19.5",
       "description": "Elasticsearch and Kibana REST API expertise for querying, indexing, managing indices, cluster health, aggregations, ES|QL, and dashboard deployment",
-      "author": {
-        "name": "nikiforovall",
-        "url": "https://github.com/nikiforovall"
-      },
       "source": "./plugins/handbook-elasticsearch",
       "category": "development",
-      "tags": [
-        "elasticsearch",
-        "kibana",
-        "search",
-        "aggregations",
-        "observability",
-        "otel",
-        "opentelemetry",
-        "esql",
-        "rest-api"
-      ],
-      "homepage": "https://nikiforovall.blog/claude-code-rules/",
-      "strict": true
+      "tags": ["elasticsearch", "kibana", "search", "aggregations", "observability", "otel", "opentelemetry", "esql", "rest-api"]
+    },
+    {
+      "name": "handbook-code-review",
+      "description": "Code review plugin with two strategies: disposable subagents for one-shot reviews and persistent team members for iterative reviews",
+      "source": "./plugins/handbook-code-review",
+      "category": "development",
+      "tags": ["code-review", "subagent", "team", "reuse", "quality", "efficiency"]
     }
   ]
 }
