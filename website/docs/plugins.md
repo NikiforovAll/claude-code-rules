@@ -12,6 +12,18 @@ Claude Code Handbook provides complementary plugins to enhance your AI-assisted 
 claude plugin marketplace add nikiforovall/claude-code-rules
 ```
 
+## [<span className="badge badge--handbook-discover">handbook-discover</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-discover/README.md)
+
+Discover and audit all plugins in a Claude Code marketplace. Shows installation status, versions, and component breakdown (skills, agents, commands, MCP/LSP servers, hooks).
+
+```bash
+claude plugin install handbook-discover@cc-handbook
+```
+
+:::tip
+Once installed, use `/handbook-discover` or ask Claude to "discover plugins" to get a live inventory of all marketplace plugins — including ones you haven't installed yet.
+:::
+
 ## [<span className="badge badge--handbook">handbook</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook/README.md)
 
 Core plugin with essential tools and best practices for Claude Code development.
@@ -117,6 +129,14 @@ GitLab CLI (glab) expertise for managing merge requests, issues, CI/CD pipelines
 claude plugin install handbook-glab@cc-handbook
 ```
 
+## [<span className="badge badge--handbook-csharp-lsp">handbook-csharp-lsp</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-csharp-lsp/README.md)
+
+C# Language Server Protocol support using csharp-ls for code intelligence features.
+
+```bash
+claude plugin install handbook-csharp-lsp@cc-handbook
+```
+
 ## [<span className="badge badge--handbook-elasticsearch">handbook-elasticsearch</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-elasticsearch/README.md)
 
 Elasticsearch and Kibana REST API expertise for querying, indexing, managing indices, cluster health, aggregations, ES|QL, and dashboard deployment.
@@ -203,6 +223,12 @@ claude plugin install ./plugins/handbook-elasticsearch
 
 # Install code-review plugin
 claude plugin install ./plugins/handbook-code-review
+
+# Install csharp-lsp plugin
+claude plugin install ./plugins/handbook-csharp-lsp
+
+# Install discover plugin
+claude plugin install ./plugins/handbook-discover
 ```
 
 ## Contributing

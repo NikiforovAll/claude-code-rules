@@ -116,3 +116,11 @@
   --ifm-badge-background-color: #7b1fa2;
   --ifm-badge-color: white;
 }
+.badge--handbook-csharp-lsp {
+  --ifm-badge-background-color: #68217a;
+  --ifm-badge-color: white;
+}
+.badge--handbook-discover {
+  --ifm-badge-background-color: #0288d1;
+  --ifm-badge-color: white;
+}

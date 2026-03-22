@@ -10,62 +10,27 @@ This is a Claude Code plugin monorepo containing multiple distributable plugins 
 
 ```
 claude-code-rules/                    # Root monorepo
-│
-├── plugins/                          # Plugin directory
-│   ├── handbook/                     # Core plugin
-│   │   ├── .claude-plugin/
-│   │   │   └── plugin.json          # Name: "handbook"
-│   │   ├── commands/                 # 5 slash commands
-│   │   ├── agents/                   # 2 specialized agents
-│   │   ├── hooks/
-│   │   ├── BEST-PRACTICES.md
-│   │   ├── TIPS-AND-TRICKS.md
-│   │   └── README.md
-│   │
-│   ├── handbook-extras/              # Extras plugin
-│   │   ├── .claude-plugin/
-│   │   │   └── plugin.json          # Name: "handbook-extras"
-│   │   ├── commands/                 # Ready for contributions
-│   │   ├── agents/
-│   │   ├── hooks/
-│   │   └── README.md
-│   │
-│   ├── handbook-qa/                  # QA and browser automation plugin
-│   │   ├── .claude-plugin/
-│   │   │   └── plugin.json          # Name: "handbook-qa"
-│   │   ├── .mcp.json                 # Playwright MCP server
-│   │   └── README.md
-│   │
-│   ├── handbook-dotnet/              # .NET development plugin
-│   │   ├── .claude-plugin/
-│   │   │   └── plugin.json          # Name: "handbook-dotnet"
-│   │   ├── .mcp.json                 # Microsoft Docs MCP server
-│   │   ├── hooks/
-│   │   └── README.md
-│   │
-│   ├── handbook-context7/            # Context7 documentation plugin
-│   │   ├── .claude-plugin/
-│   │   │   └── plugin.json          # Name: "handbook-context7"
-│   │   ├── .mcp.json                 # Context7 MCP server
-│   │   └── README.md
-│   │
-│   └── handbook-sounds/              # Audio feedback plugin
-│       ├── .claude-plugin/
-│       │   └── plugin.json          # Name: "handbook-sounds"
-│       ├── hooks/
-│       └── README.md
-│
-├── .claude-plugin/                   # Marketplace configuration
-│   └── marketplace.json              # Catalogs all plugins (Marketplace name: "cc-handbook")
-│
+├── plugins/                          # All plugins (run discover script for full inventory)
+│   └── <plugin-name>/
+│       ├── .claude-plugin/plugin.json  # Manifest (name, version, description)
+│       ├── skills/                     # Skills (SKILL.md per skill)
+│       ├── agents/                     # Agent definitions (.md)
+│       ├── commands/                   # Slash commands (.md)
+│       ├── hooks/hooks.json            # Event hooks
+│       ├── .mcp.json                   # MCP servers
+│       └── .lsp.json                   # LSP servers
+├── .claude-plugin/
+│   └── marketplace.json              # Catalogs all plugins (marketplace: "cc-handbook")
 ├── website/                          # Docusaurus documentation site
-│   ├── docs/                         # Source documentation
-│   └── docusaurus.config.js          # Site configuration
-│
-├── BEST-PRACTICES.md                 # Shared documentation
+├── BEST-PRACTICES.md
 ├── TIPS-AND-TRICKS.md
 ├── CHANGELOG.md
 └── README.md
+```
+
+To list all plugins with components and install status:
+```bash
+python plugins/handbook-discover/skills/handbook-discover/scripts/discover.py --detailed
 ```
 
 ## Website
