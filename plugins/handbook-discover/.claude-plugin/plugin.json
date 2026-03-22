@@ -1,0 +1,19 @@
+{
+  "name": "handbook-discover",
+  "version": "1.0.0",
+  "description": "Discover and audit all plugins in a Claude Code marketplace with installation status, versions, and component breakdown",
+  "author": {
+    "name": "nikiforovall",
+    "url": "https://github.com/nikiforovall"
+  },
+  "homepage": "https://nikiforovall.blog/claude-code-rules/",
+  "repository": "https://github.com/nikiforovall/claude-code-rules",
+  "license": "MIT",
+  "keywords": [
+    "discovery",
+    "marketplace",
+    "plugins",
+    "audit",
+    "inventory"
+  ]
+}

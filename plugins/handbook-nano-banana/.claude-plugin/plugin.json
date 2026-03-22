@@ -16,9 +16,5 @@
     "uv",
     "ai",
     "scripting"
-  ],
-  "skills": [
-    "./skills/nano-banana",
-    "./skills/nano-banana-prompting"
   ]
 }

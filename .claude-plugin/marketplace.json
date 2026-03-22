@@ -110,6 +110,13 @@
       "source": "./plugins/handbook-code-review",
       "category": "development",
       "tags": ["code-review", "subagent", "team", "reuse", "quality", "efficiency"]
+    },
+    {
+      "name": "handbook-discover",
+      "description": "Discover and audit all plugins in a Claude Code marketplace with installation status, versions, and component breakdown",
+      "source": "./plugins/handbook-discover",
+      "category": "productivity",
+      "tags": ["discovery", "marketplace", "plugins", "audit", "inventory"]
     }
   ]
 }

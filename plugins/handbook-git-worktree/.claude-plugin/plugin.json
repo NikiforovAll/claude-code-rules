@@ -16,8 +16,5 @@
     "productivity",
     "workflow",
     "parallel-development"
-  ],
-  "skills": [
-    "./skills/git-worktree"
   ]
 }
