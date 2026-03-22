@@ -1,0 +1,34 @@
+---
+title: "team-review"
+sidebar_position: 14
+description: "Code review using persistent named team members for iterative reviews with follow-up questions"
+---
+
+import TeamReviewSource from '!!raw-loader!../../../../plugins/handbook-code-review/skills/team-review/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `team-review` skill
+
+<span className="badge badge--handbook-code-review">handbook-code-review</span>
+
+Code review using three persistent named team members (reuse-reviewer, quality-reviewer, efficiency-reviewer) that stay alive for follow-up questions.
+
+Creates a team with three named reviewers running in parallel. Unlike `/subagent-review`, team members persist after review — you can send follow-up messages to specific reviewers.
+
+## When to Use This Skill
+
+Use the `team-review` skill when you want to:
+
+- In-depth code review with ability to ask follow-up questions
+- Iterative review process across multiple rounds
+- Track review progress via tasks per reviewer
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{TeamReviewSource}
+</CodeBlock>
+
+## Related
+
+- [`subagent-review`](/component-reference/skills/subagent-review) — one-shot disposable agents for quick reviews

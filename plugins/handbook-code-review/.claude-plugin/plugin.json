@@ -1,0 +1,20 @@
+{
+  "name": "handbook-code-review",
+  "version": "1.0.0",
+  "description": "Code review plugin with two strategies: disposable subagents for one-shot reviews and persistent team members for iterative reviews",
+  "author": {
+    "name": "nikiforovall",
+    "url": "https://github.com/nikiforovall"
+  },
+  "homepage": "https://nikiforovall.blog/claude-code-rules/",
+  "repository": "https://github.com/nikiforovall/claude-code-rules",
+  "license": "MIT",
+  "keywords": [
+    "code-review",
+    "subagent",
+    "team",
+    "reuse",
+    "quality",
+    "efficiency"
+  ]
+}

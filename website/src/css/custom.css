@@ -112,3 +112,7 @@
   --ifm-badge-background-color: #fed10a;
   --ifm-badge-color: black;
 }
+.badge--handbook-code-review {
+  --ifm-badge-background-color: #7b1fa2;
+  --ifm-badge-color: white;
+}

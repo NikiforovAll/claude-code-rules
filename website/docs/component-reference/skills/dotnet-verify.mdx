@@ -1,0 +1,29 @@
+---
+title: "dotnet-verify"
+sidebar_position: 16
+description: "Manage Verify snapshot tests in .NET projects"
+---
+
+import DotnetVerifySource from '!!raw-loader!../../../../plugins/handbook-dotnet/skills/dotnet-verify/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `dotnet-verify` skill
+
+<span className="badge badge--handbook-dotnet">handbook-dotnet</span>
+
+Manage [Verify](https://github.com/VerifyTests/Verify) snapshot tests in .NET projects — update snapshots, accept new baselines, discover verify tests, and troubleshoot mismatches.
+
+## When to Use This Skill
+
+Use the `dotnet-verify` skill when you want to:
+
+- Update verified snapshots after intentional code changes
+- Accept or reject new snapshot baselines
+- Discover and run Verify-based tests
+- Troubleshoot `.verified.txt` mismatches
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{DotnetVerifySource}
+</CodeBlock>

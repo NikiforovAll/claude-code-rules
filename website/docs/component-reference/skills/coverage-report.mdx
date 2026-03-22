@@ -1,0 +1,28 @@
+---
+title: "coverage-report"
+sidebar_position: 15
+description: "Generate .NET code coverage reports scoped to files changed in the current branch"
+---
+
+import CoverageReportSource from '!!raw-loader!../../../../plugins/handbook-dotnet/skills/coverage-report/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `coverage-report` skill
+
+<span className="badge badge--handbook-dotnet">handbook-dotnet</span>
+
+Generate a .NET code coverage report scoped to source files changed in the current branch. Runs tests with coverage collection and produces filtered HTML reports.
+
+## When to Use This Skill
+
+Use the `coverage-report` skill when you want to:
+
+- See code coverage for only the files you changed
+- Generate HTML coverage reports during PR review
+- Verify test coverage before merging
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{CoverageReportSource}
+</CodeBlock>
