@@ -23,6 +23,6 @@ fi
 # Play sound using PowerShell with -NoProfile to avoid oh-my-posh conflicts
 # Use -NonInteractive to prevent any prompts
 # Run in background to not block Claude
-powershell -NoProfile -NonInteractive -Command "(New-Object Media.SoundPlayer '$sound_file').PlaySync();" &
+powershell.exe -NoProfile -NonInteractive -Command "(New-Object Media.SoundPlayer '$sound_file').PlaySync();" &
 
 exit 0
