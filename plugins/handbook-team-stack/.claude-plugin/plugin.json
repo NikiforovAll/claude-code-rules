@@ -1,0 +1,18 @@
+{
+  "name": "handbook-team-stack",
+  "version": "0.1.2",
+  "description": "Interactive skill that analyzes a task, proposes an agent team composition, and creates the team after user confirmation",
+  "author": {
+    "name": "nikiforovall",
+    "url": "https://github.com/nikiforovall"
+  },
+  "homepage": "https://nikiforovall.blog/claude-code-rules/",
+  "repository": "https://github.com/nikiforovall/claude-code-rules",
+  "license": "MIT",
+  "keywords": [
+    "agent-teams",
+    "team-stack",
+    "orchestration",
+    "multi-agent"
+  ]
+}

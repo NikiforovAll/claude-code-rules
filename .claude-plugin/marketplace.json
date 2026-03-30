@@ -117,6 +117,13 @@
       "source": "./plugins/handbook-discover",
       "category": "productivity",
       "tags": ["discovery", "marketplace", "plugins", "audit", "inventory"]
+    },
+    {
+      "name": "handbook-team-stack",
+      "description": "Interactive skill that analyzes a task, proposes an agent team composition with roles and responsibilities, and creates the team after user confirmation",
+      "source": "./plugins/handbook-team-stack",
+      "category": "productivity",
+      "tags": ["agent-teams", "team-stack", "orchestration", "multi-agent", "workflow"]
     }
   ]
 }
