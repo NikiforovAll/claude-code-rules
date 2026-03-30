@@ -1,9 +1,9 @@
 ---
 name: "Handbookbot: Docs Audit"
-description: "Daily audit of plugin components vs component-reference documentation. Creates an issue only when gaps or inconsistencies are found."
+description: "Weekly audit of plugin components vs component-reference documentation. Creates an issue only when gaps or inconsistencies are found."
 
 on:
-  schedule: daily
+  schedule: weekly
   workflow_dispatch:
 
 permissions:
