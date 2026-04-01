@@ -77,5 +77,4 @@ conventions, type usage, and project structure guidelines.
 
 **Built-in implementations:**
 - [`@code-reviewer`](/component-reference/agents/code-reviewer) - Agent that reviews code changes in a separate context
-- [`/review`](/component-reference/commands/review) - Command for systematic code review with structured feedback
 

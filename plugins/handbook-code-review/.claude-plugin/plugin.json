@@ -1,7 +1,7 @@
 {
   "name": "handbook-code-review",
-  "version": "1.0.0",
-  "description": "Code review plugin with two strategies: disposable subagents for one-shot reviews and persistent team members for iterative reviews",
+  "version": "1.0.1",
+  "description": "Code review plugin with a standalone reviewer agent and two skill strategies: disposable subagents for one-shot reviews and persistent team members for iterative reviews",
   "author": {
     "name": "nikiforovall",
     "url": "https://github.com/nikiforovall"

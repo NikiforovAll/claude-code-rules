@@ -3,28 +3,27 @@ title: "@code-reviewer"
 sidebar_position: 1
 ---
 
-import CodeReviewerSource from '!!raw-loader!../../../../plugins/handbook/agents/code-reviewer.md'
+import CodeReviewerSource from '!!raw-loader!../../../../plugins/handbook-code-review/agents/code-reviewer.md'
 import CodeBlock from '@theme/CodeBlock';
 
 # Use `@code-reviewer` agent
 
-<span className="badge badge--handbook">handbook</span>
+<span className="badge badge--handbook-code-review">handbook-code-review</span>
 
-Review code changes in a separate context window with structured feedback, implementing the Fresh Eyes Pattern.
+Review code changes in a separate context window, implementing the Fresh Eyes Pattern.
 
-The `@code-reviewer` agent provides systematic code analysis by running in an isolated context, free from implementation assumptions. It invokes the `/review` command and returns numbered findings organized by severity, making it easy to track and address issues.
+The `@code-reviewer` agent provides systematic code analysis by running in an isolated context, free from implementation assumptions. It reviews diffs directly against a base branch, providing actionable feedback grouped by severity.
 
 ## When to Use
 
-Use the `@code-reviewer` agent when you want to get an unbiased review of your code changes
+Use the `@code-reviewer` agent when you want to get an unbiased review of your code changes.
 
 ## Key Features
 
 - **Separate Context**: Runs in isolated context window without implementation bias
-- **Structured Feedback**: Numbered findings with emoji categorization
 - **Read-Only**: Does NOT modify code - only provides analysis
 - **Auto-Triggering**: Automatically activates when code review is requested
-- **Flexible Parameters**: Supports custom base branches and format modes
+- **Flexible Parameters**: Supports custom base branches
 
 ## Usage Examples
 
@@ -38,11 +37,6 @@ Use the `@code-reviewer` agent when you want to get an unbiased review of your c
 @code-reviewer review my changes against develop
 ```
 
-**Quick summary:**
-```
-@code-reviewer give me a quick summary of issues
-```
-
 ## Agent Specification
 
 <CodeBlock language="markdown">
@@ -51,5 +45,4 @@ Use the `@code-reviewer` agent when you want to get an unbiased review of your c
 
 ## Related
 
-- [`/review`](/component-reference/commands/review) - Command version for manual invocation
 - [Fresh Eyes Pattern](/tips-and-tricks/fresh-eyes-pattern) - Pattern this agent implements

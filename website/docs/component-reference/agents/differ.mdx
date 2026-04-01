@@ -1,23 +1,23 @@
 ---
-title: "@git-diff-analyzer"
+title: "@differ"
 sidebar_position: 9
 description: "Analyze differences between git branches and generate clear, concise summaries of code changes"
 ---
 
-import GitDiffAnalyzerAgentSource from '!!raw-loader!../../../../plugins/handbook-extras/agents/git-diff-analyzer.md'
+import DifferAgentSource from '!!raw-loader!../../../../plugins/handbook/agents/differ.md'
 import CodeBlock from '@theme/CodeBlock';
 
-# Use `@git-diff-analyzer` agent
+# Use `@differ` agent
 
-<span className="badge badge--handbook-extras">handbook-extras</span>
+<span className="badge badge--handbook">handbook</span>
 
 Fast, focused agent for analyzing git branch differences and generating concise summaries of code changes.
 
-The `@git-diff-analyzer` agent specializes in comparing branches and producing structured, one-page summaries showing file-level changes, statistics, and high-level impact analysis. It uses the Haiku model for speed and cost efficiency, making it ideal for routine PR reviews and quick branch comparisons.
+The `@differ` agent specializes in comparing branches and producing structured, one-page summaries showing file-level changes, statistics, and high-level impact analysis. It uses the Haiku model for speed and cost efficiency, making it ideal for routine PR reviews and quick branch comparisons.
 
 ## When to Use This Agent
 
-Use the `@git-diff-analyzer` agent when you need to:
+Use the `@differ` agent when you need to:
 
 - Generate quick summaries of branch differences for PR descriptions
 - Understand what changed when returning to a work-in-progress branch
@@ -34,19 +34,19 @@ Use the `@git-diff-analyzer` agent when you need to:
 ## Agent Specification
 
 <CodeBlock language="markdown">
-{GitDiffAnalyzerAgentSource}
+{DifferAgentSource}
 </CodeBlock>
 
 ## Example Usage
 
 **Basic usage** (compares current branch against develop):
 ```
-Use @git-diff-analyzer to summarize my changes
+Use @differ to summarize my changes
 ```
 
 **Custom target branch**:
 ```
-Use @git-diff-analyzer to compare against main
+Use @differ to compare against main
 ```
 
 ## Output Format

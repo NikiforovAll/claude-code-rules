@@ -1,6 +1,6 @@
 ---
-name: git-diff-analyzer
-description: Use this agent when the user needs to analyze differences between git branches and summarize code changes. It is not intended for comprehensive analysis but for clear, concise summaries of branch differences.
+name: differ
+description: Analyze differences between git branches and summarize code changes concisely.
 tools: Bash, Glob, Grep, Read
 model: haiku
 color: purple

@@ -96,7 +96,7 @@ When you need to understand existing code or gather information before making de
 |----------------|----------------|--------------|
 | Need to understand how existing code works | [`@codebase-analyzer`](/component-reference/agents/codebase-analyzer) | Traces implementation details and documents architecture |
 | Need comprehensive research on a topic | [`@deep-research-agent`](/component-reference/agents/deep-research-agent) | Gathers information from multiple sources with adaptive strategies |
-| Need quick summary of git branch differences | [`@git-diff-analyzer`](/component-reference/agents/git-diff-analyzer) | Generates concise PR summaries and branch comparison analysis |
+| Need quick summary of git branch differences | [`@differ`](/component-reference/agents/differ) | Generates concise PR summaries and branch comparison analysis |
 
 :::tip Context Management Best Practices
 - **Keep context focused**: Monitor with `/context` command. Trim unnecessary files to maintain quality.
