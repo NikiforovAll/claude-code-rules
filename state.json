@@ -1,11 +1,15 @@
 {
-  "last_run": "2026-03-31T13:20:09Z",
-  "run_id": "23799413037",
+  "last_run": "2026-04-01T13:20:38Z",
+  "run_id": "23850657420",
   "nudged_prs": {
     "15": "2026-03-31T13:20:09Z"
   },
   "commented_issues": {},
   "monthly_summary_issues": {
-    "2026-03": "[Handbookbot] Monthly Activity 2026-03"
+    "2026-03": "[Handbookbot] Monthly Activity 2026-03",
+    "2026-04": "[Handbookbot] Monthly Activity 2026-04"
+  },
+  "labelled_prs": {
+    "11": "2026-04-01T13:20:38Z"
   }
 }
