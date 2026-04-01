@@ -1,0 +1,59 @@
+---
+title: "handbook-discover"
+sidebar_position: 18
+---
+
+import HandbookDiscoverSource from '!!raw-loader!../../../../plugins/handbook-discover/skills/handbook-discover/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `handbook-discover` skill
+
+<span className="badge badge--handbook-discover">handbook-discover</span>
+
+Discover, browse, and audit all plugins in the cc-handbook marketplace — with installation status, versions, and component breakdown.
+
+This skill runs a Python discovery script that inventories every plugin in the marketplace and reports which are installed, disabled, or missing — along with component counts per plugin.
+
+## When to Use This Skill
+
+Use the `handbook-discover` skill when you want to:
+
+- See all available cc-handbook plugins at a glance
+- Check which plugins are installed and enabled
+- Find plugins by keyword or component type
+- Get a machine-readable inventory for scripting or auditing
+
+## Quick Examples
+
+```bash
+# List all plugins with status
+python ${CLAUDE_SKILL_DIR}/scripts/discover.py
+
+# Show component names per plugin
+python ${CLAUDE_SKILL_DIR}/scripts/discover.py --detailed
+
+# Filter by keyword
+python ${CLAUDE_SKILL_DIR}/scripts/discover.py --filter dotnet
+
+# Only show uninstalled plugins
+python ${CLAUDE_SKILL_DIR}/scripts/discover.py --uninstalled
+
+# Machine-readable JSON output
+python ${CLAUDE_SKILL_DIR}/scripts/discover.py --json
+```
+
+## Status Legend
+
+| Symbol | Meaning |
+|--------|---------|
+| `[+]` | Installed and enabled |
+| `[o]` | Installed but disabled |
+| `[ ]` | Not installed |
+
+Component counts use single-letter codes: `S`=skills `A`=agents `C`=commands `M`=mcp `L`=lsp `H`=hooks
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{HandbookDiscoverSource}
+</CodeBlock>

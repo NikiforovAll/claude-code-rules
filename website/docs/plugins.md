@@ -157,6 +157,18 @@ Code review plugin with two review strategies: disposable subagents for one-shot
 claude plugin install handbook-code-review@cc-handbook
 ```
 
+## [<span className="badge badge--handbook-team-stack">handbook-team-stack</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-team-stack/README.md)
+
+Agent team orchestration — analyze a task, propose a minimum viable team composition, and spin up agents with clear Definition of Ready / Definition of Done contracts.
+
+**Components:**
+- **Skill:** [`adr-plan`](/component-reference/skills/adr-plan) - Analyze a task and produce an Architecture Decision Record with implementation steps
+- **Skill:** [`team-stack`](/component-reference/skills/team-stack) - Propose and create an agent team for complex multi-workstream tasks
+
+```bash
+claude plugin install handbook-team-stack@cc-handbook
+```
+
 ---
 
 ## Understanding Building Blocks
@@ -226,6 +238,9 @@ claude plugin install ./plugins/handbook-code-review
 
 # Install csharp-lsp plugin
 claude plugin install ./plugins/handbook-csharp-lsp
+
+# Install team-stack plugin
+claude plugin install ./plugins/handbook-team-stack
 
 # Install discover plugin
 claude plugin install ./plugins/handbook-discover

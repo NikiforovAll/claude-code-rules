@@ -1,0 +1,39 @@
+---
+title: "team-stack"
+sidebar_position: 20
+---
+
+import TeamStackSource from '!!raw-loader!../../../../plugins/handbook-team-stack/skills/team-stack/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `team-stack` skill
+
+<span className="badge badge--handbook-team-stack">handbook-team-stack</span>
+
+Analyze a task, propose a minimum viable agent team composition, and create the team after user confirmation.
+
+This skill infers the right team structure from the task description and codebase context — no manual configuration needed. It follows a propose-then-confirm workflow and structures each agent prompt with explicit Definition of Ready and Definition of Done sections.
+
+## When to Use This Skill
+
+Use the `team-stack` skill when you want to:
+
+- Parallelize a complex task across multiple specialized agents
+- Set up a builder/reviewer split for code quality
+- Run independent workstreams (e.g., frontend + backend) concurrently
+- Orchestrate a multi-step migration or investigation
+
+## Team Size Guidelines
+
+| Size | When to Use |
+|------|------------|
+| Solo agent | Simple, single-file changes — use a subagent instead |
+| 2 agents | Two clearly independent workstreams |
+| 3 agents | Builder/reviewer split or cross-layer work |
+| 4+ agents | Large migrations, multi-module refactors |
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{TeamStackSource}
+</CodeBlock>

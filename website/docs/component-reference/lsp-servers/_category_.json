@@ -1,0 +1,10 @@
+{
+  "label": "LSP Servers",
+  "position": 6,
+  "link": {
+    "type": "generated-index",
+    "title": "LSP Servers",
+    "description": "Language Server Protocol servers integrated with Claude Code plugins",
+    "keywords": ["lsp", "servers", "language-server", "code-intelligence"]
+  }
+}

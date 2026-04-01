@@ -1,0 +1,52 @@
+---
+title: "csharp"
+sidebar_position: 1
+---
+
+# C# LSP Server
+
+<span className="badge badge--handbook-csharp-lsp">handbook-csharp-lsp</span>
+
+Language Server Protocol support for C# files using `csharp-ls`, providing code intelligence features like go-to-definition, hover documentation, and diagnostics.
+
+## Configuration
+
+```json
+{
+  "csharp": {
+    "command": "csharp-ls",
+    "args": [],
+    "extensionToLanguage": {
+      ".cs": "csharp"
+    },
+    "transport": "stdio",
+    "initializationOptions": {},
+    "settings": {},
+    "maxRestarts": 3
+  }
+}
+```
+
+## Coverage
+
+- Go-to-definition and find references for C# symbols
+- Hover documentation for types, methods, and properties
+- Diagnostics (errors and warnings) inline in the editor
+- Code completion for C# files (`.cs`)
+
+## Installation
+
+```bash
+claude plugin install handbook-csharp-lsp@cc-handbook
+```
+
+Requires `csharp-ls` to be installed on your system:
+
+```bash
+dotnet tool install --global csharp-ls
+```
+
+## Related
+
+- [handbook-dotnet](/component-reference/skills/dotnet-test) — .NET test runner and build tools
+- [handbook-csharp-lsp plugin](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-csharp-lsp/README.md)

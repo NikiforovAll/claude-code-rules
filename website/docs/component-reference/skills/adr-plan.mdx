@@ -1,0 +1,37 @@
+---
+title: "adr-plan"
+sidebar_position: 19
+---
+
+import AdrPlanSource from '!!raw-loader!../../../../plugins/handbook-team-stack/skills/adr-plan/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `adr-plan` skill
+
+<span className="badge badge--handbook-team-stack">handbook-team-stack</span>
+
+Analyze a task, explore the codebase, and produce an Architecture Decision Record (ADR) with concrete implementation steps.
+
+This skill guides you through structured technical planning: it explores affected areas, identifies alternatives, and writes an ADR with ordered, parallelizable implementation steps — each with clear "done when" criteria.
+
+## When to Use This Skill
+
+Use the `adr-plan` skill when you want to:
+
+- Plan a non-trivial feature or refactor before writing code
+- Document a technical decision with alternatives considered
+- Break a task into concrete, dependency-ordered implementation steps
+- Create an artifact that can be handed off to agents or team members
+
+## Workflow
+
+1. **Analyze** — explore the codebase, map blast radius, identify alternatives
+2. **Detect ADR setup** — find or initialize an ADR directory
+3. **Produce ADR** — write the decision record with implementation steps
+4. **Present to user** — approve, adjust, or cancel
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{AdrPlanSource}
+</CodeBlock>

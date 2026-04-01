@@ -124,3 +124,7 @@
   --ifm-badge-background-color: #0288d1;
   --ifm-badge-color: white;
 }
+.badge--handbook-team-stack {
+  --ifm-badge-background-color: #2e7d32;
+  --ifm-badge-color: white;
+}
