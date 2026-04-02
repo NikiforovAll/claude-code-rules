@@ -108,7 +108,7 @@ load balancer configuration, and keep-alive intervals.
 **When to use**: Debugging, root cause analysis, complex logic problems.
 
 :::tip
-Claude Code supports [extended thinking](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking) — see the [Ultrathink](../tips-and-tricks/ultrathink) tip for details on triggering deeper reasoning.
+Claude Code supports [extended thinking](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking) — see the [Ultrathink](/tips-and-tricks/ultrathink) tip for details on triggering deeper reasoning.
 :::
 
 ## Reasoning Strategies as Prompt Building Blocks
