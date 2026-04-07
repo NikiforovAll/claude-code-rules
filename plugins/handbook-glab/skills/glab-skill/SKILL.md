@@ -71,9 +71,43 @@ glab mr checkout <mr-number>
 # 3. After testing, approve
 glab mr approve <mr-number>
 
-# 4. Add review comments
+# 4. Add a general comment
 glab mr note <mr-number> -m "Please update tests"
 ```
+
+#### Posting Inline DiffNote Comments
+
+To anchor a comment to a specific line in the diff (a `DiffNote`), you **must** use a JSON body with the `Content-Type: application/json` header. Using `-F` form fields will create an unanchored `DiscussionNote`.
+
+```bash
+# Get SHA values from the MR
+glab mr view <id> --output=json | grep -oP '"(base_sha|head_sha|start_sha)":\s*"\K[0-9a-f]{40}'
+
+# Post a DiffNote on a new line
+glab api --method POST "projects/:id/merge_requests/:iid/discussions" \
+  -H "Content-Type: application/json" \
+  --input - <<'JSONEOF'
+{
+  "body": "Your review comment here",
+  "position": {
+    "base_sha": "<base_sha>",
+    "start_sha": "<start_sha>",
+    "head_sha": "<head_sha>",
+    "position_type": "text",
+    "new_path": "path/to/file.js",
+    "new_line": 42
+  }
+}
+JSONEOF
+```
+
+**Key rules for DiffNotes:**
+- Always use `--input -` with a heredoc and `-H "Content-Type: application/json"`. Never use `-F` for the `position` object — it will silently create a `DiscussionNote` instead.
+- Line numbers are **new file line numbers** calculated from the diff hunk headers (`@@ -old,count +new,count @@`), not the diff output line numbers. Count only context lines and `+` lines from the hunk start.
+- Verify findings on the **MR source branch** (`git fetch origin <branch>` then `git grep`), not the current working branch.
+- To update an existing note: `glab api --method PUT "projects/:id/merge_requests/:iid/notes/:note_id" -H "Content-Type: application/json" --input - <<< '{"body":"updated text"}'`
+- GitLab has no batch "Submit Review" API like GitHub. Post DiffNotes individually.
+- To find a discussion or note ID: `glab api "projects/:id/merge_requests/:iid/discussions" --paginate`
 
 ### Managing Issues
 
