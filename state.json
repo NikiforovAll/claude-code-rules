@@ -1,6 +1,7 @@
 {
-  "last_run": "2026-04-14T13:21:00Z",
-  "run_id": "24401238662",
+  "last_run": "2026-04-15T13:20:30Z",
+  "run_id": "24456807793",
+  "run_note": "safeoutputs MCP filtered (registry policy 401) - no GitHub writes possible",
   "nudged_prs": {
     "15": "2026-03-31T13:20:09Z"
   },
@@ -15,5 +16,10 @@
   "labelled_prs": {
     "11": "2026-04-01T13:20:38Z",
     "22": "2026-04-07T13:20:12Z"
+  },
+  "pending_update": {
+    "issue": 20,
+    "run_entry": "2026-04-15 13:20 UTC",
+    "note": "No actions this run; PR #11 reached 14-day staleness threshold"
   }
 }
