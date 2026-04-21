@@ -1,7 +1,7 @@
 {
-  "last_run": "2026-04-20T13:20:45Z",
-  "run_id": "24668805527",
-  "run_note": "Run failed (safeoutputs MCP unavailable). T2: no new comments needed. T3: PR #11 nudged 3 days ago (within 14-day window). T4: monthly summary update skipped (can't write). Issue #23 is now closed.",
+  "last_run": "2026-04-21T13:20:28Z",
+  "run_id": "24724623107",
+  "run_note": "Run failed (safeoutputs MCP unavailable — filtered at startup due to registry policy check 401). T1: no labelling needed. T2: no triage comments (only automated issues open). T4: monthly summary update skipped (can't write).",
   "nudged_prs": {
     "15": "2026-03-31T13:20:09Z",
     "11": "2026-04-17T13:19:51Z"
@@ -17,5 +17,9 @@
   "labelled_prs": {
     "11": "2026-04-01T13:20:38Z",
     "22": "2026-04-07T13:20:12Z"
+  },
+  "pending_monthly_update": {
+    "run_id": "24724623107",
+    "entry": "### 2026-04-21 13:20 UTC — [Run](https://github.com/NikiforovAll/claude-code-rules/actions/runs/24724623107)\n- ⚠️ Run failed (safeoutputs MCP unavailable)\n- ℹ️ PR #11 still open — within 14-day nudge window (nudged Apr 17); monitoring"
   }
 }
