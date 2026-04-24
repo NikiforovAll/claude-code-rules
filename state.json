@@ -1,9 +1,9 @@
 {
-  "last_run": "2026-04-23T13:20:48Z",
-  "run_id": "24837557325",
-  "run_note": "Run FAILED \u2014 safeoutputs MCP filtered (MCP registry policy check: 401 Bad credentials). T1: 0 unlabelled issues. T2: all open issues bot-generated (no human issues to triage). T3: PR #11 within nudge window (nudged 2026-04-17, 6 days ago). T4: monthly summary update skipped (cant write).",
-  "consecutive_failures": 2,
-  "failure_reason": "safeoutputs MCP server filtered: Could not verify server against any configured registry (401 on MCP registry policy check)",
+  "last_run": "2026-04-24T13:20:11Z",
+  "run_id": "24891618363",
+  "run_note": "Run FAILED — safeoutputs MCP tools not available (4th consecutive failure). T1: 0 unlabelled issues. T2: no human issues to triage (only bot-generated issues open). T3: not selected. T4: monthly summary update skipped (can't write).",
+  "consecutive_failures": 3,
+  "failure_reason": "safeoutputs MCP server tools not available in agent tool list",
   "nudged_prs": {
     "15": "2026-03-31T13:20:09Z",
     "11": "2026-04-17T13:19:51Z"
@@ -19,7 +19,7 @@
     },
     "2026-04": {
       "title": "[Handbookbot] Monthly Activity 2026-04",
-      "issue_number": 25
+      "issue_number": 20
     }
   },
   "labelled_prs": {
@@ -27,7 +27,11 @@
     "22": "2026-04-07T13:20:12Z"
   },
   "pending_monthly_update": {
-    "run_id": "24837557325",
-    "entry": "### 2026-04-23 13:20 UTC \u2014 [Run](https://github.com/NikiforovAll/claude-code-rules/actions/runs/24837557325)\n- \u26a0\ufe0f Run failed (safeoutputs MCP filtered \u2014 registry policy check 401)\n- \u2139\ufe0f T1: 0 unlabelled issues; T2: all open issues bot-generated; T3: PR #11 within nudge window (6 days since nudge)"
+    "run_id": "24891618363",
+    "entries_to_add": [
+      "### 2026-04-24 13:20 UTC — [Run](https://github.com/NikiforovAll/claude-code-rules/actions/runs/24891618363)\n- ⚠️ Run failed (safeoutputs MCP tools not available)\n- ℹ️ T1: 0 unlabelled issues; T2: no human issues; T3: not selected",
+      "### 2026-04-23 13:20 UTC — [Run](https://github.com/NikiforovAll/claude-code-rules/actions/runs/24837557325)\n- ⚠️ Run failed (safeoutputs MCP filtered — registry policy check 401)\n- ℹ️ T1: 0 unlabelled issues; T2: all open issues bot-generated; T3: PR #11 within nudge window (6 days since nudge)",
+      "### 2026-04-21 13:20 UTC — [Run](https://github.com/NikiforovAll/claude-code-rules/actions/runs/24724623107)\n- ⚠️ Run failed (no safe outputs generated — safeoutputs MCP unavailable)"
+    ]
   }
 }
