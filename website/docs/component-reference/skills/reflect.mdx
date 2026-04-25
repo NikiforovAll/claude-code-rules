@@ -1,0 +1,31 @@
+---
+title: "reflect"
+sidebar_position: 21
+description: "Analyze Claude Code sessions for wrong turns and generate an interactive HTML reflection dashboard"
+---
+
+import ReflectSource from '!!raw-loader!../../../../plugins/handbook-reflect/skills/reflect/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `reflect` skill
+
+<span className="badge badge--handbook-reflect">handbook-reflect</span>
+
+Analyze a Claude Code session for wrong turns and generate an interactive HTML dashboard with concrete follow-up recommendations.
+
+This skill turns a session into a structured reflection artifact: corrections, retries, reversals, dead-ends, and waste are surfaced alongside suggestions such as rules, docs, scripts, hooks, or memory entries that would help future agents avoid the same mistakes.
+
+## When to Use This Skill
+
+Use the `reflect` skill when you want to:
+
+- Review a completed session for workflow mistakes and recovery patterns
+- Capture reusable guidance from user corrections and failed attempts
+- Produce a shareable HTML dashboard instead of a plain text recap
+- Turn one-off debugging pain into durable repo or memory improvements
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{ReflectSource}
+</CodeBlock>

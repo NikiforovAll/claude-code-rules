@@ -124,6 +124,17 @@
       "source": "./plugins/handbook-team-stack",
       "category": "productivity",
       "tags": ["agent-teams", "team-stack", "orchestration", "multi-agent", "workflow"]
+    },
+    {
+      "name": "handbook-reflect",
+      "description": "Better alignment with LLMs",
+      "source": "./plugins/handbook-reflect",
+      "category": "alignment",
+      "tags": [
+        "reflect",
+        "presentation",
+        "playground"
+      ]
     }
   ]
 }

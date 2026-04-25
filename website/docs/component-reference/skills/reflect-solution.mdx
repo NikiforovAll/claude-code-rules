@@ -1,0 +1,31 @@
+---
+title: "reflect-solution"
+sidebar_position: 22
+description: "Summarize what shipped in a Claude Code session as a self-contained HTML recap deck"
+---
+
+import ReflectSolutionSource from '!!raw-loader!../../../../plugins/handbook-reflect/skills/reflect-solution/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `reflect-solution` skill
+
+<span className="badge badge--handbook-reflect">handbook-reflect</span>
+
+Summarize what shipped in a Claude Code session as a self-contained HTML slide deck focused on outcome rather than process.
+
+This skill produces an executive recap of the final result: problem, solution, artifacts, decisions, verification, and follow-ups. It deliberately excludes tool-call churn and debugging detours unless they shaped the final outcome.
+
+## When to Use This Skill
+
+Use the `reflect-solution` skill when you want to:
+
+- Turn a completed session into a concise stakeholder-friendly recap
+- Capture the final shipped outcome instead of the full execution history
+- Generate a presentation-style HTML artifact with verification evidence
+- Explain a session's delivered value in the style of a PR summary
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{ReflectSolutionSource}
+</CodeBlock>

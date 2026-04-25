@@ -128,3 +128,8 @@
   --ifm-badge-background-color: #2e7d32;
   --ifm-badge-color: white;
 }
+
+.badge--handbook-reflect {
+  --ifm-badge-background-color: #ff8f3a;
+  --ifm-badge-color: black;
+}

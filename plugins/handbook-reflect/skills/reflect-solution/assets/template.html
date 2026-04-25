@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+
+<style>
+/* === DESIGN TOKENS — light by default, dark via [data-theme="dark"] === */
+:root {
+  --bg:        #fafaf9;
+  --panel:     #ffffff;
+  --panel-2:   #f4f4f2;
+  --border:    #e7e5e1;
+  --border-2:  #d6d3cd;
+  --fg:        #111111;
+  --muted:     #6b6b6b;
+  --faint:     #9a9a9a;
+  --accent:    #c2410c;
+  --accent-2:  #ea580c;
+  --rust:      #c2410c;
+  --ok:        #4d7c2a;
+  --warn:      #b45309;
+  --err:       #b91c1c;
+  --snippet:   #f6f5f1;
+
+  --serif: "Newsreader", ui-serif, Georgia, serif;
+  --sans:  ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:  "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+:root[data-theme="dark"] {
+  --bg:       #0c0c0c;
+  --panel:    #131313;
+  --panel-2:  #1a1a1a;
+  --border:   #232323;
+  --border-2: #303030;
+  --fg:       #ededed;
+  --muted:    #9a9a9a;
+  --faint:    #666666;
+  --accent:   #f97316;
+  --accent-2: #fb923c;
+  --rust:     #c2410c;
+  --ok:       #84cc16;
+  --warn:     #d97706;
+  --err:      #ef4444;
+  --snippet:  #0a0a0a;
+}
+
+/* === viewport-base.css (paste full contents inline in production; abridged here) === */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow-x: hidden; background: var(--bg); color: var(--fg); }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+body { font: 15px/1.55 var(--sans); }
+.slide {
+  width: 100vw; height: 100vh; height: 100dvh;
+  overflow: hidden; scroll-snap-align: start;
+  display: flex; flex-direction: column; position: relative;
+  padding: clamp(1.5rem, 4vw, 4rem) clamp(2rem, 6vw, 6rem);
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* === SLIDE SHELL — top eyebrow + title + hairline, bottom hairline + footer === */
+.eyebrow {
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.18em; color: var(--rust);
+  display: flex; align-items: center; gap: 14px;
+}
+.eyebrow .num { color: var(--fg); background: var(--snippet); padding: 2px 8px; border-radius: 2px; border: 1px solid var(--border); }
+.title {
+  font-family: var(--serif); font-style: italic; font-weight: 500;
+  font-size: clamp(2rem, 4.5vw, 3.75rem); line-height: 1.1; letter-spacing: -0.01em;
+  color: var(--fg); margin: clamp(1rem, 2vh, 2rem) 0 clamp(0.75rem, 1.5vh, 1.25rem);
+  max-width: min(90%, 1100px);
+}
+.title .roman { font-style: normal; color: var(--muted); }
+.hairline { height: 1px; background: var(--border); width: 100%; }
+.body { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; padding: clamp(1rem, 3vh, 2rem) 0; min-height: 0; overflow: hidden; }
+.footer {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); padding-top: clamp(0.75rem, 1.5vh, 1.25rem);
+}
+.footer .right { font-family: var(--serif); font-style: italic; font-size: 13px; text-transform: none; letter-spacing: 0; color: var(--faint); }
+
+/* === TITLE SLIDE (no eyebrow, centered) === */
+.title-slide { justify-content: center; }
+.title-slide .pitch {
+  font-family: var(--serif); font-style: italic; font-weight: 500;
+  font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: 1.05; letter-spacing: -0.02em;
+  max-width: min(90%, 1300px);
+}
+.title-slide .pitch .roman { font-style: normal; color: var(--muted); }
+.title-slide .meta { margin-top: clamp(1.5rem, 3vh, 2.5rem); font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rust); }
+.title-slide .meta .sep { color: var(--faint); margin: 0 10px; }
+
+/* === INLINE CODE (must be inline, never block) === */
+code, .code {
+  font-family: var(--mono); font-size: 0.88em; font-style: normal;
+  background: var(--snippet); padding: 1px 6px; border-radius: 2px;
+  border: 1px solid var(--border); color: var(--accent);
+  white-space: nowrap; display: inline;
+}
+
+/* === CONTENT BLOCK: BULLETS === */
+.bullets { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: clamp(0.6rem, 1.5vh, 1.1rem); }
+.bullets li {
+  font-family: var(--sans); font-size: clamp(0.95rem, 1.25vw, 1.1rem); line-height: 1.55; color: var(--fg);
+  padding-left: 28px; position: relative; max-width: 78ch;
+}
+.bullets li::before {
+  content: "—"; position: absolute; left: 0; top: 0;
+  font-family: var(--mono); color: var(--rust); font-weight: 500;
+}
+.bullets li b, .bullets li strong { font-weight: 600; color: var(--fg); }
+
+/* === CONTENT BLOCK: ARTIFACT GRID === */
+.artifacts { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(0.75rem, 1.5vw, 1.25rem); }
+.artifact {
+  border: 1px solid var(--border); background: var(--panel); padding: clamp(0.75rem, 1.5vw, 1.1rem);
+  border-radius: 4px; display: flex; flex-direction: column; gap: 6px;
+}
+.artifact .path { font-family: var(--mono); font-size: 12px; color: var(--accent); word-break: break-all; }
+.artifact .purpose { font-size: 13px; color: var(--muted); line-height: 1.45; }
+.artifact .tag {
+  align-self: flex-start; font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 2px; border: 1px solid;
+}
+.tag.added    { color: var(--ok);    border-color: var(--ok); }
+.tag.modified { color: var(--warn);  border-color: var(--warn); }
+.tag.removed  { color: var(--err);   border-color: var(--err); }
+
+/* === CONTENT BLOCK: DECISION ROWS === */
+.decisions { display: flex; flex-direction: column; gap: clamp(0.75rem, 2vh, 1.4rem); }
+.decision { border-top: 1px solid var(--border); padding-top: clamp(0.5rem, 1vh, 0.85rem); }
+.decision .row { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem, 3vw, 2.5rem); align-items: baseline; }
+.decision .col { font-family: var(--serif); font-style: italic; font-size: clamp(1.1rem, 1.6vw, 1.35rem); line-height: 1.3; }
+.decision .col .label {
+  font-family: var(--mono); font-style: normal; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--rust); display: block; margin-bottom: 4px;
+}
+.decision .col.rejected { color: var(--faint); }
+.decision .col.rejected .label { color: var(--muted); }
+.decision .reason { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.5; max-width: 90ch; }
+
+/* === CONTENT BLOCK: CODE/OUTPUT === */
+.codeblock {
+  background: var(--snippet); border: 1px solid var(--border); border-radius: 4px;
+  padding: clamp(0.75rem, 1.5vw, 1.1rem); font-family: var(--mono); font-size: clamp(11px, 1vw, 13px);
+  line-height: 1.55; color: var(--fg); overflow: auto; max-height: 100%;
+  white-space: pre; tab-size: 2; margin: 0;
+}
+.codeblock .ln { display: inline-block; width: 2.2em; color: var(--faint); user-select: none; text-align: right; padding-right: 0.8em; }
+.codeblock .kw { color: var(--accent); }
+.codeblock .str { color: var(--ok); }
+.codeblock .com { color: var(--faint); font-style: italic; }
+.codeblock .ok { color: var(--ok); }
+
+/* === CONTENT BLOCK: PULL-QUOTE === */
+.pullquote {
+  font-family: var(--serif); font-style: italic; font-weight: 500;
+  font-size: clamp(1.5rem, 3vw, 2.4rem); line-height: 1.3; text-align: center;
+  max-width: 70ch; margin: auto; color: var(--fg);
+}
+.pullquote .attr { display: block; font-family: var(--mono); font-style: normal; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-top: clamp(1rem, 2vh, 1.5rem); }
+
+/* === CONTENT BLOCK: TWO-COLUMN PROSE === */
+.cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 3vw, 2.5rem); }
+.cols2 p { font-size: clamp(0.95rem, 1.25vw, 1.05rem); line-height: 1.6; max-width: 60ch; margin: 0 0 0.9em; color: var(--fg); }
+
+/* === NAV RAIL (right edge) === */
+.navrail {
+  position: fixed; right: clamp(0.75rem, 1.5vw, 1.5rem); top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 8px; z-index: 50;
+}
+.navrail a {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--faint);
+  text-decoration: none; padding: 4px 6px; border-radius: 2px; transition: color 0.2s;
+}
+.navrail a.active { color: var(--accent); }
+.navrail a:hover { color: var(--fg); }
+
+/* === THEME TOGGLE (bottom-right) === */
+.theme-toggle {
+  position: fixed; right: clamp(0.75rem, 1.5vw, 1.5rem); bottom: clamp(0.75rem, 1.5vw, 1.5rem);
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted); background: var(--panel); border: 1px solid var(--border); border-radius: 2px;
+  padding: 6px 10px; cursor: pointer; z-index: 50;
+}
+.theme-toggle:hover { color: var(--fg); border-color: var(--border-2); }
+
+/* === REVEAL ANIMATION === */
+.reveal { opacity: 0; transform: translateY(8px); transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
+.slide.visible .reveal { opacity: 1; transform: translateY(0); }
+.slide.visible .reveal:nth-child(1) { transition-delay: 0.05s; }
+.slide.visible .reveal:nth-child(2) { transition-delay: 0.15s; }
+.slide.visible .reveal:nth-child(3) { transition-delay: 0.25s; }
+.slide.visible .reveal:nth-child(4) { transition-delay: 0.35s; }
+.slide.visible .reveal:nth-child(5) { transition-delay: 0.45s; }
+.slide.visible .reveal:nth-child(6) { transition-delay: 0.55s; }
+
+@media (max-width: 700px) {
+  .artifacts, .decision .row, .cols2 { grid-template-columns: 1fr; }
+  .navrail { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- TITLE SLIDE -->
+<section class="slide title-slide" id="s0">
+  <div class="pitch reveal"><em>{{TITLE_ITALIC}}</em> <span class="roman">{{TITLE_ROMAN}}</span></div>
+  <div class="meta reveal">SOLUTION RECAP <span class="sep">·</span> {{PROJECT_OR_CONTEXT}}</div>
+</section>
+
+<!-- BODY SLIDE — bullets example -->
+<section class="slide" id="s1">
+  <div class="eyebrow reveal"><span class="num">01</span> PROBLEM</div>
+  <h2 class="title reveal"><em>{{TITLE_ITALIC}}</em> <span class="roman">{{TITLE_ROMAN}}</span></h2>
+  <div class="hairline reveal"></div>
+  <div class="body">
+    <ul class="bullets">
+      <li class="reveal"><b>{{LEAD}}</b> — {{REST}}</li>
+      <li class="reveal"><b>{{LEAD}}</b> — {{REST}}</li>
+      <li class="reveal"><b>{{LEAD}}</b> — {{REST}}</li>
+      <li class="reveal"><b>{{LEAD}}</b> — {{REST}}</li>
+    </ul>
+  </div>
+  <div class="hairline reveal"></div>
+  <div class="footer reveal">
+    <span>{{EYEBROW}} · {{CONTEXT}}</span>
+    <span class="right">{{PROJECT}} / {{STATUS}}</span>
+  </div>
+</section>
+
+<!-- BODY SLIDE — artifact grid example -->
+<section class="slide" id="s2">
+  <div class="eyebrow reveal"><span class="num">02</span> ARTIFACTS</div>
+  <h2 class="title reveal"><em>{{TITLE_ITALIC}}</em> <span class="roman">{{TITLE_ROMAN}}</span></h2>
+  <div class="hairline reveal"></div>
+  <div class="body">
+    <div class="artifacts">
+      <div class="artifact reveal">
+        <span class="tag added">added</span>
+        <span class="path">{{path/to/file}}</span>
+        <span class="purpose">{{one-line purpose}}</span>
+      </div>
+      <!-- repeat .artifact cards (2x2 or 2x3 max) -->
+    </div>
+  </div>
+  <div class="hairline reveal"></div>
+  <div class="footer reveal">
+    <span>{{EYEBROW}} · {{CONTEXT}}</span>
+    <span class="right">{{PROJECT}} / {{STATUS}}</span>
+  </div>
+</section>
+
+<!-- BODY SLIDE — decisions example -->
+<section class="slide" id="s3">
+  <div class="eyebrow reveal"><span class="num">03</span> DECISIONS</div>
+  <h2 class="title reveal"><em>{{TITLE_ITALIC}}</em> <span class="roman">{{TITLE_ROMAN}}</span></h2>
+  <div class="hairline reveal"></div>
+  <div class="body">
+    <div class="decisions">
+      <div class="decision reveal">
+        <div class="row">
+          <div class="col"><span class="label">Chose</span>{{CHOICE}}</div>
+          <div class="col rejected"><span class="label">Rejected</span>{{ALTERNATIVE}}</div>
+        </div>
+        <div class="reason">{{one-line reason}}</div>
+      </div>
+      <!-- repeat .decision rows -->
+    </div>
+  </div>
+  <div class="hairline reveal"></div>
+  <div class="footer reveal">
+    <span>{{EYEBROW}} · {{CONTEXT}}</span>
+    <span class="right">{{PROJECT}} / {{STATUS}}</span>
+  </div>
+</section>
+
+<!-- BODY SLIDE — code/verification example -->
+<section class="slide" id="s4">
+  <div class="eyebrow reveal"><span class="num">04</span> VERIFICATION</div>
+  <h2 class="title reveal"><em>{{TITLE_ITALIC}}</em> <span class="roman">{{TITLE_ROMAN}}</span></h2>
+  <div class="hairline reveal"></div>
+  <div class="body">
+    <pre class="codeblock reveal"><span class="ln">1</span><span class="com">$ npm test -- --coverage</span>
+<span class="ln">2</span>PASS  src/auth/<span class="kw">middleware.test.ts</span>
+<span class="ln">3</span>  validateBearerToken
+<span class="ln">4</span>    <span class="ok">✓</span> rejects missing header (4 ms)
+<span class="ln">5</span>    <span class="ok">✓</span> rejects malformed token (2 ms)
+<span class="ln">6</span>    <span class="ok">✓</span> accepts signed token (3 ms)
+<span class="ln">7</span>
+<span class="ln">8</span>Tests: <span class="str">12 passed</span>, 12 total
+<span class="ln">9</span>Coverage: <span class="str">94.2%</span> stmts</pre>
+  </div>
+  <div class="hairline reveal"></div>
+  <div class="footer reveal">
+    <span>{{EYEBROW}} · {{CONTEXT}}</span>
+    <span class="right">{{PROJECT}} / {{STATUS}}</span>
+  </div>
+</section>
+
+<!-- NAV RAIL -->
+<nav class="navrail" id="navrail" aria-label="Slides">
+  <a href="#s0" data-target="s0" class="active">00</a>
+  <a href="#s1" data-target="s1">01</a>
+  <a href="#s2" data-target="s2">02</a>
+  <a href="#s3" data-target="s3">03</a>
+  <a href="#s4" data-target="s4">04</a>
+</nav>
+
+<button class="theme-toggle" id="themeToggle" type="button">Theme</button>
+
+<script>
+/* === SLIDE PRESENTATION CONTROLLER === */
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const navLinks = Array.from(document.querySelectorAll('.navrail a'));
+
+  // Reveal-on-enter via IntersectionObserver
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting && e.intersectionRatio > 0.5) {
+        e.target.classList.add('visible');
+        const idx = slides.indexOf(e.target);
+        navLinks.forEach((a, i) => a.classList.toggle('active', i === idx));
+      }
+    });
+  }, { threshold: [0.5] });
+  slides.forEach((s) => io.observe(s));
+
+  // Keyboard navigation
+  function currentIndex() {
+    const y = window.scrollY + window.innerHeight / 2;
+    for (let i = 0; i < slides.length; i++) {
+      const r = slides[i].getBoundingClientRect();
+      const top = r.top + window.scrollY;
+      if (y >= top && y < top + slides[i].offsetHeight) return i;
+    }
+    return 0;
+  }
+  function goto(i) {
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    slides[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.target.matches('input, textarea, [contenteditable]')) return;
+    const i = currentIndex();
+    switch (e.key) {
+      case 'ArrowDown': case 'ArrowRight': case 'PageDown': case ' ': case 'j': case 'l':
+        e.preventDefault(); goto(i + 1); break;
+      case 'ArrowUp': case 'ArrowLeft': case 'PageUp': case 'k': case 'h':
+        e.preventDefault(); goto(i - 1); break;
+      case 'Home':
+        e.preventDefault(); goto(0); break;
+      case 'End':
+        e.preventDefault(); goto(slides.length - 1); break;
+    }
+  });
+
+  // Touch swipe
+  let touchY = null;
+  document.addEventListener('touchstart', (e) => { touchY = e.touches[0].clientY; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (touchY == null) return;
+    const dy = e.changedTouches[0].clientY - touchY;
+    if (Math.abs(dy) > 50) goto(currentIndex() + (dy < 0 ? 1 : -1));
+    touchY = null;
+  }, { passive: true });
+
+  // Theme toggle (persisted)
+  const root = document.documentElement;
+  const stored = localStorage.getItem('reflect-solution-theme');
+  if (stored) root.setAttribute('data-theme', stored);
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('reflect-solution-theme', next);
+  });
+})();
+</script>
+</body>
+</html>

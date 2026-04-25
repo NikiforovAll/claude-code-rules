@@ -1,0 +1,17 @@
+{
+  "name": "reflect",
+  "version": "0.1.0",
+  "description": "Better alignment with LLMs",
+  "author": {
+    "name": "nikiforovall",
+    "url": "https://github.com/nikiforovall"
+  },
+  "homepage": "https://nikiforovall.blog/claude-code-rules/",
+  "repository": "https://github.com/nikiforovall/claude-code-rules",
+  "license": "MIT",
+  "keywords": [
+    "reflect",
+    "presentation",
+    "playground"
+  ]
+}

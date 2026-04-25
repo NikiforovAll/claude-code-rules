@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<title>/reflect-tree — session quest tree</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #fafaf9;
+    --panel:     #ffffff;
+    --panel-2:   #f4f4f2;
+    --border:    #e7e5e1;
+    --border-2:  #d6d3cd;
+    --fg:        #111111;
+    --muted:     #6b6b6b;
+    --faint:     #9a9a9a;
+    --accent:    #c2410c;
+    --accent-2:  #ea580c;
+    --ok:        #4d7c2a;
+    --warn:      #b45309;
+    --err:       #b91c1c;
+    --snippet:   #f6f5f1;
+    --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --serif: "Newsreader", ui-serif, Georgia, serif;
+  }
+  :root[data-theme="dark"] {
+    --bg:        #0c0c0c;
+    --panel:     #131313;
+    --panel-2:   #1a1a1a;
+    --border:    #232323;
+    --border-2:  #303030;
+    --fg:        #ededed;
+    --muted:     #9a9a9a;
+    --faint:     #666666;
+    --accent:    #f97316;
+    --accent-2:  #fb923c;
+    --ok:        #84cc16;
+    --warn:      #d97706;
+    --err:       #ef4444;
+    --snippet:   #0a0a0a;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--fg);
+    font: 13px/1.55 var(--sans); }
+  body { display:grid; grid-template-rows: auto auto 1fr; height:100vh; overflow:hidden; }
+
+  /* ───── header ───── */
+  header {
+    display:flex; gap:18px; align-items:center;
+    padding: 12px 18px; border-bottom:1px solid var(--border);
+    background:var(--panel);
+  }
+  .wordmark {
+    font-family: var(--serif); font-style: italic; font-weight: 500;
+    font-size: 20px; letter-spacing: -0.01em; color: var(--fg);
+  }
+  .wordmark .slash { color: var(--accent); font-weight: 500; }
+  header .meta {
+    color:var(--muted); font-family:var(--mono); font-size:11px;
+    letter-spacing: 0.02em; display:flex; gap:14px; align-items:center;
+  }
+  header .meta .sep { color:var(--faint); }
+  header .spacer { flex:1; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .filters { display:flex; gap:4px; flex-wrap:wrap; align-items:center; }
+  .filters .label {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.14em; color: var(--faint);
+    padding-right: 6px;
+  }
+  .chip {
+    display:inline-flex; align-items:center; gap:6px;
+    padding: 3px 9px; border-radius: 2px;
+    background: transparent; border:1px solid var(--border);
+    color:var(--fg); font-family:var(--mono); font-size:11px;
+    cursor:pointer; user-select:none;
+    transition: background .12s ease, border-color .12s ease, color .12s ease;
+  }
+  .chip:hover { border-color: var(--border-2); background: var(--panel-2); }
+  .chip.off { color: var(--faint); }
+  .chip.off .dot { opacity: .25; }
+  .chip .dot { width:8px; height:8px; border-radius:50%; }
+  .chip[data-cat="normal"]      .dot { background:var(--muted); }
+  .chip[data-cat="correction"]  .dot { background:var(--err); }
+  .chip[data-cat="retry"]       .dot { background:var(--warn); }
+  .chip[data-cat="reversal"]    .dot { background:var(--warn); }
+  .chip[data-cat="dead-end"]    .dot { background:var(--err); }
+  .chip[data-cat="backtrack"]   .dot { background:var(--muted); }
+  .chip[data-cat="self-correction"] .dot { background:var(--ok); }
+  .chip.icon { padding: 3px 7px; }
+
+  /* ───── goal banner ───── */
+  .goal {
+    padding: 14px 22px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: baseline;
+  }
+  .goal .label {
+    font-family: var(--mono); font-size: 10px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.18em; color: var(--accent);
+  }
+  .goal .text {
+    font-family: var(--sans); font-size: 14px; color: var(--fg);
+  }
+  .goal .text code {
+    font-family: var(--mono); font-size: 12px;
+    background: var(--snippet); padding: 1px 5px; border-radius: 2px;
+    border: 1px solid var(--border);
+  }
+
+  /* ───── main: SVG canvas + drawer ───── */
+  main {
+    display:grid; grid-template-columns: 1fr 360px;
+    background:var(--border); gap:1px; overflow:hidden;
+  }
+  .canvas-wrap { background:var(--bg); position:relative; overflow:hidden; }
+  svg.canvas { display:block; width:100%; height:100%; cursor:grab; }
+  svg.canvas.drag { cursor:grabbing; }
+
+  .legend {
+    position:absolute; bottom:10px; left:12px;
+    background:var(--panel); border:1px solid var(--border);
+    padding: 8px 10px; border-radius: 2px;
+    font-family:var(--mono); font-size:10px; color:var(--muted);
+    display:grid; grid-template-columns: auto auto; gap:4px 14px;
+  }
+  .legend b { color:var(--fg); font-weight:500; }
+  .help {
+    position:absolute; top:10px; right:10px;
+    font-family:var(--mono); font-size:10px; color:var(--faint);
+    background:var(--panel); border:1px solid var(--border);
+    padding: 6px 9px; border-radius: 2px;
+  }
+  .help kbd {
+    font-family:var(--mono); font-size:9px;
+    border:1px solid var(--border); border-bottom-width:2px;
+    padding: 0 4px; border-radius:2px; color:var(--fg);
+  }
+
+  /* ───── node visuals (SVG) ───── */
+  .node { cursor:pointer; transition: opacity .15s ease; }
+  .node text {
+    font-family: var(--mono); font-size: 10px; fill: var(--muted);
+    dominant-baseline: middle;
+  }
+  .node .label-turn { font-weight:500; fill: var(--fg); }
+  .node .label-summary { fill: var(--muted); }
+  .node:hover .label-summary { fill: var(--fg); }
+  .node.dim { opacity: .15; }
+  .node.selected .body {
+    filter: drop-shadow(0 0 6px var(--accent));
+  }
+  .node.pulse .body {
+    animation: pulse 0.9s ease-out;
+  }
+  @keyframes pulse {
+    0%   { filter: drop-shadow(0 0 0 var(--accent)); }
+    50%  { filter: drop-shadow(0 0 10px var(--accent)); }
+    100% { filter: drop-shadow(0 0 0 var(--accent)); }
+  }
+
+  .node[data-cat="normal-user"] .body      { fill: var(--accent); stroke: var(--accent); }
+  .node[data-cat="normal-assistant"] .body { fill: var(--bg); stroke: var(--fg); stroke-width:1.5; }
+  .node[data-cat="correction"] .body       { fill: var(--bg); stroke: var(--err); stroke-width:2; }
+  .node[data-cat="correction"] .symbol     { fill: var(--err); }
+  .node[data-cat="retry"] .body            { fill: var(--bg); stroke: var(--warn); stroke-width:2; }
+  .node[data-cat="retry"] .body-inner      { fill: none; stroke: var(--warn); stroke-width:1; }
+  .node[data-cat="retry"] .symbol          { fill: var(--warn); }
+  .node[data-cat="reversal"] .body         { fill: var(--bg); stroke: var(--warn); stroke-width:1.5; stroke-dasharray: 3 2; }
+  .node[data-cat="reversal"] .symbol       { fill: var(--warn); }
+  .node[data-cat="dead-end"] .body         { fill: var(--err); stroke: var(--err); }
+  .node[data-cat="dead-end"] .symbol       { fill: var(--bg); font-weight:600; }
+  .node[data-cat="backtrack"] .body        { fill: var(--bg); stroke: var(--muted); stroke-width:1.5; stroke-dasharray: 4 3; }
+  .node[data-cat="backtrack"] .symbol      { fill: var(--muted); }
+  .node[data-cat="self-correction"] .body  { fill: var(--bg); stroke: var(--ok); stroke-width:1.5; }
+  .node[data-cat="self-correction"] .symbol{ fill: var(--ok); font-size:8px; }
+
+  .capsule { cursor:pointer; }
+  .capsule rect { fill: var(--panel-2); stroke: var(--border-2); stroke-width:1; rx:10; ry:10; }
+  .capsule text { font-family: var(--mono); fill: var(--muted); font-size: 10px;
+    dominant-baseline: middle; text-anchor: middle; }
+  .capsule:hover rect { stroke: var(--muted); }
+  .capsule .turn-range { fill: var(--fg); font-weight:500; }
+
+  /* edges */
+  .edge { fill:none; transition: opacity .15s ease; }
+  .edge.flow         { stroke: var(--border-2); stroke-width: 1.5; }
+  .edge.back-correction { stroke: var(--err);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+  .edge.back-retry      { stroke: var(--warn); stroke-width: 1.2; stroke-dasharray: 4 3; }
+  .edge.back-reversal   { stroke: var(--warn); stroke-width: 1.2; stroke-dasharray: 2 3; }
+  .edge.back-deadend    { stroke: var(--err);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+  .edge.back-backtrack  { stroke: var(--muted); stroke-width: 1.4; }
+  .edge.wasted          { stroke: var(--faint); stroke-width: 3; opacity: .55; }
+  .edge.dim { opacity: .08; }
+  .edge.highlight { opacity: 1; stroke-width: 2.4; }
+
+  /* tooltip */
+  .tooltip {
+    position:absolute; pointer-events:none;
+    background:var(--panel); border:1px solid var(--border-2);
+    padding:6px 9px; font-family:var(--mono); font-size:10.5px;
+    color:var(--fg); white-space:nowrap; border-radius:2px;
+    display:none; z-index:10;
+    box-shadow: 0 2px 10px rgba(0,0,0,.08);
+  }
+  .tooltip .turn { color: var(--accent); font-weight:500; }
+  .tooltip .cat  { color: var(--muted); margin-left:8px; }
+
+  /* drawer */
+  aside.drawer {
+    background:var(--panel); overflow:auto; padding: 16px 18px 24px;
+    border-left:1px solid var(--border);
+  }
+  .drawer h2 {
+    font-family: var(--mono); font-size:10px; font-weight:500;
+    text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted);
+    margin: 0 0 10px;
+  }
+  .d-empty { color:var(--faint); font-family:var(--mono); font-size:11.5px; }
+  .d-head { display:flex; align-items:baseline; gap:10px; margin-bottom:8px; }
+  .d-turn { font-family:var(--mono); font-size: 18px; font-weight:600; color:var(--accent); }
+  .d-cat {
+    font-family:var(--mono); font-size:10px;
+    text-transform:uppercase; letter-spacing:0.12em;
+    color:var(--fg); padding:2px 7px;
+    border:1px solid var(--border); border-radius:2px;
+    background: var(--panel-2);
+  }
+  .d-text {
+    margin-top: 8px; padding: 10px 12px;
+    background:var(--snippet); border:1px solid var(--border);
+    border-left: 2px solid var(--border-2);
+    font-family:var(--mono); font-size:11.5px; line-height:1.6;
+    white-space:pre-wrap; color:var(--fg);
+  }
+  .d-tools { margin-top:12px; }
+  .d-tool {
+    font-family:var(--mono); font-size:11px; color:var(--fg);
+    padding: 4px 0; border-bottom:1px dashed var(--border);
+  }
+  .d-tool .arrow { color:var(--accent); margin-right:4px; }
+  .d-tool .err { color:var(--err); }
+  .d-refs { margin-top:12px; font-family:var(--mono); font-size:10px;
+    text-transform:uppercase; letter-spacing:0.12em; color:var(--faint); }
+  .d-refs a { color:var(--accent); cursor:pointer; text-decoration:none;
+    border-bottom: 1px dashed var(--border-2); margin-right:6px; }
+  .d-refs a:hover { border-bottom-color: var(--accent); }
+
+  /* insight block */
+  .d-insight {
+    margin-top: 14px; border:1px solid var(--border);
+    border-left: 2px solid var(--accent);
+    background: var(--snippet); padding: 10px 12px 12px;
+  }
+  .d-insight .d-section {
+    font-family: var(--mono); font-size: 9.5px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.16em; color: var(--accent);
+    margin-bottom: 6px; display:flex; align-items:center; justify-content:space-between;
+  }
+  .d-highlight { font-weight:500; color:var(--fg); margin-bottom: 8px; }
+  .d-why { color: var(--muted); font-size: 12px; line-height: 1.55; margin-bottom: 10px; }
+  .d-snippet {
+    font-family: var(--mono); font-size: 11px; line-height: 1.55;
+    color: var(--fg); background: var(--bg); border:1px solid var(--border);
+    padding: 8px 10px; white-space: pre-wrap; border-radius: 2px;
+  }
+  button.copy-btn {
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--border); border-radius: 2px;
+    padding: 2px 8px; font-family: var(--mono); font-size: 9.5px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    cursor: pointer; transition: all .12s ease;
+  }
+  button.copy-btn:hover { color: var(--fg); border-color: var(--border-2); background: var(--panel-2); }
+  button.copy-btn.copied { color: var(--ok); border-color: var(--ok); }
+  header button.copy-btn { padding: 3px 10px; font-size: 10px; }
+
+  ::-webkit-scrollbar { width:10px; height:10px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:var(--border-2); border:2px solid var(--bg); border-radius:6px; }
+  ::-webkit-scrollbar-thumb:hover { background:var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wordmark"><span class="slash">/</span>reflect-tree</div>
+  <div class="meta">
+    <span>session <span class="num">95e89c22</span></span>
+    <span class="sep">/</span>
+    <span><span class="num">12</span> turns</span>
+    <span class="sep">/</span>
+    <span class="num">2026-04-25</span>
+  </div>
+  <div class="spacer"></div>
+  <button class="copy-btn" id="copyAllBtn" title="Copy every node's insight as a single markdown doc">Copy all insights</button>
+  <button class="chip icon" id="themeBtn" title="Toggle theme">◐</button>
+  <div class="filters" id="filters">
+    <span class="label">filter</span>
+    <span class="chip" data-cat="normal"><span class="dot"></span>normal</span>
+    <span class="chip" data-cat="correction"><span class="dot"></span>correction</span>
+    <span class="chip" data-cat="retry"><span class="dot"></span>retry</span>
+    <span class="chip" data-cat="reversal"><span class="dot"></span>reversal</span>
+    <span class="chip" data-cat="dead-end"><span class="dot"></span>dead-end</span>
+    <span class="chip" data-cat="backtrack"><span class="dot"></span>backtrack</span>
+    <span class="chip" data-cat="self-correction"><span class="dot"></span>self-correction</span>
+  </div>
+</header>
+
+<section class="goal">
+  <span class="label">Goal</span>
+  <div class="text">Diagnose double-reporting of APM exceptions and build a <code>ExceptionTypeNormalizeProcessor</code>; user later challenged whether a custom processor was needed at all.</div>
+</section>
+
+<main>
+  <div class="canvas-wrap" id="canvasWrap">
+    <svg class="canvas" id="canvas" viewBox="0 0 600 900" preserveAspectRatio="xMidYMid meet">
+      <!-- edges first so nodes draw on top -->
+      <g id="edges">
+        <!-- linear flow spine (T1 → T2 → ... → T12) -->
+        <path class="edge flow" d="M 300 60   L 300 130"/>
+        <path class="edge flow" d="M 300 130  L 300 200"/>
+        <path class="edge flow" d="M 300 200  L 300 270"/>
+        <path class="edge flow" d="M 300 270  L 380 340"/>  <!-- to retry (right rail) -->
+        <path class="edge flow" d="M 380 340  L 220 410"/>  <!-- to correction (left rail) -->
+        <path class="edge flow" d="M 220 410  L 380 480"/>  <!-- to dead-end (right rail) -->
+        <path class="edge flow" d="M 380 480  L 220 550"/>  <!-- to reversal (left rail) -->
+        <path class="edge flow" d="M 220 550  L 300 620"/>  <!-- to backtrack -->
+        <path class="edge flow" d="M 300 620  L 300 690"/>  <!-- to self-correction -->
+        <path class="edge flow" d="M 300 690  L 300 760"/>  <!-- to normal close -->
+        <path class="edge flow" d="M 300 760  L 300 830"/>
+
+        <!-- back-edges -->
+        <!-- T5 retry refs T3 (build attempt) -->
+        <path class="edge back-retry" data-from="t5" data-to="t3"
+              d="M 380 340 C 470 320, 470 220, 320 200"/>
+        <!-- T6 correction refs T5 (user pushed back on retry approach) -->
+        <path class="edge back-correction" data-from="t6" data-to="t5"
+              d="M 220 410 C 130 400, 130 360, 360 340"/>
+        <!-- T7 dead-end refs T2 (env mismatch reaching back to early choice) -->
+        <path class="edge back-deadend" data-from="t7" data-to="t2"
+              d="M 380 480 C 510 480, 510 130, 320 130"/>
+        <!-- T8 reversal refs T4 (undoes that edit) -->
+        <path class="edge back-reversal" data-from="t8" data-to="t4"
+              d="M 220 550 C 110 540, 110 280, 280 270"/>
+        <!-- T9 backtrack jumps back to T2 -->
+        <path class="edge back-backtrack" data-from="t9" data-to="t2"
+              d="M 300 620 C 540 620, 540 110, 320 130"/>
+        <!-- T10 self-correction refs T9 -->
+        <path class="edge back-correction" data-from="t10" data-to="t9"
+              d="M 300 690 C 360 660, 360 640, 310 620"/>
+
+        <!-- wasted segment overlay (illustrative, T2→T3 cluster) -->
+      </g>
+
+      <g id="nodes">
+        <!-- T1 USER request -->
+        <g class="node" data-id="t1" data-cat="normal-user" data-cat-key="normal" transform="translate(300 60)">
+          <circle class="body" r="9"/>
+          <text class="label-turn" x="-22" y="0" text-anchor="end">T1</text>
+          <text class="label-summary" x="22" y="0">user · "diagnose double APM reports"</text>
+        </g>
+        <!-- T2 ASSISTANT search -->
+        <g class="node" data-id="t2" data-cat="normal-assistant" data-cat-key="normal" transform="translate(300 130)">
+          <circle class="body" r="8"/>
+          <text class="label-turn" x="-22" y="0" text-anchor="end">T2</text>
+          <text class="label-summary" x="22" y="0">→ Grep(pattern="ApmExceptionProcessor")</text>
+        </g>
+        <!-- T3 ASSISTANT read -->
+        <g class="node" data-id="t3" data-cat="normal-assistant" data-cat-key="normal" transform="translate(300 200)">
+          <circle class="body" r="8"/>
+          <text class="label-turn" x="-22" y="0" text-anchor="end">T3</text>
+          <text class="label-summary" x="22" y="0">→ Read(ApmConfig.cs)</text>
+        </g>
+        <!-- T4 ASSISTANT edit -->
+        <g class="node" data-id="t4" data-cat="normal-assistant" data-cat-key="normal" transform="translate(300 270)">
+          <circle class="body" r="8"/>
+          <text class="label-turn" x="-22" y="0" text-anchor="end">T4</text>
+          <text class="label-summary" x="22" y="0">→ Edit(ExceptionTypeNormalizeProcessor.cs)</text>
+        </g>
+        <!-- T5 RETRY (right rail) -->
+        <g class="node" data-id="t5" data-cat="retry" data-cat-key="retry" transform="translate(380 340)">
+          <circle class="body" r="10"/>
+          <circle class="body-inner" r="5"/>
+          <text class="symbol" x="0" y="0" text-anchor="middle" dominant-baseline="middle">↻</text>
+          <text class="label-turn" x="22" y="0">T5</text>
+          <text class="label-summary" x="46" y="0">retry · dotnet build (3rd attempt)</text>
+        </g>
+        <!-- T6 CORRECTION (left rail) -->
+        <g class="node" data-id="t6" data-cat="correction" data-cat-key="correction" transform="translate(220 410)">
+          <rect class="body" x="-9" y="-9" width="18" height="18" transform="rotate(45)"/>
+          <text class="symbol" x="0" y="0" text-anchor="middle" dominant-baseline="middle" font-weight="600">!</text>
+          <text class="label-turn" x="-22" y="0" text-anchor="end">T6</text>
+          <text class="label-summary" x="-46" y="0" text-anchor="end">user · "use -p:WarningLevel=0"</text>
+        </g>
+        <!-- T7 DEAD-END (right rail) -->
+        <g class="node" data-id="t7" data-cat="dead-end" data-cat-key="dead-end" transform="translate(380 480)">
+          <circle class="body" r="9"/>
+          <text class="symbol" x="0" y="0" text-anchor="middle" dominant-baseline="middle">✕</text>
+          <text class="label-turn" x="22" y="0">T7</text>
+          <text class="label-summary" x="46" y="0">dead-end · python3: not found</text>
+        </g>
+        <!-- T8 REVERSAL (left rail) -->
+        <g class="node" data-id="t8" data-cat="reversal" data-cat-key="reversal" transform="translate(220 550)">
+          <rect class="body" x="-9" y="-9" width="18" height="18"/>
+          <text class="symbol" x="0" y="1" text-anchor="middle" dominant-baseline="middle" font-weight="600">⇄</text>
+          <text class="label-turn" x="-22" y="0" text-anchor="end">T8</text>
+          <text class="label-summary" x="-46" y="0" text-anchor="end">reversal · revert Edit on T4</text>
+        </g>
+        <!-- T9 BACKTRACK -->
+        <g class="node" data-id="t9" data-cat="backtrack" data-cat-key="backtrack" transform="translate(300 620)">
+          <rect class="body" x="-9" y="-9" width="18" height="18" rx="3"/>
+          <text class="symbol" x="0" y="1" text-anchor="middle" dominant-baseline="middle" font-weight="600">↶</text>
+          <text class="label-turn" x="22" y="0">T9</text>
+          <text class="label-summary" x="46" y="0">backtrack · resume from T2 search</text>
+        </g>
+        <!-- T10 SELF-CORRECTION -->
+        <g class="node" data-id="t10" data-cat="self-correction" data-cat-key="self-correction" transform="translate(300 690)">
+          <rect class="body" x="-7" y="-7" width="14" height="14" transform="rotate(45)"/>
+          <text class="symbol" x="0" y="0" text-anchor="middle" dominant-baseline="middle" font-weight="600">✓!</text>
+          <text class="label-turn" x="22" y="0">T10</text>
+          <text class="label-summary" x="46" y="0">self-correction · drop custom processor</text>
+        </g>
+        <!-- T11 ASSISTANT close -->
+        <g class="node" data-id="t11" data-cat="normal-assistant" data-cat-key="normal" transform="translate(300 760)">
+          <circle class="body" r="8"/>
+          <text class="label-turn" x="-22" y="0" text-anchor="end">T11</text>
+          <text class="label-summary" x="22" y="0">→ Edit(ApmConfig.cs · record=true)</text>
+        </g>
+        <!-- T12 USER ack -->
+        <g class="node" data-id="t12" data-cat="normal-user" data-cat-key="normal" transform="translate(300 830)">
+          <circle class="body" r="9"/>
+          <text class="label-turn" x="-22" y="0" text-anchor="end">T12</text>
+          <text class="label-summary" x="22" y="0">user · "perfect, ship it"</text>
+        </g>
+      </g>
+    </svg>
+
+    <div class="help">
+      <kbd>drag</kbd> pan · <kbd>wheel</kbd> zoom · <kbd>0</kbd> reset · <kbd>+</kbd>/<kbd>-</kbd>
+    </div>
+
+    <div class="legend">
+      <span><b>●</b> normal</span><span><b style="color:var(--err)">◆</b> correction</span>
+      <span><b style="color:var(--warn)">↻</b> retry</span><span><b style="color:var(--warn)">⇄</b> reversal</span>
+      <span><b style="color:var(--err)">✕</b> dead-end</span><span><b style="color:var(--muted)">↶</b> backtrack</span>
+      <span><b style="color:var(--ok)">✓!</b> self-correction</span><span><b style="color:var(--accent)">→</b> back-edge</span>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+  </div>
+
+  <aside class="drawer" id="drawer">
+    <h2>Turn detail</h2>
+    <div id="drawerBody"><div class="d-empty">Click a node to inspect.</div></div>
+  </aside>
+</main>
+
+<script>
+// ─── theme ──────────────────────────────────────────────────────────────
+const themeBtn = document.getElementById('themeBtn');
+const root = document.documentElement;
+themeBtn.addEventListener('click', () => {
+  root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+  themeBtn.textContent = root.dataset.theme === 'dark' ? '◑' : '◐';
+});
+
+// ─── data ───────────────────────────────────────────────────────────────
+const TURNS = {
+  t1:  { turn:'T1',  cat:'user', text:'diagnose double-reporting of APM exceptions; the existing fix hides the real cause', tools:[], refs:[],
+         highlight:'Goal: surface the real cause of double-reported APM exceptions, not paper over it.',
+         insight:'The team had a fix in place that suppressed the symptom. The user wanted root-cause work, not a stronger filter. Anchor the whole session against this framing.',
+         snippet:'Goal: APM is double-reporting exceptions. Fix the real cause, not the symptom. The existing suppression in `ApmExceptionProcessor` is hiding the upstream bug.' },
+  t2:  { turn:'T2',  cat:'normal', text:'searching for ApmExceptionProcessor references', tools:['Grep(pattern="ApmExceptionProcessor")'], refs:[] },
+  t3:  { turn:'T3',  cat:'normal', text:'reading ApmConfig.cs', tools:['Read(ApmConfig.cs)'], refs:[] },
+  t4:  { turn:'T4',  cat:'normal', text:'edit: introduce ExceptionTypeNormalizeProcessor', tools:['Edit(ExceptionTypeNormalizeProcessor.cs)'], refs:[],
+         highlight:'Built a custom processor before checking if the SDK already covers the case.',
+         insight:'Wrote a new abstraction first instead of asking whether the existing config knob solved it. Cost a reversal at T8. Audit the SDK surface before introducing custom processors.',
+         snippet:'Before adding a custom APM processor, search the SDK for an equivalent config (e.g. `record=true`). Reach for new abstractions only after confirming the built-ins do not cover the case.' },
+  t5:  { turn:'T5',  cat:'retry', text:'rebuilt 3 times before figuring out the right MSBuild flags', tools:['Bash(dotnet build)','Bash(dotnet build -clp:ErrorsOnly)','Bash(dotnet build -p:WarningLevel=0 /clp:ErrorsOnly)'], refs:['t3'],
+         highlight:'`dotnet build` output is unreadable without `-p:WarningLevel=0 /clp:ErrorsOnly`.',
+         insight:'Three retries to discover the right invocation. Bake the canonical flags into a CLAUDE.md rule or a wrapper script so no future session pays this tax.',
+         snippet:'<dotnet_build_rules>\n- ALWAYS build via: `dotnet build -p:WarningLevel=0 /clp:ErrorsOnly`\n- Why: full output drowns errors in warnings; ErrorsOnly + WarningLevel=0 keeps signal high.\n</dotnet_build_rules>' },
+  t6:  { turn:'T6',  cat:'correction', text:'user: "always build with -p:WarningLevel=0 /clp:ErrorsOnly, the full output is unreadable"', tools:[], refs:['t5'],
+         highlight:'User explicitly mandated the build flags — promote to a durable rule.',
+         insight:'Explicit user correction on tooling. These never want to be relearned. Land in CLAUDE.md immediately.',
+         snippet:'Rule (from user): every `dotnet build` MUST use `-p:WarningLevel=0 /clp:ErrorsOnly`. No exceptions.' },
+  t7:  { turn:'T7',  cat:'dead-end', text:'tried python3 to run a helper — not installed on this Windows host', tools:['Bash(python3 helper.py) [ERR]'], refs:['t2'],
+         highlight:'`python3` is not installed on Windows; use `uv run` / `uvx`.',
+         insight:'Environment fact, not a coding mistake. Worth saving as a memory so the same dead-end never recurs.',
+         snippet:'Environment: `python3` is NOT installed on this Windows host. Use `uv run <script>` or `uvx <tool>` for any Python invocation.' },
+  t8:  { turn:'T8',  cat:'reversal', text:'rolled back the new processor edit after user pointed out record=true already covers it', tools:['Edit(ExceptionTypeNormalizeProcessor.cs · revert)'], refs:['t4'],
+         highlight:'`record=true` in `ApmConfig` already covers exception normalization — no custom processor needed.',
+         insight:'The custom processor at T4 was redundant. The SDK had a one-line config equivalent. Future agents should grep the SDK config surface before drafting processors.',
+         snippet:'For APM exception normalization in this codebase: set `record=true` in `ApmConfig.cs`. Do NOT add a custom processor — the SDK already handles it.' },
+  t9:  { turn:'T9',  cat:'backtrack', text:'abandoned the custom-processor branch; resumed from the original config search', tools:[], refs:['t2'],
+         highlight:'When an approach gets reverted, restart from the last known-good investigation point, not from scratch.',
+         insight:'Backtracked cleanly to T2 and reused that context instead of redoing the search. Cheap recovery move worth keeping.',
+         snippet:'Heuristic: after a reversal, resume from the last investigation step that produced useful signal — do not redo the search from zero.' },
+  t10: { turn:'T10', cat:'self-correction', text:'caught my own redundant abstraction — removing the processor scaffolding', tools:[], refs:['t9'],
+         highlight:'Pause before introducing a custom abstraction; check whether the framework or SDK already solves it.',
+         insight:'Self-caught: the processor was scaffolding around something the SDK gave for free. The check should happen *before* the edit, not after a reversal.',
+         snippet:'Before writing a custom processor/middleware/handler, run a 30-second SDK-config check. Premature abstractions cost reversals.' },
+  t11: { turn:'T11', cat:'normal', text:'flip record=true in ApmConfig.cs', tools:['Edit(ApmConfig.cs · record=true)'], refs:[],
+         highlight:'Final fix is one line: `record=true` in `ApmConfig.cs`.',
+         insight:'The actual remediation. Keep this as the canonical answer for any future "double APM exceptions" investigation.',
+         snippet:'Fix for double-reported APM exceptions in this repo: set `record=true` in `ApmConfig.cs`. One-line change, no custom processor.' },
+  t12: { turn:'T12', cat:'user', text:'perfect, ship it', tools:[], refs:[] },
+};
+
+// ─── drawer ─────────────────────────────────────────────────────────────
+const drawer = document.getElementById('drawerBody');
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+function showDrawer(id) {
+  const t = TURNS[id]; if (!t) return;
+  const refs = (t.refs||[]).map(r => `<a data-ref="${r}">${TURNS[r]?.turn||r}</a>`).join('');
+  const tools = (t.tools||[]).map(s => {
+    const isErr = /\[ERR\]|\[REJECTED\]/.test(s);
+    return `<div class="d-tool"><span class="arrow">→</span><span class="${isErr?'err':''}">${esc(s)}</span></div>`;
+  }).join('') || '<div class="d-tool" style="color:var(--faint)">no tool calls</div>';
+
+  const insightHTML = t.highlight ? `
+    <div class="d-insight">
+      <div class="d-section">
+        <span>Insight · knowledge</span>
+        <button class="copy-btn" id="insightCopy">Copy</button>
+      </div>
+      <div class="d-highlight">${esc(t.highlight)}</div>
+      ${t.insight ? `<div class="d-why">${esc(t.insight)}</div>` : ''}
+      ${t.snippet ? `<div class="d-snippet">${esc(t.snippet)}</div>` : ''}
+    </div>` : '';
+
+  drawer.innerHTML = `
+    <div class="d-head">
+      <span class="d-turn">${t.turn}</span>
+      <span class="d-cat">${t.cat}</span>
+    </div>
+    <div class="d-text">${esc(t.text)}</div>
+    <div class="d-tools">${tools}</div>
+    ${refs ? `<div class="d-refs">refs: ${refs}</div>` : ''}
+    ${insightHTML}
+  `;
+  drawer.querySelectorAll('a[data-ref]').forEach(a =>
+    a.addEventListener('click', () => focusNode(a.dataset.ref))
+  );
+  const cb = document.getElementById('insightCopy');
+  if (cb) cb.addEventListener('click', async () => {
+    const md = formatInsight(t);
+    await navigator.clipboard.writeText(md);
+    cb.classList.add('copied'); cb.textContent = '✓';
+    setTimeout(() => { cb.classList.remove('copied'); cb.textContent = 'Copy'; }, 1000);
+  });
+}
+
+function formatInsight(t) {
+  const parts = [];
+  parts.push(`### ${t.turn} · ${t.cat} — ${t.highlight}`);
+  if (t.insight) parts.push('', t.insight);
+  if (t.snippet) parts.push('', '```', t.snippet, '```');
+  return parts.join('\n') + '\n';
+}
+
+// ─── Copy all insights ──────────────────────────────────────────────────
+document.getElementById('copyAllBtn').addEventListener('click', async (e) => {
+  const groups = {};
+  Object.values(TURNS).forEach(t => {
+    if (!t.highlight) return;
+    (groups[t.cat] ||= []).push(t);
+  });
+  const order = ['correction','retry','reversal','dead-end','backtrack','self-correction','user','normal'];
+  const out = ['# Session insights', ''];
+  order.forEach(cat => {
+    if (!groups[cat]) return;
+    out.push(`## ${cat}`, '');
+    groups[cat].forEach(t => out.push(formatInsight(t)));
+  });
+  await navigator.clipboard.writeText(out.join('\n'));
+  const btn = e.currentTarget;
+  btn.classList.add('copied'); const orig = btn.textContent; btn.textContent = '✓ Copied';
+  setTimeout(() => { btn.classList.remove('copied'); btn.textContent = orig; }, 1200);
+});
+
+// ─── selection / focus ──────────────────────────────────────────────────
+const nodes = document.querySelectorAll('.node');
+const edges = document.querySelectorAll('.edge');
+
+function focusNode(id) {
+  nodes.forEach(n => n.classList.remove('selected','pulse'));
+  const el = document.querySelector(`.node[data-id="${id}"]`);
+  if (!el) return;
+  el.classList.add('selected');
+  // pulse via reflow trick
+  void el.offsetWidth;
+  el.classList.add('pulse');
+  showDrawer(id);
+  // highlight related edges
+  edges.forEach(e => e.classList.remove('highlight'));
+  document.querySelectorAll(`.edge[data-from="${id}"], .edge[data-to="${id}"]`)
+    .forEach(e => e.classList.add('highlight'));
+}
+
+nodes.forEach(n => {
+  n.addEventListener('click', () => focusNode(n.dataset.id));
+  n.addEventListener('mouseenter', e => showTip(e, n));
+  n.addEventListener('mouseleave', hideTip);
+});
+
+// ─── tooltip ────────────────────────────────────────────────────────────
+const tip = document.getElementById('tooltip');
+const wrap = document.getElementById('canvasWrap');
+function showTip(evt, n) {
+  const id = n.dataset.id;
+  const t = TURNS[id]; if (!t) return;
+  tip.innerHTML = `<span class="turn">${t.turn}</span><span class="cat">${t.cat}</span><br><span style="color:var(--muted)">${t.text.slice(0,80)}${t.text.length>80?'…':''}</span>`;
+  tip.style.display = 'block';
+  const rect = wrap.getBoundingClientRect();
+  tip.style.left = (evt.clientX - rect.left + 12) + 'px';
+  tip.style.top  = (evt.clientY - rect.top  + 12) + 'px';
+}
+function hideTip() { tip.style.display = 'none'; }
+wrap.addEventListener('mousemove', e => {
+  if (tip.style.display === 'block') {
+    const rect = wrap.getBoundingClientRect();
+    tip.style.left = (e.clientX - rect.left + 12) + 'px';
+    tip.style.top  = (e.clientY - rect.top  + 12) + 'px';
+  }
+});
+
+// ─── filters ────────────────────────────────────────────────────────────
+const chips = document.querySelectorAll('#filters .chip');
+const active = new Set(['normal','correction','retry','reversal','dead-end','backtrack','self-correction']);
+chips.forEach(c => c.addEventListener('click', () => {
+  c.classList.toggle('off');
+  const cat = c.dataset.cat;
+  if (c.classList.contains('off')) active.delete(cat); else active.add(cat);
+  nodes.forEach(n => {
+    const ok = active.has(n.dataset.catKey);
+    n.classList.toggle('dim', !ok);
+  });
+  // dim back-edges whose endpoints are dimmed
+  edges.forEach(e => {
+    const f = e.dataset.from, t = e.dataset.to;
+    if (!f || !t) { e.classList.remove('dim'); return; }
+    const fOk = active.has(document.querySelector(`.node[data-id="${f}"]`)?.dataset.catKey);
+    const tOk = active.has(document.querySelector(`.node[data-id="${t}"]`)?.dataset.catKey);
+    e.classList.toggle('dim', !(fOk && tOk));
+  });
+}));
+
+// ─── pan + zoom (viewBox) ───────────────────────────────────────────────
+const svg = document.getElementById('canvas');
+let vb = { x:0, y:0, w:600, h:900 };
+const initial = { ...vb };
+function applyVB() { svg.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`); }
+
+svg.addEventListener('wheel', e => {
+  e.preventDefault();
+  const scale = e.deltaY > 0 ? 1.1 : 0.9;
+  const pt = svg.createSVGPoint();
+  pt.x = e.clientX; pt.y = e.clientY;
+  const sp = pt.matrixTransform(svg.getScreenCTM().inverse());
+  vb.x = sp.x - (sp.x - vb.x) * scale;
+  vb.y = sp.y - (sp.y - vb.y) * scale;
+  vb.w *= scale; vb.h *= scale;
+  applyVB();
+}, { passive:false });
+
+let dragging = false, dragStart = null;
+svg.addEventListener('mousedown', e => {
+  if (e.target.closest('.node')) return;
+  dragging = true; svg.classList.add('drag');
+  dragStart = { x:e.clientX, y:e.clientY, vb:{ ...vb } };
+});
+window.addEventListener('mouseup', () => { dragging = false; svg.classList.remove('drag'); });
+window.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  const ctm = svg.getScreenCTM();
+  const dx = (e.clientX - dragStart.x) / ctm.a;
+  const dy = (e.clientY - dragStart.y) / ctm.d;
+  vb.x = dragStart.vb.x - dx;
+  vb.y = dragStart.vb.y - dy;
+  applyVB();
+});
+
+window.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === '0') { vb = { ...initial }; applyVB(); }
+  if (e.key === '+' || e.key === '=') { vb.w *= 0.9; vb.h *= 0.9; applyVB(); }
+  if (e.key === '-') { vb.w *= 1.1; vb.h *= 1.1; applyVB(); }
+});
+
+applyVB();
+</script>
+</body>
+</html>

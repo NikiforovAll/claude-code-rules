@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<title>/reflect — session analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #fafaf9;
+    --panel:     #ffffff;
+    --panel-2:   #f4f4f2;
+    --border:    #e7e5e1;
+    --border-2:  #d6d3cd;
+    --fg:        #111111;
+    --muted:     #6b6b6b;
+    --faint:     #9a9a9a;
+    --accent:    #c2410c;     /* rust */
+    --accent-2:  #ea580c;
+    --ok:        #4d7c2a;
+    --warn:      #b45309;
+    --err:       #b91c1c;
+    --snippet:   #f6f5f1;
+    --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --serif: "Newsreader", ui-serif, Georgia, serif;
+  }
+  :root[data-theme="dark"] {
+    --bg:        #0c0c0c;
+    --panel:     #131313;
+    --panel-2:   #1a1a1a;
+    --border:    #232323;
+    --border-2:  #303030;
+    --fg:        #ededed;
+    --muted:     #9a9a9a;
+    --faint:     #666666;
+    --accent:    #f97316;
+    --accent-2:  #fb923c;
+    --ok:        #84cc16;
+    --warn:      #d97706;
+    --err:       #ef4444;
+    --snippet:   #0a0a0a;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--fg);
+    font: 13px/1.55 var(--sans); font-feature-settings: "ss01","cv11"; }
+  body { display:grid; grid-template-rows: auto auto 1fr; height:100vh; }
+
+  /* ───── goal banner ───── */
+  .goal {
+    padding: 18px 22px 20px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: baseline;
+  }
+  .goal .label {
+    font-family: var(--mono); font-size: 10px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.18em; color: var(--accent);
+    padding-top: 4px;
+  }
+  .goal .text {
+    font-family: var(--sans); font-weight: 400;
+    font-size: 15px; line-height: 1.55; color: var(--fg);
+  }
+  .goal .text code {
+    font-family: var(--mono); font-style: normal; font-size: 13px;
+    background: var(--snippet); padding: 1px 6px; border-radius: 2px;
+    border: 1px solid var(--border);
+  }
+  code, .mono { font-family: var(--mono); font-size: 12px; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* ───── header ───── */
+  header {
+    display:flex; gap:18px; align-items:center;
+    padding: 12px 18px; border-bottom:1px solid var(--border);
+    background:var(--panel);
+  }
+  .wordmark {
+    font-family: var(--serif); font-style: italic; font-weight: 500;
+    font-size: 20px; letter-spacing: -0.01em; color: var(--fg);
+  }
+  .wordmark .slash { color: var(--accent); font-weight: 500; }
+  header .meta {
+    color:var(--muted); font-family:var(--mono); font-size:11px;
+    letter-spacing: 0.02em; display:flex; gap:14px; align-items:center;
+  }
+  header .meta .sep { color:var(--faint); }
+  header .spacer { flex:1; }
+
+  .filters { display:flex; gap:4px; flex-wrap:wrap; align-items:center; }
+  .filters .label {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.14em; color: var(--faint);
+    padding-right: 6px;
+  }
+  .chip {
+    display:inline-flex; align-items:center; gap:6px;
+    padding: 3px 9px; border-radius: 2px;
+    background: transparent; border:1px solid var(--border);
+    color:var(--fg); font-family:var(--mono); font-size:11px;
+    cursor:pointer; user-select:none;
+    transition: background .12s ease, border-color .12s ease, color .12s ease;
+  }
+  .chip:hover { border-color: var(--border-2); background: var(--panel-2); }
+  .chip.off { color: var(--faint); border-color: var(--border); background: transparent; }
+  .chip.off .dot { opacity: .35; }
+  .chip .dot { width:6px; height:6px; border-radius:50%; }
+  .chip[data-k="high"] .dot { background:var(--err); }
+  .chip[data-k="med"]  .dot { background:var(--warn); }
+  .chip[data-k="low"]  .dot { background:var(--faint); }
+  .chip.icon { padding: 3px 7px; }
+
+  /* ───── main ───── */
+  main {
+    display:grid; grid-template-columns: 1fr 1fr;
+    background:var(--border); gap:1px; overflow:hidden;
+  }
+  .pane { background:var(--bg); overflow:auto; padding: 18px 20px 24px; }
+  .pane h2 {
+    font-family: var(--mono); font-size:10px; font-weight:500;
+    text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted);
+    margin: 0 0 14px; display:flex; align-items:baseline; gap:8px;
+  }
+  .pane h2 .count { color: var(--faint); }
+  .pane h2 .rule { flex:1; height:1px; background:var(--border); margin-left:6px; }
+
+  /* ───── incidents ───── */
+  .incident {
+    position:relative;
+    background:var(--panel); border:1px solid var(--border);
+    padding: 11px 13px 11px 16px; margin-bottom: 6px;
+    cursor:pointer; transition: background .12s ease, border-color .12s ease;
+  }
+  .incident::before {
+    content:""; position:absolute; left:0; top:-1px; bottom:-1px; width:2px;
+    background: transparent; transition: background .12s ease;
+  }
+  .incident:hover { background: var(--panel-2); }
+  .incident.selected::before { background: var(--accent); }
+  .incident.selected { border-color: var(--border-2); }
+
+  .row { display:flex; align-items:center; gap:10px; }
+  .sev { width:6px; height:6px; border-radius:50%; flex:none; }
+  .sev.high { background:var(--err); }
+  .sev.med  { background:var(--warn); }
+  .sev.low  { background:var(--faint); }
+  .cat {
+    font-family:var(--mono); font-size:10px; font-weight:500;
+    text-transform:uppercase; letter-spacing:0.12em;
+    color:var(--muted); padding:2px 7px;
+    border:1px solid var(--border); border-radius:2px;
+    background: var(--panel-2);
+  }
+  .summary { flex:1; color: var(--fg); }
+  .summary code {
+    background: var(--snippet); padding: 1px 5px; border-radius:2px;
+    border:1px solid var(--border); font-size: 11px;
+  }
+  .turn { font-family:var(--mono); font-size:11px; color:var(--faint); }
+  .turn::before { content:"#"; color:var(--faint); }
+  .conf {
+    font-family:var(--mono); font-size:10px; font-weight:500;
+    color:var(--muted); padding: 1px 6px; border-radius:2px;
+    border:1px solid var(--border); background: var(--panel-2);
+    letter-spacing: 0.04em;
+  }
+  .conf::before { content:"~"; color:var(--faint); margin-right:1px; }
+  .conf::after  { content:"%"; color:var(--faint); margin-left:1px; }
+  .conf.hi { color:var(--ok); }
+  .conf.lo { color:var(--faint); }
+
+  /* slider */
+  .slider-wrap {
+    display:inline-flex; align-items:center; gap:8px;
+    padding: 3px 10px; border:1px solid var(--border); border-radius:2px;
+    background: var(--panel);
+  }
+  .slider-wrap .label {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.14em; color: var(--faint);
+  }
+  .slider-wrap input[type=range] {
+    -webkit-appearance:none; appearance:none;
+    width: 90px; height: 2px; background: var(--border-2);
+    border-radius: 1px; outline:none; cursor:pointer;
+  }
+  .slider-wrap input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance:none; appearance:none;
+    width: 11px; height: 11px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--panel);
+    cursor: pointer;
+  }
+  .slider-wrap input[type=range]::-moz-range-thumb {
+    width: 11px; height: 11px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--panel);
+    cursor: pointer; border-radius: 50%;
+  }
+  .slider-wrap .val {
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    color: var(--fg); min-width: 26px; text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .excerpt {
+    margin-top:10px; background:var(--snippet);
+    border:1px solid var(--border); border-left: 2px solid var(--border-2);
+    padding:10px 12px; font-family:var(--mono); font-size:11.5px; line-height:1.6;
+    color:var(--fg); white-space:pre-wrap; display:none;
+  }
+  .incident.open .excerpt { display:block; }
+  .quote { color:var(--muted); font-weight:500; }
+  .quote.user { color:var(--accent); }
+
+  /* ───── recommendations ───── */
+  .rec {
+    background:var(--panel); border:1px solid var(--border);
+    padding: 11px 13px; margin-bottom: 6px;
+  }
+  .rec-head { display:flex; align-items:flex-start; gap:10px; cursor:pointer; }
+  button.rec-copy {
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--border); border-radius: 2px;
+    padding: 3px 8px; font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    cursor: pointer; transition: all .12s ease; white-space: nowrap;
+  }
+  button.rec-copy:hover { color: var(--fg); border-color: var(--border-2); background: var(--panel-2); }
+  button.rec-copy.copied { color: var(--ok); border-color: var(--ok); }
+  .rec-title { font-weight:500; flex:1; color: var(--fg); }
+  .rec-title code {
+    background: var(--snippet); padding: 1px 5px; border-radius:2px;
+    border:1px solid var(--border); font-size: 11px;
+  }
+  .rec-target {
+    font-family:var(--mono); font-size:10px; color:var(--muted);
+    padding: 2px 7px; border:1px solid var(--border); border-radius:2px;
+    background: var(--panel-2);
+    text-transform: lowercase; letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .rec-target::before { content: ""; }
+  .rec-target[data-kind]::before {
+    content: attr(data-kind) " · "; color: var(--accent); font-weight:500;
+  }
+  .rec-body { margin-top:10px; padding-left:23px; }
+  .rec-snippet {
+    background:var(--snippet); border:1px solid var(--border);
+    border-left: 2px solid var(--border-2);
+    padding:10px 12px; font-family:var(--mono); font-size:11.5px; line-height: 1.55;
+    color:var(--fg); white-space:pre-wrap; margin-top:6px;
+  }
+  .rec-refs {
+    margin-top:8px; font-family:var(--mono); font-size:10px;
+    text-transform: uppercase; letter-spacing: 0.12em; color: var(--faint);
+  }
+  .rec-refs a {
+    color:var(--accent); text-decoration:none; cursor:pointer;
+    border-bottom: 1px dashed var(--border-2);
+  }
+  .rec-refs a:hover { border-bottom-color: var(--accent); }
+
+  /* scrollbars (webkit) */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-2); border: 2px solid var(--bg); border-radius: 6px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wordmark"><span class="slash">/</span>reflect</div>
+  <div class="meta">
+    <span>session <span class="num">95e89c22</span></span>
+    <span class="sep">/</span>
+    <span><span class="num">142</span> turns</span>
+    <span class="sep">/</span>
+    <span class="num">2026-04-24</span>
+  </div>
+  <div class="spacer"></div>
+  <button class="chip icon" id="themeBtn" title="Toggle theme">◐</button>
+  <div class="filters" id="filters">
+    <span class="label">filter</span>
+    <span class="chip" data-k="high"><span class="dot"></span>high</span>
+    <span class="chip" data-k="med"><span class="dot"></span>med</span>
+    <span class="chip" data-k="low"><span class="dot"></span>low</span>
+    <span class="chip" data-cat="correction">correction</span>
+    <span class="chip" data-cat="retry">retry</span>
+    <span class="chip" data-cat="waste">waste</span>
+    <span class="chip" data-cat="reversal">reversal</span>
+    <span class="chip" data-cat="deadend">dead-end</span>
+  </div>
+  <div class="slider-wrap" title="Hide incidents below this confidence">
+    <span class="label">conf ≥</span>
+    <input type="range" id="confSlider" min="0" max="100" step="5" value="50" />
+    <span class="val num" id="confVal">50</span>
+  </div>
+</header>
+
+<section class="goal">
+  <span class="label">Goal</span>
+  <div class="text">Diagnose double-reporting of APM exceptions + log-level case mismatch; the team's existing fix hides the real cause. Outcome: built <code>ExceptionTypeNormalizeProcessor</code> + tests, then user challenged whether a custom processor is needed at all (<code>record=true</code> already covers it).</div>
+</section>
+
+<main>
+  <section class="pane" id="left">
+    <h2>Wrong turns <span class="count num" id="incCount">6</span><span class="rule"></span></h2>
+
+    <div class="incident open selected" data-id="i1" data-sev="high" data-cat="correction" data-conf="95">
+      <div class="row">
+        <span class="sev high"></span>
+        <span class="cat">correction</span>
+        <span class="summary">Used <code>dotnet build</code> without warning-level flag; user pushed back.</span>
+        <span class="conf hi num">95</span>
+        <span class="turn num">14</span>
+      </div>
+      <div class="excerpt">
+<span class="quote">assistant</span>  Running <code>dotnet build</code> to verify the change…
+<span class="quote user">user</span>       no, always build with <code>-p:WarningLevel=0 /clp:ErrorsOnly</code>, the full output is unreadable
+      </div>
+    </div>
+
+    <div class="incident" data-id="i2" data-sev="high" data-cat="correction" data-conf="92">
+      <div class="row">
+        <span class="sev high"></span>
+        <span class="cat">correction</span>
+        <span class="summary">Used <code>cd repo &amp;&amp; git status</code> instead of <code>git -C repo status</code>.</span>
+        <span class="conf hi num">92</span>
+        <span class="turn num">23</span>
+      </div>
+      <div class="excerpt">
+<span class="quote user">user</span>  stop cd-ing around, use <code>git -C &lt;path&gt;</code>
+      </div>
+    </div>
+
+    <div class="incident" data-id="i3" data-sev="med" data-cat="waste" data-conf="72">
+      <div class="row">
+        <span class="sev med"></span>
+        <span class="cat">waste</span>
+        <span class="summary">Read 9 files under <code>src/Infrastructure/**</code> before finding the Dapper setup.</span>
+        <span class="conf num">72</span>
+        <span class="turn num">31–48</span>
+      </div>
+      <div class="excerpt">
+9 Read calls across Infrastructure/, Data/, Persistence/ before landing on
+src/Infrastructure/Database/DapperModule.cs — the conventional entry point.
+      </div>
+    </div>
+
+    <div class="incident" data-id="i4" data-sev="med" data-cat="retry" data-conf="80">
+      <div class="row">
+        <span class="sev med"></span>
+        <span class="cat">retry</span>
+        <span class="summary">Ran quality gates 3× before discovering Husky hook path.</span>
+        <span class="conf num">80</span>
+        <span class="turn num">62</span>
+      </div>
+      <div class="excerpt">
+Attempted <code>dotnet format</code>, then <code>npm run lint</code>, then finally
+<code>.husky/pre-commit</code> — which was the intended entry point.
+      </div>
+    </div>
+
+    <div class="incident" data-id="i5" data-sev="med" data-cat="reversal" data-conf="88">
+      <div class="row">
+        <span class="sev med"></span>
+        <span class="cat">reversal</span>
+        <span class="summary">Edited <code>appsettings.json</code>, reverted after user noted env-specific override.</span>
+        <span class="conf hi num">88</span>
+        <span class="turn num">78</span>
+      </div>
+      <div class="excerpt">
+<span class="quote user">user</span>  that file is generated, edit appsettings.Development.json instead
+      </div>
+    </div>
+
+    <div class="incident" data-id="i6" data-sev="low" data-cat="deadend" data-conf="45">
+      <div class="row">
+        <span class="sev low"></span>
+        <span class="cat">dead-end</span>
+        <span class="summary">Tried <code>python3</code> — not installed on Windows; switched to <code>uv</code>.</span>
+        <span class="conf lo num">45</span>
+        <span class="turn num">91</span>
+      </div>
+      <div class="excerpt">
+$ python3
+bash: python3: command not found
+$ uv run script.py    # ✓
+      </div>
+    </div>
+  </section>
+
+  <section class="pane" id="right">
+    <h2>Recommendations <span class="count num" id="recCount">6</span><span class="rule"></span></h2>
+
+    <div class="rec">
+      <div class="rec-head">
+        <div class="rec-title">Document the <code>dotnet build</code> incantation</div>
+        <span class="rec-target" data-kind="rule">CLAUDE.md</span>
+        <button class="rec-copy" type="button">Copy</button>
+      </div>
+      <div class="rec-body">
+        <div class="rec-snippet">&lt;dotnet_build_rules&gt;
+- ALWAYS build via: dotnet build -p:WarningLevel=0 /clp:ErrorsOnly
+&lt;/dotnet_build_rules&gt;</div>
+        <div class="rec-refs">addresses <a data-ref="i1">#14 correction</a></div>
+      </div>
+    </div>
+
+    <div class="rec">
+      <div class="rec-head">
+        <div class="rec-title">Prefer <code>git -C</code> over <code>cd &amp;&amp;</code></div>
+        <span class="rec-target" data-kind="rule">CLAUDE.md</span>
+        <button class="rec-copy" type="button">Copy</button>
+      </div>
+      <div class="rec-body">
+        <div class="rec-snippet">&lt;git&gt;
+Use git -C &lt;path&gt; instead of `cd &lt;path&gt; && git ...`.
+&lt;/git&gt;</div>
+        <div class="rec-refs">addresses <a data-ref="i2">#23 correction</a></div>
+      </div>
+    </div>
+
+    <div class="rec">
+      <div class="rec-head">
+        <div class="rec-title">Map the Infrastructure entry point</div>
+        <span class="rec-target" data-kind="doc">docs/AGENT.md</span>
+        <button class="rec-copy" type="button">Copy</button>
+      </div>
+      <div class="rec-body">
+        <div class="rec-snippet">Database wiring lives in src/Infrastructure/Database/DapperModule.cs.
+Entry points for Infrastructure concerns are registered there.</div>
+        <div class="rec-refs">addresses <a data-ref="i3">#31–48 waste</a></div>
+      </div>
+    </div>
+
+    <div class="rec">
+      <div class="rec-head">
+        <div class="rec-title">Bundle the quality-gate command</div>
+        <span class="rec-target" data-kind="script">scripts/quality-gates.sh</span>
+        <button class="rec-copy" type="button">Copy</button>
+      </div>
+      <div class="rec-body">
+        <div class="rec-snippet">#!/usr/bin/env bash
+# Canonical pre-commit gate — delegates to Husky
+exec .husky/pre-commit "$@"</div>
+        <div class="rec-refs">addresses <a data-ref="i4">#62 retry</a></div>
+      </div>
+    </div>
+
+    <div class="rec">
+      <div class="rec-head">
+        <div class="rec-title">Block edits to generated <code>appsettings.json</code></div>
+        <span class="rec-target" data-kind="hook">.claude/settings.json · PreToolUse</span>
+        <button class="rec-copy" type="button">Copy</button>
+      </div>
+      <div class="rec-body">
+        <div class="rec-snippet">{
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "Edit|Write",
+      "hooks": [{ "type": "command",
+        "command": "grep -q 'appsettings.json$' || exit 0; echo 'edit appsettings.Development.json' >&2; exit 2" }]
+    }]
+  }
+}</div>
+        <div class="rec-refs">addresses <a data-ref="i5">#78 reversal</a></div>
+      </div>
+    </div>
+
+    <div class="rec">
+      <div class="rec-head">
+        <div class="rec-title"><code>python3</code> is unavailable on this host</div>
+        <span class="rec-target" data-kind="memory">memory/env_python.md</span>
+        <button class="rec-copy" type="button">Copy</button>
+      </div>
+      <div class="rec-body">
+        <div class="rec-snippet">python3 is NOT installed. Use `uv run` / `uvx` for Python.
+Why: saves a dead-end tool call each time.
+How to apply: default to uv/uvx for any Python invocation.</div>
+        <div class="rec-refs">addresses <a data-ref="i6">#91 dead-end</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const themeBtn = document.getElementById('themeBtn');
+const root = document.documentElement;
+themeBtn.addEventListener('click', () => {
+  root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+  themeBtn.textContent = root.dataset.theme === 'dark' ? '◑' : '◐';
+});
+
+const incidents = document.querySelectorAll('.incident');
+const filters = document.querySelectorAll('#filters .chip');
+const activeSev = new Set(['high','med','low']);
+const activeCat = new Set(['correction','retry','waste','reversal','deadend']);
+const confSlider = document.getElementById('confSlider');
+const confVal = document.getElementById('confVal');
+let confMin = parseInt(confSlider.value, 10);
+
+function applyFilters() {
+  let shown = 0;
+  incidents.forEach(inc => {
+    const conf = parseInt(inc.dataset.conf || '100', 10);
+    const ok = activeSev.has(inc.dataset.sev)
+            && activeCat.has(inc.dataset.cat)
+            && conf >= confMin;
+    inc.style.display = ok ? '' : 'none';
+    if (ok) shown++;
+  });
+  document.getElementById('incCount').textContent = shown;
+}
+
+filters.forEach(c => c.addEventListener('click', () => {
+  c.classList.toggle('off');
+  const k = c.dataset.k, cat = c.dataset.cat;
+  if (k)   (c.classList.contains('off') ? activeSev.delete(k)   : activeSev.add(k));
+  if (cat) (c.classList.contains('off') ? activeCat.delete(cat) : activeCat.add(cat));
+  applyFilters();
+}));
+
+confSlider.addEventListener('input', () => {
+  confMin = parseInt(confSlider.value, 10);
+  confVal.textContent = confMin;
+  applyFilters();
+});
+applyFilters();
+
+incidents.forEach(inc => inc.addEventListener('click', () => {
+  const wasOpen = inc.classList.contains('open');
+  incidents.forEach(i => i.classList.remove('selected'));
+  inc.classList.add('selected');
+  inc.classList.toggle('open', !wasOpen);
+}));
+
+document.querySelectorAll('.rec-refs a').forEach(a => a.addEventListener('click', e => {
+  const id = e.target.dataset.ref;
+  const target = document.querySelector(`.incident[data-id="${id}"]`);
+  if (!target) return;
+  incidents.forEach(i => i.classList.remove('selected'));
+  target.classList.add('selected','open');
+  target.scrollIntoView({behavior:'smooth', block:'center'});
+}));
+
+document.querySelectorAll('.rec-copy').forEach(btn => btn.addEventListener('click', async () => {
+  const rec = btn.closest('.rec');
+  const title = rec.querySelector('.rec-title').innerText.trim();
+  const tgtEl = rec.querySelector('.rec-target');
+  const path = tgtEl.innerText.replace(/^[a-z]+ · /,'');
+  const kind = tgtEl.dataset.kind || 'other';
+  const snippet = rec.querySelector('.rec-snippet').innerText;
+  const text = `## ${kind}: ${title}\n\nTarget: ${path}\n\n\`\`\`\n${snippet}\n\`\`\`\n`;
+  await navigator.clipboard.writeText(text);
+  btn.classList.add('copied');
+  const orig = btn.textContent;
+  btn.textContent = '✓';
+  setTimeout(() => { btn.classList.remove('copied'); btn.textContent = orig; }, 1000);
+}));
+</script>
+</body>
+</html>

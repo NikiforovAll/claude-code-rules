@@ -1,0 +1,31 @@
+---
+title: "reflect-tree"
+sidebar_position: 23
+description: "Visualize a Claude Code session as an interactive quest tree with retries, reversals, and backtracking"
+---
+
+import ReflectTreeSource from '!!raw-loader!../../../../plugins/handbook-reflect/skills/reflect-tree/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `reflect-tree` skill
+
+<span className="badge badge--handbook-reflect">handbook-reflect</span>
+
+Visualize a Claude Code session as an interactive quest tree that shows linear progress, wrong turns, and recovery paths.
+
+This skill renders the session as a graph rather than a report: retries, corrections, reversals, dead-ends, backtracks, and self-corrections are mapped into a navigable HTML artifact with per-node insights that can be copied into prompts, docs, or memory files.
+
+## When to Use This Skill
+
+Use the `reflect-tree` skill when you want to:
+
+- Inspect the full journey of a session rather than only its outcome
+- See where an agent retried, backtracked, or reversed course
+- Generate a visual artifact for reviewing workflow friction and recovery
+- Extract reusable insights from specific turns in a session graph
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{ReflectTreeSource}
+</CodeBlock>

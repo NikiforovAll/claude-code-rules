@@ -169,6 +169,19 @@ Agent team orchestration — analyze a task, propose a minimum viable team compo
 claude plugin install handbook-team-stack@cc-handbook
 ```
 
+## [<span className="badge badge--handbook-reflect">handbook-reflect</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-reflect/README.md)
+
+Reflection tools for analyzing Claude Code sessions and turning them into reusable artifacts.
+
+**Components:**
+- **Skill:** [`reflect`](/component-reference/skills/reflect) - Analyze a session for wrong turns and generate an interactive reflection dashboard
+- **Skill:** [`reflect-solution`](/component-reference/skills/reflect-solution) - Summarize what shipped in a session as a self-contained HTML recap deck
+- **Skill:** [`reflect-tree`](/component-reference/skills/reflect-tree) - Visualize a session as an interactive quest tree showing flow, retries, and reversals
+
+```bash
+claude plugin install handbook-reflect@cc-handbook
+```
+
 ---
 
 ## Understanding Building Blocks
@@ -241,6 +254,9 @@ claude plugin install ./plugins/handbook-csharp-lsp
 
 # Install team-stack plugin
 claude plugin install ./plugins/handbook-team-stack
+
+# Install reflect plugin
+claude plugin install ./plugins/handbook-reflect
 
 # Install discover plugin
 claude plugin install ./plugins/handbook-discover
