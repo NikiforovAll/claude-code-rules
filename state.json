@@ -1,7 +1,7 @@
 {
-  "last_run": "2026-04-25T13:18:11Z",
-  "run_id": "24931783812",
-  "run_note": "Run SUCCEEDED. T1: 0 unlabelled issues. T2: no human issues (all bot-generated). T3: not selected. T4: updated monthly summary #20 with backlog entries (Apr 21-24 failures) + this run. safeoutputs MCP now operational via HTTP.",
+  "last_run": "2026-04-26T13:18:25Z",
+  "run_id": "24957577320",
+  "run_note": "Run SUCCEEDED. T2: commented on #25 (failures resolved). T3: PR #11 nudged Apr 17 (9 days ago, within 14-day window - skipped). T4: updated monthly summary #20.",
   "consecutive_failures": 0,
   "nudged_prs": {
     "15": "2026-03-31T13:20:09Z",
@@ -9,7 +9,8 @@
   },
   "commented_issues": {
     "23": "2026-04-13T13:21:00Z",
-    "24": "2026-04-14T13:21:00Z"
+    "24": "2026-04-14T13:21:00Z",
+    "25": "2026-04-26T13:18:25Z"
   },
   "monthly_summary_issues": {
     "2026-03": {
