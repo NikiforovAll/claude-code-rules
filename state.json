@@ -1,8 +1,8 @@
 {
-  "last_run": "2026-04-27T13:21:29Z",
-  "run_id": "24997458051",
-  "run_note": "Run SUCCEEDED. T1: 0 unlabelled issues (nothing to do). T2: all open issues bot-generated, no human issues to triage. T3: not selected. T4: updated monthly summary #20.",
-  "consecutive_failures": 0,
+  "last_run": "2026-04-28T13:23:17Z",
+  "run_id": "25055320696",
+  "run_note": "Run FAILED. safeoutputs MCP server filtered (registry policy 401). T2: no human issues; T3: PR #11 within 14-day nudge window (last nudged Apr 17). New bot issue #26 observed.",
+  "consecutive_failures": 1,
   "nudged_prs": {
     "15": "2026-03-31T13:20:09Z",
     "11": "2026-04-17T13:19:51Z"
