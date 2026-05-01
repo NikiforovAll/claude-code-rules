@@ -1,8 +1,8 @@
 {
-  "last_run": "2026-04-29T15:00:09Z",
-  "run_id": "25116453739",
-  "run_note": "Run FAILED. safeoutputs MCP server not available (tools not in schema). T1: 0 unlabelled issues. T2: no human issues (all bot-generated). T4: would have updated issue #20 with Apr 28+29 run entries.",
-  "consecutive_failures": 2,
+  "last_run": "2026-05-01T14:11:06Z",
+  "run_id": "25217449966",
+  "run_note": "Run FAILED. safeoutputs MCP server not available (tools not in schema). T2: no human issues (all bot-generated). T3: PR #11 qualifies for nudge (14 days since Apr 17 nudge). T4: would have created May 2026 issue and updated #20.",
+  "consecutive_failures": 3,
   "nudged_prs": {
     "15": "2026-03-31T13:20:09Z",
     "11": "2026-04-17T13:19:51Z"
@@ -29,9 +29,14 @@
   "pending_issue20_update": {
     "run_entries_to_add": [
       {
+        "date": "2026-05-01 14:11 UTC",
+        "run_id": "25217449966",
+        "notes": ["⚠️ Run failed (safeoutputs MCP not in schema). T3: PR #11 nudge pending (14d since Apr 17). T4: May 2026 issue not yet created."]
+      },
+      {
         "date": "2026-04-29 15:00 UTC",
         "run_id": "25116453739",
-        "notes": ["ℹ️ T1: 0 unlabelled issues; T2: no human issues (all open issues are bot-generated); T3: not selected. T4: safeoutputs MCP unavailable — update not written."]
+        "notes": ["⚠️ Run failed (safeoutputs MCP not available — T1: 0 unlabelled; T2: no human issues; T3: not selected)"]
       },
       {
         "date": "2026-04-28 13:23 UTC",
@@ -39,5 +44,11 @@
         "notes": ["⚠️ Run failed (safeoutputs MCP filtered — registry policy 401)"]
       }
     ]
+  },
+  "pending_may_issue": {
+    "needed": true,
+    "note": "May 2026 monthly issue not yet created — safeoutputs MCP unavailable",
+    "pr11_nudge_pending": true,
+    "pr11_days_stale": 14
   }
 }
