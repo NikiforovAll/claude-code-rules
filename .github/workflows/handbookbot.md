@@ -8,7 +8,7 @@ description: |
   - Updates monthly activity summary
 
 on:
-  schedule: daily
+  schedule: "0 2 */2 * *"
   workflow_dispatch:
   slash_command:
     name: handbookbot
