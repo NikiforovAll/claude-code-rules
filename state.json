@@ -1,9 +1,7 @@
 {
-  "last_run": "2026-05-02T14:02:41Z",
-  "run_id": "25253591523",
-  "run_note": "Run FAILED. Root cause confirmed: 'github' and 'safeoutputs' MCP servers BLOCKED BY POLICY (see agent-stdio.log: '2 MCP servers were blocked by policy: github, safeoutputs'). This explains all consecutive failures since Apr 21. T1: 0 unlabelled; T2: no human issues (all bot-generated); T3: not selected; T4: pending (update Apr#20 + create May issue).",
-  "consecutive_failures": 4,
-  "root_cause": "MCP servers 'github' and 'safeoutputs' blocked by firewall/policy — safeoutputs tools never appear in tool schema",
+  "last_run": "2026-05-03T05:33:42Z",
+  "run_id": "25270958978",
+  "consecutive_failures": 0,
   "nudged_prs": {
     "15": "2026-03-31T13:20:09Z",
     "11": "2026-04-17T13:19:51Z"
@@ -21,40 +19,14 @@
     "2026-04": {
       "title": "[Handbookbot] Monthly Activity 2026-04",
       "issue_number": 20
+    },
+    "2026-05": {
+      "title": "[Handbookbot] Monthly Activity 2026-05",
+      "issue_number": "pending"
     }
   },
   "labelled_prs": {
     "11": "2026-04-01T13:20:38Z",
     "22": "2026-04-07T13:20:12Z"
-  },
-  "pending_issue20_update": {
-    "run_entries_to_add": [
-      {
-        "date": "2026-05-02 14:02 UTC",
-        "run_id": "25253591523",
-        "notes": ["⚠️ Run failed (safeoutputs+github MCP blocked by policy — confirmed root cause). T1: 0 unlabelled; T2: no human issues; T3: not selected; T4: pending"]
-      },
-      {
-        "date": "2026-05-01 14:11 UTC",
-        "run_id": "25217449966",
-        "notes": ["⚠️ Run failed (safeoutputs MCP not in schema). T3: PR #11 nudge pending (14d since Apr 17). T4: May 2026 issue not yet created."]
-      },
-      {
-        "date": "2026-04-29 15:00 UTC",
-        "run_id": "25116453739",
-        "notes": ["⚠️ Run failed (safeoutputs MCP tools not available — T1: 0 unlabelled; T2: no human issues; T3: not selected)"]
-      },
-      {
-        "date": "2026-04-28 13:23 UTC",
-        "run_id": "25055320696",
-        "notes": ["⚠️ Run failed (safeoutputs MCP filtered — registry policy 401)"]
-      }
-    ]
-  },
-  "pending_may_issue": {
-    "needed": true,
-    "note": "May 2026 monthly issue not yet created — safeoutputs MCP blocked by policy",
-    "pr11_nudge_pending": true,
-    "pr11_days_stale": 15
   }
 }
