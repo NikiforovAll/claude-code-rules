@@ -1,0 +1,41 @@
+---
+title: "visual-explainer"
+sidebar_position: 24
+---
+
+import VisualExplainerSource from '!!raw-loader!../../../../plugins/handbook-visual-explainer/skills/visual-explainer/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `visual-explainer` skill
+
+<span className="badge badge--handbook-visual-explainer">handbook-visual-explainer</span>
+
+Generate beautiful, self-contained HTML pages that visually explain systems, code changes, plans, and data — diagrams, tables, slide decks, and architecture overviews.
+
+## When to Use This Skill
+
+Use the `visual-explainer` skill when you want to:
+
+- Generate architecture or system diagrams as interactive HTML
+- Produce visual diff reviews, plan reviews, or project recaps
+- Create magazine-quality slide deck presentations
+- Render data tables, comparisons, or audit matrices in the browser
+- Replace any complex ASCII table (4+ rows or 3+ columns) with a styled HTML page
+
+## Available Commands
+
+| Command | What it does |
+|---------|-------------|
+| [`/visual-explainer:generate-web-diagram`](/component-reference/commands/generate-web-diagram) | Generate an HTML diagram for any topic |
+| [`/visual-explainer:generate-visual-plan`](/component-reference/commands/generate-visual-plan) | Generate a visual implementation plan for a feature |
+| [`/visual-explainer:generate-slides`](/component-reference/commands/generate-slides) | Generate a magazine-quality slide deck |
+| [`/visual-explainer:diff-review`](/component-reference/commands/diff-review) | Visual diff review with architecture comparison |
+| [`/visual-explainer:plan-review`](/component-reference/commands/plan-review) | Compare a plan against the codebase with risk assessment |
+| [`/visual-explainer:project-recap`](/component-reference/commands/project-recap) | Mental model snapshot for context-switching back to a project |
+| [`/visual-explainer:fact-check`](/component-reference/commands/fact-check) | Verify accuracy of a document against actual code |
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{VisualExplainerSource}
+</CodeBlock>

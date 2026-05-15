@@ -184,6 +184,26 @@ claude plugin install handbook-reflect@cc-handbook
 
 ---
 
+## [<span className="badge badge--handbook-visual-explainer">handbook-visual-explainer</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-visual-explainer/README.md)
+
+Generate beautiful, self-contained HTML pages that visually explain systems, code changes, plans, and data. Based on [visual-explainer](https://github.com/nicobailon/visual-explainer) by nicobailon (MIT).
+
+**Components:**
+- **Skill:** [`visual-explainer`](/component-reference/skills/visual-explainer) - Generate HTML diagrams, tables, slide decks, and architecture overviews
+- **Command:** [`/visual-explainer:generate-web-diagram`](/component-reference/commands/generate-web-diagram) - Generate an HTML diagram for any topic
+- **Command:** [`/visual-explainer:generate-visual-plan`](/component-reference/commands/generate-visual-plan) - Generate a visual implementation plan
+- **Command:** [`/visual-explainer:generate-slides`](/component-reference/commands/generate-slides) - Generate a magazine-quality slide deck
+- **Command:** [`/visual-explainer:diff-review`](/component-reference/commands/diff-review) - Visual diff review with architecture comparison
+- **Command:** [`/visual-explainer:plan-review`](/component-reference/commands/plan-review) - Compare a plan against the codebase
+- **Command:** [`/visual-explainer:project-recap`](/component-reference/commands/project-recap) - Mental model snapshot for context-switching
+- **Command:** [`/visual-explainer:fact-check`](/component-reference/commands/fact-check) - Verify accuracy of a document against code
+
+```bash
+claude plugin install handbook-visual-explainer@cc-handbook
+```
+
+---
+
 ## Understanding Building Blocks
 
 Plugins help you to bundle related customizations, commands, and agents into reusable packages. This modular approach allows you to easily share and install sets of tools tailored for specific workflows or problem domains.
@@ -257,6 +277,9 @@ claude plugin install ./plugins/handbook-team-stack
 
 # Install reflect plugin
 claude plugin install ./plugins/handbook-reflect
+
+# Install visual-explainer plugin
+claude plugin install ./plugins/handbook-visual-explainer
 
 # Install discover plugin
 claude plugin install ./plugins/handbook-discover

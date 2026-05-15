@@ -133,3 +133,8 @@
   --ifm-badge-background-color: #ff8f3a;
   --ifm-badge-color: black;
 }
+
+.badge--handbook-visual-explainer {
+  --ifm-badge-background-color: #0891b2;
+  --ifm-badge-color: white;
+}
