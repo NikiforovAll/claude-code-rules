@@ -77,35 +77,6 @@ Not every task needs to become a skill or command. Look for these signals:
 
 One of the fastest ways to evolve your setup is using skills - reusable components that encapsulate specific functionality.
 
-### The `skill-creator` Skill
-
-The handbook plugin includes [`skill-creator`](/component-reference/skills/skill-creator), a skill that helps you design and implement new skills following Anthropic's best practices.
-
-**Benefits:**
-- **Rapid Development**: Quickly scaffold well-structured skills
-- **Best Practices**: Automatically incorporates Anthropic's recommendations
-- **Consistent Quality**: Ensures all your skills follow proven patterns
-- **Learning Tool**: See examples of effective skill design
-
-**Usage Example:**
-
-```
-You: "I keep debugging database connection issues. Help me create
-     a skill for systematic database troubleshooting."
-
-Claude: [Uses skill-creator to design a comprehensive database
-         debugging skill with progressive disclosure, proper
-         tool coordination, and clear decision trees]
-```
-
-The `skill-creator` skill handles:
-- Structuring your skill with appropriate frontmatter
-- Organizing instructions for progressive disclosure
-- Suggesting relevant bundled resources (scripts, references)
-- Applying tool access restrictions when appropriate
-
-See the [skill-creator reference](/component-reference/skills/skill-creator) for complete details.
-
 For more on skills, see [Use Agent Skills](./agent-skills)
 
 ## Best Practices
