@@ -135,6 +135,13 @@
         "presentation",
         "playground"
       ]
+    },
+    {
+      "name": "handbook-visual-explainer",
+      "description": "Generate beautiful HTML pages for diagrams, diff reviews, plan reviews, slides, and data tables",
+      "source": "./plugins/handbook-visual-explainer",
+      "category": "productivity",
+      "tags": ["visualization", "diagrams", "html", "mermaid", "slides", "data-tables", "diff-review", "architecture"]
     }
   ]
 }
