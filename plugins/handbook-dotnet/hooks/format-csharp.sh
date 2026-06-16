@@ -42,8 +42,8 @@ fi
 
 # Run CSharpier with specified options
 # --skip-validation: Skip validation for better performance
-# --compilation-errors-as-warnings: Don't block on compilation errors
-if ! $FORMATTER_CMD format "$file_path" --skip-validation --compilation-errors-as-warnings 2>&1; then
+# --syntax-errors-as-warnings: Don't block on syntax errors (CSharpier 1.x; was --compilation-errors-as-warnings in 0.x)
+if ! $FORMATTER_CMD format "$file_path" --skip-validation --syntax-errors-as-warnings 2>&1; then
     echo "Warning: CSharpier formatting failed for $file_path" >&2
     exit 1  # Non-zero exit (not 2) - warns user but doesn't block Claude
 fi
