@@ -12,11 +12,11 @@
   - Teal/cyan palette (NOT indigo/violet)
   - Dot-grid background atmosphere (different from radial gradient)
   - Large heading (38px) for typographic contrast
-  - ESM import of Mermaid + @mermaid-js/layout-elk
+  - UMD <script src> of Mermaid (works over file:// and surfaces load errors)
   - Mermaid theme: 'base' + full themeVariables, fontSize: 16px
   - CSS overrides: .nodeLabel 16px, .edgeLabel 13px
   - look: 'classic' for clean lines
-  - layout: 'elk' for better node positioning
+  - default dagre layout (ELK mis-sizes labels in some environments)
   - Zoom controls with scroll-to-zoom and drag-to-pan
   - Both light and dark themes via prefers-color-scheme
   - Staggered fade-in, reduced motion respect
@@ -351,16 +351,22 @@
   </div>
 
   <div class="callout animate" style="--i:5">
-    <strong>ELK layout.</strong> The <code>layout: 'elk'</code> engine provides better node positioning
-    for complex graphs — it requires the separate <code>@mermaid-js/layout-elk</code> package (imported above).
-    Without it, Mermaid silently falls back to dagre.
+    <strong>Dagre layout (default).</strong> This template deliberately uses Mermaid's built-in dagre
+    layout. The <code>layout: 'elk'</code> engine mis-measures HTML labels in some environments and can
+    produce a giant, unreadable canvas — avoid it unless verified in the target browser.
   </div>
 
 </div>
 
-<script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-  import elkLayouts from 'https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk/dist/mermaid-layout-elk.esm.min.mjs';
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"
+        onerror="document.querySelectorAll('.zoom-label').forEach(function (l) { l.textContent = 'Error: Mermaid failed to load (offline or CDN blocked)'; })"></script>
+<script>
+  if (typeof mermaid === 'undefined') {
+    document.querySelectorAll('.zoom-label').forEach(function (l) {
+      l.textContent = 'Error: Mermaid failed to load (offline or CDN blocked)';
+    });
+    throw new Error('Mermaid library not available');
+  }
 
   const config = {
     fitPadding: 28,
@@ -386,12 +392,10 @@
 
   const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
 
-  mermaid.registerLayoutLoaders(elkLayouts);
   mermaid.initialize({
     startOnLoad: false,
     theme: 'base',
     look: 'classic',
-    layout: 'elk',
     themeVariables: {
       fontFamily: "'Bricolage Grotesque', system-ui, sans-serif",
       fontSize: '16px',
@@ -492,7 +496,7 @@
           mode = 'height-priority';
         }
       }
-      return { zoom: clamp(z, config.minZoom, config.maxInitialZoom), mode };
+      return { zoom: clamp(z, config.readabilityFloor, config.maxInitialZoom), mode };
     }
 
     function fitDiagram() {
@@ -524,20 +528,28 @@
     }
 
     function readSvgNaturalSize(svg) {
+      // Tighten the viewBox to the real content bounds. Layout engines can
+      // inflate the canvas with dead space when label measurement misfires,
+      // which breaks centering and fit — the content bbox is the truth.
       let w = 0;
       let h = 0;
-      if (svg.viewBox?.baseVal?.width > 0) {
+      try {
+        const b = svg.getBBox();
+        if (b.width > 0 && b.height > 0) {
+          const pad = 8;
+          svg.setAttribute('viewBox',
+            `${b.x - pad} ${b.y - pad} ${b.width + pad * 2} ${b.height + pad * 2}`);
+          w = b.width + pad * 2;
+          h = b.height + pad * 2;
+        }
+      } catch (e) { /* getBBox throws on hidden/detached SVG */ }
+      if (!w && svg.viewBox?.baseVal?.width > 0) {
         w = svg.viewBox.baseVal.width;
         h = svg.viewBox.baseVal.height;
       }
       if (!w) {
         w = parseFloat(svg.getAttribute('width')) || 0;
         h = parseFloat(svg.getAttribute('height')) || 0;
-      }
-      if (!w) {
-        const b = svg.getBBox();
-        w = b.width;
-        h = b.height;
       }
       if (!w) {
         const r = svg.getBoundingClientRect();
@@ -718,6 +730,15 @@
   }
 
   document.querySelectorAll('.diagram-shell').forEach(initDiagram);
+
+  setTimeout(function () {
+    document.querySelectorAll('.diagram-shell').forEach(function (shell) {
+      if (!shell.querySelector('.mermaid-canvas svg')) {
+        var l = shell.querySelector('.zoom-label');
+        if (l) l.textContent = 'Error: diagram did not render';
+      }
+    });
+  }, 6000);
 </script>
 
 </body>

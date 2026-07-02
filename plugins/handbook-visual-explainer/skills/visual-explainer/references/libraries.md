@@ -8,36 +8,26 @@ Use for flowcharts, sequence diagrams, ER diagrams, state machines, mind maps, c
 
 Do NOT use for dashboards — CSS Grid card layouts with Chart.js look better for those. Data tables use `<table>` elements.
 
-**CDN:**
+**CDN (UMD build — use this, not the ESM `.mjs` build):**
 ```html
-<script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"
+        onerror="document.querySelectorAll('.zoom-label').forEach(function (l) { l.textContent = 'Error: Mermaid failed to load (offline or CDN blocked)'; })"></script>
+<script>
   mermaid.initialize({ startOnLoad: true, /* ... */ });
 </script>
 ```
 
-**With ELK layout** (required for `layout: 'elk'` — it's a separate package, not bundled in core):
-```html
-<script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-  import elkLayouts from 'https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk/dist/mermaid-layout-elk.esm.min.mjs';
+The UMD build exposes a `mermaid` global and its `onerror` hook makes CDN failures visible. A static ESM `import` that fails (offline, blocked CDN) kills the entire module script silently — the page hangs on "Loading..." with no error and no way to diagnose it.
 
-  mermaid.registerLayoutLoaders(elkLayouts);
-  mermaid.initialize({ startOnLoad: true, layout: 'elk', /* ... */ });
-</script>
-```
-
-Without the ELK import and registration, `layout: 'elk'` silently falls back to dagre. Only import ELK when you actually need it — it adds significant bundle weight. Most simple diagrams render fine with dagre.
+**ELK layout — do not use.** `layout: 'elk'` (the separate `@mermaid-js/layout-elk` package) mis-measures HTML labels in some environments and produces a giant canvas with tiny scattered nodes — observed: the same 16-node flowchart rendered at viewBox 7557×21070 with ELK vs 825×1342 with dagre. The default dagre layout renders correctly everywhere. If you believe a diagram truly needs ELK, verify the output visually in a real browser AND headless before delivering.
 
 ### Deep Theming
 
 Always use `theme: 'base'` — it's the only theme where all `themeVariables` are fully customizable. The built-in themes (`default`, `dark`, `forest`, `neutral`) ignore most variable overrides.
 
 ```html
-<script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
   const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   mermaid.initialize({
     startOnLoad: true,

@@ -92,13 +92,13 @@ Vary the choice each time. If the last diagram was dark and technical, make the 
 | Timeline | CSS (central line + cards) | Simple linear layout doesn't need a layout engine |
 | Dashboard | CSS Grid + Chart.js | Card grid with embedded charts |
 
-**Mermaid theming:** Always use `theme: 'base'` with custom `themeVariables` so colors match your page palette. Use `layout: 'elk'` for complex graphs (requires the `@mermaid-js/layout-elk` package — see `./references/libraries.md` for the CDN import). Override Mermaid's SVG classes with CSS for pixel-perfect control. See `./references/libraries.md` for full theming guide.
+**Mermaid theming:** Always use `theme: 'base'` with custom `themeVariables` so colors match your page palette. Use the default dagre layout — do **not** use `layout: 'elk'`: it mis-measures HTML labels in some environments and produces a giant, unreadable canvas with tiny scattered nodes (see `./references/libraries.md`). Override Mermaid's SVG classes with CSS for pixel-perfect control. See `./references/libraries.md` for full theming guide.
 
 **Mermaid containers:** Always center Mermaid diagrams with `display: flex; justify-content: center;`. Add zoom controls (+/−/reset/expand) to every `.mermaid-wrap` container. Include the click-to-expand JavaScript so clicking the diagram (or the ⛶ button) opens it full-size in a new tab.
 
 **⚠️ Never use bare `<pre class="mermaid">`.** It renders but has no zoom/pan controls — diagrams become tiny and unusable. Always use the full `diagram-shell` pattern from `templates/mermaid-flowchart.html`: the HTML structure (`.diagram-shell` > `.mermaid-wrap` > `.zoom-controls` + `.mermaid-viewport` > `.mermaid-canvas`), the CSS, and the ~200-line JS module for zoom/pan/fit. Copy it wholesale.
 
-**Mermaid scaling:** Diagrams with 10+ nodes render too small by default. For 10-12 nodes, increase `fontSize` in themeVariables to 18-20px and set `INITIAL_ZOOM` to 1.5-1.6. For 15+ elements, don't try to scale — use the hybrid pattern instead (simple Mermaid overview + CSS Grid cards). See "Architecture / System Diagrams" below.
+**Mermaid scaling:** Diagrams with 10+ nodes render too small by default. For 10-12 nodes, increase `fontSize` in themeVariables to 18-20px — the fit engine clamps to a readable zoom floor (`readabilityFloor`) and lets oversized diagrams overflow with pan instead of shrinking them. For 15+ elements, don't try to scale — use the hybrid pattern instead (simple Mermaid overview + CSS Grid cards). See "Architecture / System Diagrams" below.
 
 **Mermaid layout direction:** Prefer `flowchart TD` (top-down) over `flowchart LR` (left-to-right) for complex diagrams. LR spreads horizontally and makes labels unreadable when there are many nodes. Use LR only for simple 3-4 node linear flows. See `./references/libraries.md` "Layout Direction: TD vs LR".
 
@@ -173,6 +173,8 @@ Keep animations purposeful: entrance reveals, hover feedback, and user-initiated
 - Windows: `start ~/.agent/diagrams/filename.html`
 
 **Tell the user** the file path so they can re-open or share it.
+
+**Smoke-test before delivering:** open the file over `file://` (double-click, the way the user will) and confirm the diagram is actually readable — an `<svg>` exists, the zoom label reads ≥ ~50% (a single-digit percentage means a layout blow-up), and no panel is stuck on "Loading...". When iterating on a file, hard-refresh (Ctrl+F5): browsers cache `file://` pages and CDN assets aggressively, which makes stale versions look like failed fixes.
 
 ## Diagram Types
 
@@ -343,7 +345,7 @@ Before delivering, verify:
 - **Information completeness**: Does the diagram actually convey what the user asked for? Pretty but incomplete is a failure.
 - **No overflow**: Resize the browser to different widths. No content should clip or escape its container. Every grid and flex child needs `min-width: 0`. Side-by-side panels need `overflow-wrap: break-word`. Never use `display: flex` on `<li>` for marker characters — it creates anonymous flex items that can't shrink, causing lines with many inline `<code>` badges to overflow. Use absolute positioning for markers instead. See the Overflow Protection section in `./references/css-patterns.md`.
 - **Mermaid zoom controls**: Every `.mermaid-wrap` container must have zoom controls (+/−/reset/expand buttons), Ctrl/Cmd+scroll zoom, click-and-drag panning, and click-to-expand (clicking without dragging opens the diagram full-size in a new tab). The expand button (⛶) provides the same functionality. See `./references/css-patterns.md` for the full pattern including the `openMermaidInNewTab()` function.
-- **File opens cleanly**: No console errors, no broken font loads, no layout shifts.
+- **File opens cleanly over `file://`**: verify by double-clicking the file, not only via a dev server. The diagram `<svg>` must exist, the zoom label must read ≥ ~50%, and nothing may remain stuck on "Loading..." or an error message. Note: Mermaid/Chart.js pages need the CDN reachable on first load; CSS-only pages (tables, architecture cards) work fully offline.
 
 ## Anti-Patterns (AI Slop)
 

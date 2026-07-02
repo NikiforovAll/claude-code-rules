@@ -1,6 +1,6 @@
 {
   "name": "handbook-visual-explainer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Generate beautiful HTML pages for diagrams, diff reviews, plan reviews, slides, and data tables",
   "author": {
     "name": "nikiforovall"

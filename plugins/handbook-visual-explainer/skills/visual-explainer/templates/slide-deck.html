@@ -795,9 +795,8 @@ graph LR
 
 </div><!-- /deck -->
 
-<script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
   const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   mermaid.initialize({
     startOnLoad: true,
@@ -824,6 +823,7 @@ graph LR
 
   function autoFit() {
     document.querySelectorAll('.mermaid svg').forEach(function(svg) {
+      if (!svg.getAttribute('viewBox')) return; // stripping height without a viewBox collapses the SVG
       svg.removeAttribute('height');
       svg.style.width = '100%';
       svg.style.maxWidth = '100%';

@@ -428,6 +428,7 @@ A single post-render function that handles all known content overflow cases. Age
 function autoFit() {
   // Mermaid SVGs: fill container instead of rendering at intrinsic size
   document.querySelectorAll('.mermaid svg').forEach(function(svg) {
+    if (!svg.getAttribute('viewBox')) return; // stripping height without a viewBox collapses the SVG
     svg.removeAttribute('height');
     svg.style.width = '100%';
     svg.style.maxWidth = '100%';
