@@ -647,7 +647,7 @@ Use one `.diagram-shell` per diagram. The source Mermaid text lives in `<script 
 Use a closure-based initializer. Per-diagram state lives inside `initDiagram(shell)`, while shared drag listeners stay at module scope:
 
 ```javascript
-const config = { /* fitPadding, zoom bounds, readabilityFloor */ };
+const config = { /* fitPadding, zoom bounds (fit is contain-only) */ };
 const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
 let activeDrag = null;
 
@@ -681,6 +681,9 @@ function initDiagram(shell) {
         label.textContent = 'Error: Empty source';
         return;
       }
+
+      // Wait for web fonts so Mermaid measures labels against the real font.
+      if (document.fonts?.ready) { try { await document.fonts.ready; } catch (e) {} }
 
       const id = 'diagram-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
       const { svg } = await mermaid.render(id, code);

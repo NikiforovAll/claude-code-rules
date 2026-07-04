@@ -261,10 +261,9 @@
 
   /* ============ CALLOUT ============ */
   .callout {
-    background: var(--surface);
+    background: var(--primary-dim);
     border: 1px solid var(--border);
-    border-left: 3px solid var(--primary);
-    border-radius: 0 10px 10px 0;
+    border-radius: 10px;
     padding: 16px 20px;
     font-size: 13px;
     line-height: 1.6;
@@ -376,8 +375,7 @@
     maxInitialZoom: 1.8,
     minZoom: 0.08,
     maxZoom: 6.5,
-    zoomStep: 0.14,
-    readabilityFloor: 0.58
+    zoomStep: 0.14
   };
 
   const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
@@ -481,22 +479,12 @@
       const vpH = viewport.clientHeight;
       const aW = Math.max(80, vpW - config.fitPadding * 2);
       const aH = Math.max(80, vpH - config.fitPadding * 2);
+      // Contain-only: always show the whole diagram. A readability-floor override
+      // used to zoom in on one axis for extreme aspect ratios, which stranded the
+      // viewer on a blank slice with the rest panned off-screen. Oversized diagrams
+      // stay small but whole; the user zooms/pans from there.
       const contain = Math.min(aW / svgW, aH / svgH);
-
-      let z = contain;
-      let mode = 'contain';
-      if (contain < config.readabilityFloor) {
-        const chartR = svgH / svgW;
-        const vpR = vpH / Math.max(vpW, 1);
-        if (chartR >= vpR) {
-          z = aW / svgW;
-          mode = 'width-priority';
-        } else {
-          z = aH / svgH;
-          mode = 'height-priority';
-        }
-      }
-      return { zoom: clamp(z, config.readabilityFloor, config.maxInitialZoom), mode };
+      return { zoom: clamp(contain, config.minZoom, config.maxInitialZoom), mode: 'contain' };
     }
 
     function fitDiagram() {
@@ -504,8 +492,12 @@
       const fit = computeSmartFit();
       zoom = fit.zoom;
       fitMode = fit.mode;
-      panX = (viewport.clientWidth - svgW * zoom) / 2;
-      panY = (viewport.clientHeight - svgH * zoom) / 2;
+      // Anchor an oversized axis to the top/left padding instead of centering, so
+      // the start of a tall (or wide) diagram is visible rather than scrolled off.
+      const rW = svgW * zoom;
+      const rH = svgH * zoom;
+      panX = rW > viewport.clientWidth ? config.fitPadding : (viewport.clientWidth - rW) / 2;
+      panY = rH > viewport.clientHeight ? config.fitPadding : (viewport.clientHeight - rH) / 2;
       applyTransform();
     }
 
@@ -586,9 +578,9 @@
       const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Diagram</title><style>
-      body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+      body{margin:0;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;
       background:${bg};padding:40px;box-sizing:border-box}
-      svg{max-width:100%;max-height:90vh;height:auto}
+      svg{max-width:100%;width:auto;height:auto}
       </style></head><body>${clone.outerHTML}</body></html>`;
 
       open(URL.createObjectURL(new Blob([html], { type: 'text/html' })), '_blank');
@@ -600,6 +592,13 @@
         if (!code) {
           label.textContent = 'Error: Empty source';
           return;
+        }
+
+        // Wait for web fonts before rendering. Mermaid measures foreignObject label
+        // widths at render time; measuring against fallback fonts skews layout and
+        // can clip labels once the real font swaps in. This removes the race.
+        if (document.fonts && document.fonts.ready) {
+          try { await document.fonts.ready; } catch (e) { /* proceed anyway */ }
         }
 
         const id = 'diagram-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);

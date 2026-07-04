@@ -98,11 +98,13 @@ Vary the choice each time. If the last diagram was dark and technical, make the 
 
 **⚠️ Never use bare `<pre class="mermaid">`.** It renders but has no zoom/pan controls — diagrams become tiny and unusable. Always use the full `diagram-shell` pattern from `templates/mermaid-flowchart.html`: the HTML structure (`.diagram-shell` > `.mermaid-wrap` > `.zoom-controls` + `.mermaid-viewport` > `.mermaid-canvas`), the CSS, and the ~200-line JS module for zoom/pan/fit. Copy it wholesale.
 
-**Mermaid scaling:** Diagrams with 10+ nodes render too small by default. For 10-12 nodes, increase `fontSize` in themeVariables to 18-20px — the fit engine clamps to a readable zoom floor (`readabilityFloor`) and lets oversized diagrams overflow with pan instead of shrinking them. For 15+ elements, don't try to scale — use the hybrid pattern instead (simple Mermaid overview + CSS Grid cards). See "Architecture / System Diagrams" below.
+**Mermaid scaling:** Diagrams with 10+ nodes render too small by default. For 10-12 nodes, increase `fontSize` in themeVariables to 18-20px. The fit engine is contain-only — it always shows the *whole* diagram, so an extreme aspect ratio (a long top-down chain, a wide fan-out) renders small and the viewer zooms/pans for detail. Keep the node count and aspect ratio moderate rather than leaning on scale. For 15+ elements, don't try to scale — use the hybrid pattern instead (simple Mermaid overview + CSS Grid cards). See "Architecture / System Diagrams" below.
 
 **Mermaid layout direction:** Prefer `flowchart TD` (top-down) over `flowchart LR` (left-to-right) for complex diagrams. LR spreads horizontally and makes labels unreadable when there are many nodes. Use LR only for simple 3-4 node linear flows. See `./references/libraries.md` "Layout Direction: TD vs LR".
 
-**Mermaid line breaks in flowchart labels:** Use `<br/>` inside quoted labels. Never use escaped newlines like `\n` (Mermaid renders them as literal text in HTML output). Example: `A["Copilot Backend<br/>/api + /api/voicebot"]`.
+**Mermaid subgraph direction — never mix.** Do not put a per-subgraph `direction` override (e.g. `direction LR` inside a `flowchart TD`). Mixed directions lay each subgraph out in its own coordinate space; depending on the viewer's font metrics the outer nodes can be flung thousands of px apart into a giant canvas that fit then shrinks to a single-digit zoom. It renders fine in some browsers and blows up in others, so you won't catch it locally. Keep one direction for the whole graph.
+
+**Mermaid line breaks in flowchart labels:** Use `<br/>` inside quoted labels. Never use escaped newlines like `\n` (Mermaid renders them as literal text in HTML output). Example: `A["Copilot Backend<br/>/api + /api/voicebot"]`. Break long single-line labels and file paths too — a line wider than its box gets clipped when the viewer's real font is wider than the render-time measurement.
 
 **Mermaid CSS class collision constraint:** Never define `.node` as a page-level CSS class. Mermaid.js uses `.node` internally on SVG `<g>` elements with `transform: translate(x, y)` for positioning. Page-level `.node` styles (hover transforms, box-shadows) leak into diagrams and break layout. Use the namespaced `.ve-card` class for card components instead. The only safe way to style Mermaid's `.node` is scoped under `.mermaid` (e.g., `.mermaid .node rect`).
 
@@ -174,7 +176,7 @@ Keep animations purposeful: entrance reveals, hover feedback, and user-initiated
 
 **Tell the user** the file path so they can re-open or share it.
 
-**Smoke-test before delivering:** open the file over `file://` (double-click, the way the user will) and confirm the diagram is actually readable — an `<svg>` exists, the zoom label reads ≥ ~50% (a single-digit percentage means a layout blow-up), and no panel is stuck on "Loading...". When iterating on a file, hard-refresh (Ctrl+F5): browsers cache `file://` pages and CDN assets aggressively, which makes stale versions look like failed fixes.
+**Smoke-test before delivering:** open the file over `file://` (double-click, the way the user will) and confirm the diagram is actually readable — an `<svg>` exists, the whole diagram is visible on load (a tall or wide diagram legitimately reads well under 50% now that fit is contain-only; a *single-digit* percentage means a layout blow-up — check for a mixed subgraph `direction`), and no panel is stuck on "Loading...". When iterating on a file, hard-refresh (Ctrl+F5): browsers cache `file://` pages and CDN assets aggressively, which makes stale versions look like failed fixes.
 
 ## Diagram Types
 
