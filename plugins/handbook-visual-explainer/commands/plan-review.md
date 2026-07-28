@@ -1,5 +1,6 @@
 ---
 description: Generate a visual HTML plan review — current codebase state vs. proposed implementation plan
+argument-hint: "[plan file] [--style <name>] [--theme light|dark] [--slides|--handbook]"
 ---
 Load the visual-explainer skill, then generate a comprehensive visual plan review as a self-contained HTML page, comparing the current codebase against a proposed implementation plan.
 
@@ -43,11 +44,11 @@ Verify each claim against the code and the plan. If something cannot be verified
 
 2. **Impact dashboard** — files to modify, files to create, files to delete, estimated lines added/removed, new test files planned, dependencies affected. Include a **completeness** indicator: whether the plan covers tests (green/red), docs updates (green/yellow/red), and migration/rollback (green/grey for N/A).
 
-3. **Current architecture** — Mermaid diagram of how the affected subsystem works *today*. Focus only on the parts the plan touches — don't diagram the entire codebase. Show the data flow, dependencies, and call paths that will change. Wrap in `.mermaid-wrap` with zoom controls (+/−/reset/expand buttons), Ctrl/Cmd+scroll zoom, click-and-drag panning, and click-to-expand (opens diagram full-size in new tab). See css-patterns.md "Mermaid Zoom Controls" for the full pattern including the `openMermaidInNewTab()` function. *Visual treatment: use matching Mermaid layout direction and node names as section 4 so the visual diff is obvious.*
+3. **Current architecture** — Mermaid diagram of how the affected subsystem works *today*. Focus only on the parts the plan touches — don't diagram the entire codebase. Show the data flow, dependencies, and call paths that will change. Wrap in `.mermaid-wrap` with the standard zoom controls — see "Zoom Controls" in css-patterns.md. *Visual treatment: use matching Mermaid layout direction and node names as section 4 so the visual diff is obvious.*
 
 4. **Planned architecture** — Mermaid diagram of how the subsystem will work *after* the plan is implemented. Use the same node names and layout direction as the current architecture diagram so the differences are visually obvious. Same zoom controls and click-to-expand as section 3. *Highlight new nodes with a glow or accent border, removed nodes with strikethrough or reduced opacity, changed edges with a different stroke color.*
 
-5. **Change-by-change breakdown** — for each change in the plan, a side-by-side panel. Overflow prevention: apply `min-width: 0` on all grid/flex children and `overflow-wrap: break-word` on panels. Never use `display: flex` on `<li>` for marker characters — use absolute positioning instead (see css-patterns.md Overflow Protection).
+5. **Change-by-change breakdown** — for each change in the plan, a side-by-side panel.
    - **Left (current):** what the code does now, with relevant snippets or function signatures
    - **Right (planned):** what the plan proposes, with the plan's own code examples if provided
    - **Rationale:** below each side-by-side panel, extract _why_ the plan chose this approach. Pull from the plan's reasoning, rejected alternatives section, or inline justifications. If the plan includes a "rejected alternatives" section, map those rejections to the specific changes they apply to. Flag changes where the plan says _what_ to do but not _why_ — these are pre-implementation cognitive debt.
@@ -78,7 +79,7 @@ Verify each claim against the code and the plan. If something cannot be verified
 **Visual hierarchy**: Sections 1-4 should dominate the viewport on load (hero depth for summary, elevated for architecture diagrams). Sections 6+ are reference material and should feel lighter (flat or recessed depth, compact layout, collapsible where appropriate).
 
 
-Include responsive section navigation. Use a current-vs-planned visual language throughout: blue/neutral for current state, green/purple for planned additions, amber for areas of concern, red for gaps or risks. Write to `~/.agent/diagrams/` and open in browser.
+Include responsive section navigation. Use a current-vs-planned visual language throughout: blue/neutral for current state, green/purple for planned additions, amber for areas of concern, red for gaps or risks. Write to `~/.agent/diagrams/` and tell the user the path.
 
 Ultrathink.
 

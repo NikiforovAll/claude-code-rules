@@ -2,7 +2,7 @@
 
 CSS patterns, JS engine, slide type layouts, transitions, navigation chrome, and curated presets for self-contained HTML slide presentations. All slides are viewport-fit (100dvh), single-file, same philosophy as scrollable pages.
 
-**When to use slides:** Only when the user explicitly requests them — `/generate-slides`, `--slides` flag on an existing prompt, or natural language like "as a slide deck." Never auto-select slide format.
+**When to use slides:** Only when the user explicitly requests them — `/slides`, `--slides` flag on an existing prompt, or natural language like "as a slide deck." Never auto-select slide format.
 
 **Before generating**, also read `./css-patterns.md` for shared patterns (Mermaid zoom controls, overflow protection, depth tiers, status badges) and `./libraries.md` for Mermaid theming, Chart.js, and font pairings. Those patterns apply to slides too — this file adds slide-specific patterns on top.
 
@@ -175,6 +175,8 @@ IntersectionObserver adds `.visible` when a slide enters the viewport. Slides an
 
 All navigation is `position: fixed` with high z-index, layered above slides. Styled to be visible on any background.
 
+**The theme toggle is part of the chrome and is required** — same pattern as scrollable pages (see "Theme Toggle (REQUIRED on every page)" in `css-patterns.md`). Place it top-right at `z-index: 200` with `backdrop-filter: blur(8px)`: the progress bar occupies only the top 3px and the dot rail is vertically centered, so that corner is free. Decks with Mermaid must re-render on `themechange` — `mermaid.run()` replaces each source node with SVG, so stash the definition first (`el.dataset.veSource = el.textContent`) and restore it before re-running. The preset palettes below are already `data-theme`-keyed.
+
 ### Progress Bar
 
 ```css
@@ -300,10 +302,16 @@ class SlideEngine {
     this.slides = [...document.querySelectorAll('.slide')];
     this.current = 0;
     this.total = this.slides.length;
+    // Anchor every slide so one can be linked, and a reload returns to it. An
+    // author-supplied id wins, so a deck can carry meaningful anchors instead.
+    this.slides.forEach(function(s, i) { if (!s.id) s.id = 's' + (i + 1); });
+    // Read the incoming hash before anything calls update() — update() rewrites it.
+    var target = this.indexFromHash();
     this.buildChrome();
     this.bindEvents();
     this.observe();
     this.update();
+    this.restoreFromHash(target);
   }
 
   buildChrome() {
@@ -370,6 +378,15 @@ class SlideEngine {
       var dy = touchY - e.changedTouches[0].clientY;
       if (Math.abs(dy) > 50) { dy > 0 ? self.next() : self.prev(); }
     });
+
+    // A hash pasted into the bar of an already-open deck, or a link to a slide,
+    // should move the deck. syncHash writes with replaceState, which fires no
+    // hashchange, so this cannot loop.
+    addEventListener('hashchange', function() {
+      var i = self.indexFromHash();
+      if (i > -1) { if (i !== self.current) self.goTo(i); }
+      else self.update();  // unrecognized hash — put the canonical one back
+    });
   }
 
   observe() {
@@ -378,12 +395,56 @@ class SlideEngine {
       entries.forEach(function(entry) {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
+          if (self.restoring) return;  // the restore jump must not be overridden by slide 1's own entry
           self.current = self.slides.indexOf(entry.target);
           self.update();
         }
       });
     }, { threshold: 0.5 });
     this.slides.forEach(function(s) { obs.observe(s); });
+  }
+
+  indexFromHash() {
+    var h = (location.hash || '').slice(1);
+    if (!h) return -1;
+    for (var i = 0; i < this.total; i++) { if (this.slides[i].id === h) return i; }
+    // A pasted "#7" is a reasonable guess at slide 7 — honor it rather than ignore it.
+    var n = parseInt(h.replace(/^s/, ''), 10);
+    return (n >= 1 && n <= this.total) ? n - 1 : -1;
+  }
+
+  // The ids are assigned in the constructor, in JS, so the browser's own hash scroll
+  // ran before they existed and found nothing — the jump has to be done here by hand.
+  restoreFromHash(i) {
+    if (i < 0) return;
+    var self = this;
+    // Jump by scrollTop, not scrollIntoView: the deck's CSS scroll-behavior:smooth would
+    // animate from slide 1 and the mandatory snap can abort that mid-load.
+    this.restoring = true;
+    var jump = function() {
+      var prev = self.deck.style.scrollBehavior;
+      self.deck.style.scrollBehavior = 'auto';
+      self.deck.scrollTop = i * self.deck.clientHeight;
+      self.deck.style.scrollBehavior = prev;
+    };
+    // Fonts, Mermaid, and images settle late and would otherwise drift the snap back.
+    var settle = function(n) {
+      jump();
+      if (n > 0) return requestAnimationFrame(function() { settle(n - 1); });
+      self.restoring = false;
+      self.current = i;
+      self.update();
+    };
+    settle(4);
+    addEventListener('load', function() { if (self.current === i) jump(); });
+  }
+
+  syncHash() {
+    var h = '#' + this.slides[this.current].id;
+    if (location.hash === h) return;  // update() fires per observer entry; only write on a real change
+    // replaceState, not a hash assignment: the deck is one document, and pushing 20
+    // entries would make Back walk the deck backwards instead of leaving the page.
+    try { history.replaceState(null, '', h); } catch (e) {}
   }
 
   goTo(i) {
@@ -399,6 +460,7 @@ class SlideEngine {
     var self = this;
     this.dots.forEach(function(d, i) { d.classList.toggle('active', i === self.current); });
     this.counter.textContent = (this.current + 1) + ' / ' + this.total;
+    this.syncHash();
   }
 
   fadeHints() {
@@ -409,6 +471,8 @@ class SlideEngine {
 ```
 
 **Usage:** Instantiate after the DOM is ready and any libraries (Mermaid, Chart.js) have rendered. Always call `autoFit()` before `new SlideEngine()` so content is sized correctly before intersection observers fire.
+
+**Slides are addressable.** The engine gives every slide an id — `s1`, `s2`, … — and keeps the URL on the current one, so `deck.html#s13` opens on slide 13 and a reload stays put. Give a slide a meaningful `id` in the markup when a deck will be linked into (`#pricing` beats `#s7`) and the engine leaves it alone; the numeric fallback still resolves `#s7` to the seventh slide, so a hand-typed number works either way. Two consequences worth honoring: don't reuse a slide id for an in-slide element, and don't renumber a shipped deck by inserting a slide mid-way if links to it are already out — add the slide at the end or give the new one an explicit id.
 
 ```html
 <script>
@@ -653,6 +717,8 @@ Full-viewport Mermaid diagram. Max 8–10 nodes (presentation scale — fewer, l
 ```
 
 **Click to expand.** Clicking anywhere on the diagram (without dragging) opens it full-size in a new browser tab. The expand button (⛶) provides the same functionality for discoverability.
+
+**Decks run four buttons, not the page set of five.** `css-patterns.md` "Zoom Controls" documents the viewport engine used on pages and documents — `zoom-fit` / `zoom-one` / double-click-to-fit, and no click-to-expand. A slide is already one viewport tall, so the deck engine keeps `reset` in place of fit-plus-1:1 and spends the whole diagram area on click-to-expand. Both are correct in their own medium; don't port one set of controls onto the other engine's handlers.
 
 ```css
 .slide--diagram {
@@ -1214,7 +1280,7 @@ Starting points the agent can riff on. Each defines a font pairing, palette, and
 Deep navy, serif display, warm gold accents. Cinematic, premium. Dark-first.
 
 ```css
-:root {
+:root, :root[data-theme="dark"] {
   --font-body: 'Instrument Serif', Georgia, serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
   --bg: #0f1729;
@@ -1230,21 +1296,19 @@ Deep navy, serif display, warm gold accents. Cinematic, premium. Dark-first.
   --code-bg: #0a0f1e;
   --code-text: #d4d0c4;
 }
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: #faf8f2;
-    --surface: #ffffff;
-    --surface2: #f5f0e6;
-    --surface-elevated: #fffdf5;
-    --border: rgba(30, 30, 50, 0.08);
-    --border-bright: rgba(30, 30, 50, 0.16);
-    --text: #1a1814;
-    --text-dim: #7a7468;
-    --accent: #b8860b;
-    --accent-dim: rgba(184, 134, 11, 0.08);
-    --code-bg: #2a2520;
-    --code-text: #e8e4d8;
-  }
+:root[data-theme="light"] {
+  --bg: #faf8f2;
+  --surface: #ffffff;
+  --surface2: #f5f0e6;
+  --surface-elevated: #fffdf5;
+  --border: rgba(30, 30, 50, 0.08);
+  --border-bright: rgba(30, 30, 50, 0.16);
+  --text: #1a1814;
+  --text-dim: #7a7468;
+  --accent: #b8860b;
+  --accent-dim: rgba(184, 134, 11, 0.08);
+  --code-bg: #2a2520;
+  --code-text: #e8e4d8;
 }
 ```
 
@@ -1255,7 +1319,7 @@ Background: radial gold glow at top center. Decorative corner marks in gold. Tit
 Cream paper, bold sans, terracotta/coral accents. Confident and modern. Light-first.
 
 ```css
-:root {
+:root, :root[data-theme="light"] {
   --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-mono: 'Azeret Mono', 'SF Mono', monospace;
   --bg: #faf6f0;
@@ -1271,21 +1335,19 @@ Cream paper, bold sans, terracotta/coral accents. Confident and modern. Light-fi
   --code-bg: #2c2520;
   --code-text: #f5ece0;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1c1916;
-    --surface: #262220;
-    --surface2: #302b28;
-    --surface-elevated: #3a3430;
-    --border: rgba(200, 180, 160, 0.08);
-    --border-bright: rgba(200, 180, 160, 0.16);
-    --text: #f0e8dc;
-    --text-dim: #a09888;
-    --accent: #e85d2a;
-    --accent-dim: rgba(232, 93, 42, 0.1);
-    --code-bg: #141210;
-    --code-text: #f0e8dc;
-  }
+:root[data-theme="dark"] {
+  --bg: #1c1916;
+  --surface: #262220;
+  --surface2: #302b28;
+  --surface-elevated: #3a3430;
+  --border: rgba(200, 180, 160, 0.08);
+  --border-bright: rgba(200, 180, 160, 0.16);
+  --text: #f0e8dc;
+  --text-dim: #a09888;
+  --accent: #e85d2a;
+  --accent-dim: rgba(232, 93, 42, 0.1);
+  --code-bg: #141210;
+  --code-text: #f0e8dc;
 }
 ```
 
@@ -1296,7 +1358,7 @@ Background: warm radial glow at bottom left. Terracotta accent borders on cards.
 Dark, monospace everything, green/cyan accents, faint grid. Developer-native. Dark-first.
 
 ```css
-:root {
+:root, :root[data-theme="dark"] {
   --font-body: 'Geist Mono', 'SF Mono', Consolas, monospace;
   --font-mono: 'Geist Mono', 'SF Mono', Consolas, monospace;
   --bg: #0a0e14;
@@ -1312,21 +1374,19 @@ Dark, monospace everything, green/cyan accents, faint grid. Developer-native. Da
   --code-bg: #060a10;
   --code-text: #c8d6e5;
 }
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: #f4f6f8;
-    --surface: #ffffff;
-    --surface2: #eaecf0;
-    --surface-elevated: #f8f9fa;
-    --border: rgba(0, 80, 40, 0.08);
-    --border-bright: rgba(0, 80, 40, 0.16);
-    --text: #1a2332;
-    --text-dim: #5a6a7a;
-    --accent: #0d7a3e;
-    --accent-dim: rgba(13, 122, 62, 0.08);
-    --code-bg: #1a2332;
-    --code-text: #c8d6e5;
-  }
+:root[data-theme="light"] {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --surface2: #eaecf0;
+  --surface-elevated: #f8f9fa;
+  --border: rgba(0, 80, 40, 0.08);
+  --border-bright: rgba(0, 80, 40, 0.16);
+  --text: #1a2332;
+  --text-dim: #5a6a7a;
+  --accent: #0d7a3e;
+  --accent-dim: rgba(13, 122, 62, 0.08);
+  --code-bg: #1a2332;
+  --code-text: #c8d6e5;
 }
 ```
 
@@ -1337,7 +1397,7 @@ Background: faint dot grid. Everything in mono. Title slides use large weight-40
 White, geometric sans, single bold accent, visible grid. Minimal and precise. Light-first.
 
 ```css
-:root {
+:root, :root[data-theme="light"] {
   --font-body: 'DM Sans', system-ui, sans-serif;
   --font-mono: 'Fira Code', 'SF Mono', monospace;
   --bg: #ffffff;
@@ -1353,21 +1413,19 @@ White, geometric sans, single bold accent, visible grid. Minimal and precise. Li
   --code-bg: #18181b;
   --code-text: #e4e4e7;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #111111;
-    --surface: #1a1a1a;
-    --surface2: #222222;
-    --surface-elevated: #2a2a2a;
-    --border: rgba(255, 255, 255, 0.08);
-    --border-bright: rgba(255, 255, 255, 0.16);
-    --text: #f0f0f0;
-    --text-dim: #888888;
-    --accent: #3b82f6;
-    --accent-dim: rgba(59, 130, 246, 0.08);
-    --code-bg: #0a0a0a;
-    --code-text: #e4e4e7;
-  }
+:root[data-theme="dark"] {
+  --bg: #111111;
+  --surface: #1a1a1a;
+  --surface2: #222222;
+  --surface-elevated: #2a2a2a;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-bright: rgba(255, 255, 255, 0.16);
+  --text: #f0f0f0;
+  --text-dim: #888888;
+  --accent: #3b82f6;
+  --accent-dim: rgba(59, 130, 246, 0.08);
+  --code-bg: #0a0a0a;
+  --code-text: #e4e4e7;
 }
 ```
 

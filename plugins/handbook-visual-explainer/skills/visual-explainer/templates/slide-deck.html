@@ -10,7 +10,7 @@
   Distinctly different from the terracotta (architecture), teal (mermaid),
   and rose (data-table) templates so agents absorb variety.
   Key patterns demonstrated:
-  - All 10 slide types in a cohesive narrative
+  - 10 of the 11 slide types in a cohesive narrative (CSS Pipeline is in slide-patterns.md only)
   - SlideEngine JS: keyboard/touch/wheel nav, progress bar, dots, counter, hints
   - Cinematic transitions: fade + translateY + scale, staggered child reveals
   - Per-slide background variation (gradient direction, accent glow position)
@@ -18,20 +18,38 @@
   - Typography scale: 120px display → 48px heading → 22px body → 14px label
   - Compositional variety: centered, left-heavy, split, full-bleed
   - Mermaid at presentation scale (18px labels, 2px edges, 8 nodes)
-  - Dark-first with light mode via prefers-color-scheme
+  - Dark-first with REQUIRED theme toggle (data-theme attribute, boot script, persistence)
   - Responsive height breakpoints for projection and small viewports
   - Nav chrome with backdrop blur for mixed-background visibility
   - Event delegation: Mermaid zoom and table scroll don't trigger slide nav
   - prefers-reduced-motion respected
 -->
+<script>
+  // Resolve theme before first paint. Order: saved choice > page default > OS.
+  (function () {
+    var DEFAULT = 'auto';            // 'auto' | 'light' | 'dark' — set from the --theme flag
+    var saved = null;
+    try { saved = localStorage.getItem('ve-theme'); } catch (e) {}
+    var pref = saved || DEFAULT;
+    if (pref !== 'light' && pref !== 'dark') {
+      pref = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', pref);
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* ============ THEME: Midnight Editorial ============ */
+  /* Dark-first: the dark palette also owns the bare :root so the deck is still
+     styled if the boot script never runs (JS disabled). */
   :root {
     --font-body: 'Instrument Serif', Georgia, serif;
     --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  }
+
+  :root, :root[data-theme="dark"] {
     --bg: #0f1729;
     --surface: #162040;
     --surface2: #1d2b52;
@@ -52,28 +70,52 @@
     --blue-dim: rgba(96, 165, 250, 0.1);
   }
 
-  @media (prefers-color-scheme: light) {
-    :root {
-      --bg: #faf8f2;
-      --surface: #ffffff;
-      --surface2: #f5f0e6;
-      --surface-elevated: #fffdf5;
-      --border: rgba(30, 30, 50, 0.08);
-      --border-bright: rgba(30, 30, 50, 0.16);
-      --text: #1a1814;
-      --text-dim: #7a7468;
-      --accent: #b8860b;
-      --accent-dim: rgba(184, 134, 11, 0.08);
-      --code-bg: #2a2520;
-      --code-text: #e8e4d8;
-      --green: #16a34a;
-      --green-dim: rgba(22, 163, 74, 0.08);
-      --red: #dc2626;
-      --red-dim: rgba(220, 38, 38, 0.08);
-      --blue: #2563eb;
-      --blue-dim: rgba(37, 99, 235, 0.08);
-    }
+  :root[data-theme="light"] {
+    --bg: #faf8f2;
+    --surface: #ffffff;
+    --surface2: #f5f0e6;
+    --surface-elevated: #fffdf5;
+    --border: rgba(30, 30, 50, 0.08);
+    --border-bright: rgba(30, 30, 50, 0.16);
+    --text: #1a1814;
+    --text-dim: #7a7468;
+    --accent: #b8860b;
+    --accent-dim: rgba(184, 134, 11, 0.08);
+    --code-bg: #2a2520;
+    --code-text: #e8e4d8;
+    --green: #16a34a;
+    --green-dim: rgba(22, 163, 74, 0.08);
+    --red: #dc2626;
+    --red-dim: rgba(220, 38, 38, 0.08);
+    --blue: #2563eb;
+    --blue-dim: rgba(37, 99, 235, 0.08);
   }
+
+  /* ============ THEME TOGGLE (required on every page) ============ */
+  /* Sits left of the slide counter in the nav chrome corner. */
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    background: var(--surface);
+    color: var(--text-dim);
+    border: 1px solid var(--border-bright);
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 200;
+    backdrop-filter: blur(8px);
+    transition: color .18s ease, border-color .18s ease, transform .18s ease;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .theme-toggle svg { grid-area: 1 / 1; }
+  :root[data-theme="light"] .theme-toggle__moon { display: none; }
+  :root[data-theme="dark"]  .theme-toggle__sun  { display: none; }
+  @media print { .theme-toggle { display: none; } }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -588,6 +630,15 @@
 </head>
 <body>
 
+<button class="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">
+  <svg class="theme-toggle__sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+  </svg>
+  <svg class="theme-toggle__moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+</button>
+
 <div class="deck">
 
   <!-- SLIDE 1: TITLE -->
@@ -797,29 +848,42 @@ graph LR
 
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <script>
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  mermaid.initialize({
-    startOnLoad: true,
-    theme: 'base',
-    look: 'classic',
-    themeVariables: {
-      primaryColor: isDark ? '#1d2b52' : '#fef3e0',
-      primaryBorderColor: isDark ? '#d4a73a' : '#b8860b',
-      primaryTextColor: isDark ? '#e8e4d8' : '#1a1814',
-      secondaryColor: isDark ? '#162040' : '#eff6ff',
-      secondaryBorderColor: isDark ? '#60a5fa' : '#2563eb',
-      secondaryTextColor: isDark ? '#e8e4d8' : '#1a1814',
-      tertiaryColor: isDark ? '#0f2620' : '#f0fdf4',
-      tertiaryBorderColor: isDark ? '#4ade80' : '#16a34a',
-      tertiaryTextColor: isDark ? '#e8e4d8' : '#1a1814',
-      lineColor: isDark ? '#9a9484' : '#7a7468',
-      fontSize: '18px',
-      fontFamily: 'var(--font-body)',
-      noteBkgColor: isDark ? '#1d2b52' : '#fef3e0',
-      noteTextColor: isDark ? '#e8e4d8' : '#1a1814',
-      noteBorderColor: isDark ? '#d4a73a' : '#b8860b',
-    }
+  // Read the live theme from the attribute, never from matchMedia — the user's
+  // toggle choice overrides the OS preference and matchMedia can't see it.
+  const isDarkTheme = () => document.documentElement.getAttribute('data-theme') === 'dark';
+  function mermaidConfig() {
+    var isDark = isDarkTheme();
+    return {
+      startOnLoad: true,
+      theme: 'base',
+      look: 'classic',
+      themeVariables: {
+        primaryColor: isDark ? '#1d2b52' : '#fef3e0',
+        primaryBorderColor: isDark ? '#d4a73a' : '#b8860b',
+        primaryTextColor: isDark ? '#e8e4d8' : '#1a1814',
+        secondaryColor: isDark ? '#162040' : '#eff6ff',
+        secondaryBorderColor: isDark ? '#60a5fa' : '#2563eb',
+        secondaryTextColor: isDark ? '#e8e4d8' : '#1a1814',
+        tertiaryColor: isDark ? '#0f2620' : '#f0fdf4',
+        tertiaryBorderColor: isDark ? '#4ade80' : '#16a34a',
+        tertiaryTextColor: isDark ? '#e8e4d8' : '#1a1814',
+        lineColor: isDark ? '#9a9484' : '#7a7468',
+        fontSize: '18px',
+        fontFamily: 'var(--font-body)',
+        noteBkgColor: isDark ? '#1d2b52' : '#fef3e0',
+        noteTextColor: isDark ? '#e8e4d8' : '#1a1814',
+        noteBorderColor: isDark ? '#d4a73a' : '#b8860b',
+      }
+    };
+  }
+
+  // mermaid.run() overwrites each source node with SVG, so keep the original
+  // definition around — it's the only way to re-render after a theme change.
+  document.querySelectorAll('.mermaid').forEach(function (el) {
+    el.dataset.veSource = el.textContent;
   });
+
+  mermaid.initialize(mermaidConfig());
 
   function autoFit() {
     document.querySelectorAll('.mermaid svg').forEach(function(svg) {
@@ -847,9 +911,44 @@ graph LR
     });
   }
 
+  // SlideEngine is defined in a later <script>, so mermaid.run() can resolve
+  // before it exists (it does over file://). Wait for the document to finish
+  // parsing before constructing it.
+  function whenParsed(fn) {
+    if (document.readyState === 'loading') addEventListener('DOMContentLoaded', fn, { once: true });
+    else fn();
+  }
+
   mermaid.run().then(function() {
     autoFit();
-    new SlideEngine();
+    whenParsed(function () { new SlideEngine(); });
+  });
+
+  // Theme toggle: persist the choice, announce it for JS-rendered content.
+  (function () {
+    var root = document.documentElement;
+    var btn = document.querySelector('.theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('ve-theme', next); } catch (e) {}
+      dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
+    });
+  })();
+
+  // Mermaid colors are baked into the SVG at render time — restore the source
+  // and re-run so diagrams follow the toggle.
+  addEventListener('themechange', function () {
+    var nodes = document.querySelectorAll('.mermaid');
+    if (!nodes.length) return;
+    nodes.forEach(function (el) {
+      el.removeAttribute('data-processed');
+      el.innerHTML = '';
+      el.textContent = el.dataset.veSource || '';
+    });
+    mermaid.initialize(mermaidConfig());
+    mermaid.run({ nodes: nodes }).then(autoFit);
   });
 </script>
 
@@ -858,9 +957,9 @@ graph LR
   var INITIAL_ZOOM=1;
   function zoomDiagram(b,f){var w=b.closest('.mermaid-wrap');var t=w.querySelector('.mermaid');var c=parseFloat(t.dataset.zoom||INITIAL_ZOOM);var n=Math.min(Math.max(c*f,0.5),5);t.dataset.zoom=n;t.style.zoom=n;}
   function resetZoom(b){var w=b.closest('.mermaid-wrap');var t=w.querySelector('.mermaid');t.dataset.zoom=INITIAL_ZOOM;t.style.zoom=INITIAL_ZOOM;}
-  function openDiagramFullscreen(b){openMermaidInNewTab(b.closest('.mermaid-wrap'));}
-  function openMermaidInNewTab(w){var svg=w.querySelector('.mermaid svg');if(!svg)return;var clone=svg.cloneNode(true);clone.style.zoom='';clone.style.transform='';var styles=getComputedStyle(document.documentElement);var bg=styles.getPropertyValue('--bg').trim()||'#ffffff';var html='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Diagram</title><style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:'+bg+';padding:40px;box-sizing:border-box}svg{max-width:100%;max-height:90vh;height:auto}</style></head><body>'+clone.outerHTML+'</body></html>';window.open(URL.createObjectURL(new Blob([html],{type:'text/html'})),'_blank');}
-  document.querySelectorAll('.mermaid-wrap').forEach(function(w){w.addEventListener('wheel',function(e){if(!e.ctrlKey&&!e.metaKey)return;e.preventDefault();var t=w.querySelector('.mermaid');var c=parseFloat(t.dataset.zoom||INITIAL_ZOOM);var f=e.deltaY<0?1.1:0.9;var n=Math.min(Math.max(c*f,0.5),5);t.dataset.zoom=n;t.style.zoom=n;},{passive:false});var sX,sY,sL,sT,sTime,didPan;w.addEventListener('mousedown',function(e){if(e.target.closest('.zoom-controls'))return;w.classList.add('is-panning');sX=e.clientX;sY=e.clientY;sL=w.scrollLeft;sT=w.scrollTop;sTime=Date.now();didPan=false;});window.addEventListener('mousemove',function(e){if(!w.classList.contains('is-panning'))return;var dx=e.clientX-sX,dy=e.clientY-sY;if(Math.abs(dx)>5||Math.abs(dy)>5)didPan=true;w.scrollLeft=sL-dx;w.scrollTop=sT-dy;});window.addEventListener('mouseup',function(){if(!w.classList.contains('is-panning'))return;w.classList.remove('is-panning');if(!didPan&&Date.now()-sTime<300)openMermaidInNewTab(w);});});
+  function openDiagramFullscreen(b){openInNewTab(b.closest('.mermaid-wrap'));}
+  function openInNewTab(w){var svg=w.querySelector('.mermaid svg');if(!svg)return;var clone=svg.cloneNode(true);clone.style.zoom='';clone.style.transform='';var styles=getComputedStyle(document.documentElement);var bg=styles.getPropertyValue('--bg').trim()||'#ffffff';var html='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Diagram</title><style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:'+bg+';padding:40px;box-sizing:border-box}svg{max-width:100%;max-height:90vh;height:auto}</style></head><body>'+clone.outerHTML+'</body></html>';window.open(URL.createObjectURL(new Blob([html],{type:'text/html'})),'_blank');}
+  document.querySelectorAll('.mermaid-wrap').forEach(function(w){w.addEventListener('wheel',function(e){if(!e.ctrlKey&&!e.metaKey)return;e.preventDefault();var t=w.querySelector('.mermaid');var c=parseFloat(t.dataset.zoom||INITIAL_ZOOM);var f=e.deltaY<0?1.1:0.9;var n=Math.min(Math.max(c*f,0.5),5);t.dataset.zoom=n;t.style.zoom=n;},{passive:false});var sX,sY,sL,sT,sTime,didPan;w.addEventListener('mousedown',function(e){if(e.target.closest('.zoom-controls'))return;w.classList.add('is-panning');sX=e.clientX;sY=e.clientY;sL=w.scrollLeft;sT=w.scrollTop;sTime=Date.now();didPan=false;});window.addEventListener('mousemove',function(e){if(!w.classList.contains('is-panning'))return;var dx=e.clientX-sX,dy=e.clientY-sY;if(Math.abs(dx)>5||Math.abs(dy)>5)didPan=true;w.scrollLeft=sL-dx;w.scrollTop=sT-dy;});window.addEventListener('mouseup',function(){if(!w.classList.contains('is-panning'))return;w.classList.remove('is-panning');if(!didPan&&Date.now()-sTime<300)openInNewTab(w);});});
 
   // SlideEngine
   function SlideEngine(){
@@ -868,10 +967,16 @@ graph LR
     this.slides=[].slice.call(document.querySelectorAll('.slide'));
     this.current=0;
     this.total=this.slides.length;
+    // Anchor every slide so one can be linked, and a reload returns to it. An
+    // author-supplied id wins, so a deck can carry meaningful anchors instead.
+    this.slides.forEach(function(s,i){ if(!s.id) s.id='s'+(i+1); });
+    // Read the incoming hash before anything calls update() — update() rewrites it.
+    var target=this.indexFromHash();
     this.buildChrome();
     this.bindEvents();
     this.observe();
     this.update();
+    this.restoreFromHash(target);
   }
   SlideEngine.prototype.buildChrome=function(){
     var bar=document.createElement('div');bar.className='deck-progress';document.body.appendChild(bar);this.bar=bar;
@@ -895,11 +1000,59 @@ graph LR
     var tY;
     this.deck.addEventListener('touchstart',function(e){tY=e.touches[0].clientY;},{passive:true});
     this.deck.addEventListener('touchend',function(e){var dy=tY-e.changedTouches[0].clientY;if(Math.abs(dy)>50){dy>0?self.next():self.prev();}});
+    // A hash pasted into the bar of an already-open deck, or a link to a slide, should
+    // move the deck. syncHash writes with replaceState, which fires no hashchange, so
+    // this cannot loop.
+    addEventListener('hashchange',function(){
+      var i=self.indexFromHash();
+      if(i>-1){if(i!==self.current)self.goTo(i);}
+      else self.update();   // unrecognized hash — put the canonical one back
+    });
   };
   SlideEngine.prototype.observe=function(){
     var self=this;
-    var obs=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add('visible');self.current=self.slides.indexOf(entry.target);self.update();}});},{threshold:0.5});
+    var obs=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add('visible');if(self.restoring)return;self.current=self.slides.indexOf(entry.target);self.update();}});},{threshold:0.5});
     this.slides.forEach(function(s){obs.observe(s);});
+  };
+  SlideEngine.prototype.indexFromHash=function(){
+    var h=(location.hash||'').slice(1);
+    if(!h)return -1;
+    for(var i=0;i<this.total;i++){if(this.slides[i].id===h)return i;}
+    // A pasted "#7" is a reasonable guess at slide 7 — honor it rather than ignore it.
+    var n=parseInt(h.replace(/^s/,''),10);
+    return (n>=1&&n<=this.total)?n-1:-1;
+  };
+  // The ids are assigned in the constructor, in JS, so the browser's own hash scroll ran
+  // before they existed and found nothing — the jump has to be done here by hand.
+  SlideEngine.prototype.restoreFromHash=function(i){
+    if(i<0)return;
+    var self=this;
+    // Jump by scrollTop, not scrollIntoView: the deck's CSS scroll-behavior:smooth would
+    // animate from slide 1 and the mandatory snap can abort that mid-load.
+    this.restoring=true;
+    var jump=function(){
+      var prev=self.deck.style.scrollBehavior;
+      self.deck.style.scrollBehavior='auto';
+      self.deck.scrollTop=i*self.deck.clientHeight;
+      self.deck.style.scrollBehavior=prev;
+    };
+    // Fonts, Mermaid, and images settle late and would otherwise drift the snap back.
+    var settle=function(n){
+      jump();
+      if(n>0)return requestAnimationFrame(function(){settle(n-1);});
+      self.restoring=false;
+      self.current=i;
+      self.update();
+    };
+    settle(4);
+    addEventListener('load',function(){if(self.current===i)jump();});
+  };
+  SlideEngine.prototype.syncHash=function(){
+    var h='#'+this.slides[this.current].id;
+    if(location.hash===h)return;   // update() fires per observer entry; only write on a real change
+    // replaceState, not a hash assignment: the deck is one document, and pushing 20
+    // entries would make Back walk the deck backwards instead of leaving the page.
+    try{history.replaceState(null,'',h);}catch(e){}
   };
   SlideEngine.prototype.goTo=function(i){this.slides[Math.max(0,Math.min(i,this.total-1))].scrollIntoView({behavior:'smooth'});};
   SlideEngine.prototype.next=function(){if(this.current<this.total-1)this.goTo(this.current+1);};
@@ -908,6 +1061,7 @@ graph LR
     this.bar.style.width=((this.current+1)/this.total*100)+'%';
     var c=this.current;this.dots.forEach(function(d,i){d.classList.toggle('active',i===c);});
     this.counter.textContent=(this.current+1)+' / '+this.total;
+    this.syncHash();
   };
   SlideEngine.prototype.fadeHints=function(){clearTimeout(this.hintTimer);this.hints.classList.add('faded');};
 </script>

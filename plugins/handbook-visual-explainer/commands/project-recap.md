@@ -1,5 +1,6 @@
 ---
 description: Generate a visual HTML project recap — rebuild mental model of a project's current state, recent decisions, and cognitive debt hotspots
+argument-hint: "[since <when>] [--style <name>] [--theme light|dark] [--slides|--handbook]"
 ---
 Load the visual-explainer skill, then generate a comprehensive visual project recap as a self-contained HTML page.
 
@@ -32,7 +33,7 @@ Verify each claim against the code. If something cannot be verified, mark it as 
 
 **Diagram structure** — the page should include:
 1. **Project identity** — not the README blurb. A *current-state* summary: what this project does, who uses it, what stage it's at (early dev, stable, actively shipping features). Include version, key dependencies, and the one-sentence "elevator pitch" for someone who forgot what they were building.
-2. **Architecture snapshot** — Mermaid diagram of the system as it exists today. Focus on the conceptual modules and their relationships, not every file. Label nodes with what they do, not just file names. Wrap in `.mermaid-wrap` with zoom controls (+/−/reset/expand buttons), Ctrl/Cmd+scroll zoom, click-and-drag panning, and click-to-expand (opens diagram full-size in new tab). See css-patterns.md "Mermaid Zoom Controls" for the full pattern including the `openMermaidInNewTab()` function. *Visual treatment: this is the visual anchor — use hero depth (elevated container, larger padding, subtle accent-tinted background). The rest of the page hangs off this diagram.*
+2. **Architecture snapshot** — Mermaid diagram of the system as it exists today. Focus on the conceptual modules and their relationships, not every file. Label nodes with what they do, not just file names. Wrap in `.mermaid-wrap` with the standard zoom controls — see "Zoom Controls" in css-patterns.md. *Visual treatment: this is the visual anchor — use hero depth (elevated container, larger padding, subtle accent-tinted background). The rest of the page hangs off this diagram.*
 3. **Recent activity** — not raw git log. A human-readable narrative grouped by theme: feature work, bug fixes, refactors, infrastructure. Timeline visualization with the most significant changes called out. For each theme, a one-sentence summary of what happened and why it mattered.
 4. **Decision log** — key design decisions from the time window. Extracted from commit messages, conversation history, plan docs, progress docs. Each entry: what was decided, why, what was considered. This is the highest-value section for fighting cognitive debt — the reasoning that evaporates first.
 5. **State of things** — *visual treatment: use the KPI card pattern from css-patterns.md — large hero numbers for working/broken/blocked/in-progress counts, with color-coded trend indicators.* A dashboard of:
@@ -53,7 +54,7 @@ Verify each claim against the code. If something cannot be verified, mark it as 
    - Flag each with a severity and a concrete suggestion (e.g., "add a doc comment to `buildCoordinationInstructions` explaining the 4 coordination levels — this function is called from 3 places and the behavior is non-obvious")
 8. **Next steps** — inferred from recent activity, open TODOs, project trajectory. Not prescriptive — just "here's where the momentum was pointing when you left." Include any explicit next-step notes from progress docs or plan files.
 
-Include responsive section navigation. Use a warm, approachable visual language: muted blues and greens for architecture, amber callouts for cognitive debt hotspots, green/blue/amber/red for state-of-things status. Overflow prevention on any side-by-side or grid-based sections: apply `min-width: 0` on all grid/flex children and `overflow-wrap: break-word`. Never use `display: flex` on `<li>` for marker characters — use absolute positioning instead (see css-patterns.md Overflow Protection). Write to `~/.agent/diagrams/` and open in browser.
+Include responsive section navigation. Use a warm, approachable visual language: muted blues and greens for architecture, amber callouts for cognitive debt hotspots, green/blue/amber/red for state-of-things status. Write to `~/.agent/diagrams/` and tell the user the path.
 
 Ultrathink.
 

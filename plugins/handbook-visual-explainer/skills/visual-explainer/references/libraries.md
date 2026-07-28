@@ -28,7 +28,10 @@ Always use `theme: 'base'` — it's the only theme where all `themeVariables` ar
 ```html
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <script>
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  // Read the live theme from the attribute the toggle sets — never matchMedia,
+  // which can't see the user's override.
+  const isDarkTheme = () => document.documentElement.getAttribute('data-theme') === 'dark';
+  const isDark = isDarkTheme();
   mermaid.initialize({
     startOnLoad: true,
     theme: 'base',
@@ -65,7 +68,7 @@ Always use `theme: 'base'` — it's the only theme where all `themeVariables` ar
 Mermaid renders SVG. Override its classes for pixel-perfect control that `themeVariables` can't reach:
 
 ```css
-/* Container — see css-patterns.md "Mermaid Zoom Controls" for the full zoom pattern */
+/* Container — see css-patterns.md "Zoom Controls" for the full zoom pattern */
 .mermaid-wrap {
   position: relative;
   background: var(--surface);
@@ -216,7 +219,7 @@ A[handleRequest] --> B[query users]
 userSvc["User Service"] --> authSvc["Auth Service"]
 ```
 
-**Max 10-12 nodes per Mermaid diagram.** Beyond that, readability collapses even with zoom controls and increased fontSize. For complex architectures (15+ elements), use the **hybrid pattern**: a simple 5-8 node Mermaid overview showing module relationships, followed by CSS Grid cards with detailed function lists. Never cram everything into one diagram. Use `subgraph` blocks to group related nodes when under the limit:
+**Max 10-12 nodes per diagram** — beyond that you get a **blow-up** (see `mermaid-rules.md`). Use `subgraph` blocks to group related nodes when under the limit:
 
 ```
 subgraph Auth
@@ -425,18 +428,138 @@ Quick-reference for choosing the right Mermaid syntax:
 
 ### Dark Mode Handling
 
-Mermaid initializes once — it can't reactively switch themes. Read the preference at load time inside your `<script type="module">`:
+Mermaid bakes its colors into the SVG at render time, so a CSS variable swap can't recolor an existing diagram — it must be re-rendered. Put the config in a function, read the theme from the `data-theme` attribute (never `matchMedia`, which can't see the user's toggle choice), and re-render on the `themechange` event the toggle dispatches:
 
 ```javascript
-const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-// Use isDark to pick light or dark values in themeVariables
+const isDarkTheme = () => document.documentElement.getAttribute('data-theme') === 'dark';
+
+function mermaidConfig() {
+  const isDark = isDarkTheme();
+  return { startOnLoad: false, theme: 'base', look: 'classic', themeVariables: { /* isDark ? ... : ... */ } };
+}
+
+mermaid.initialize(mermaidConfig());
+
+addEventListener('themechange', () => {
+  mermaid.initialize(mermaidConfig());
+  render();   // re-render from the preserved .diagram-source, per mermaid-flowchart.html
+});
 ```
 
-The CSS overrides on the container (`.mermaid-wrap`) and page will still respond to `prefers-color-scheme` normally — only the Mermaid SVG internals are static.
+Anything else that reads the theme at load time — `openInNewTab()`'s export background, Chart.js colors — must be recomputed the same way, at use time or on `themechange`. CSS overrides on the container (`.mermaid-wrap`) follow the attribute automatically since they use custom properties.
 
 ## Chart.js — Data Visualizations
 
-Use for bar charts, line charts, pie/doughnut charts, radar charts, and other data-driven visualizations in dashboard-type diagrams. Overkill for static numbers — use pure SVG/CSS for simple progress bars and sparklines.
+Use for bar charts, line charts, pie/doughnut charts, radar charts, and other data-driven visualizations in dashboard-type diagrams. Overkill for static numbers — use pure SVG/CSS for simple progress bars and sparklines. Check "Is it even a chart?" in the skill's §2 before reaching for this section at all.
+
+### Mark Specs
+
+Chart.js defaults are tuned to look busy in a demo, not correct on a designed page. Override them:
+
+| Mark | Spec | Why |
+|---|---|---|
+| Bar thickness | `maxBarThickness: 24` | A bar wider than its label reads as a block of color, not a measured quantity |
+| Line width | `borderWidth: 2` | 1px disappears on a tinted surface; 3px+ makes the ink louder than the trend |
+| Mark borders | `borderWidth: 0` on bars, points, arcs | A stroke around a filled mark is ink that isn't data. Separate adjacent marks with a 2px gap of surface color instead |
+| Point radius | `pointRadius: 0`, `pointHoverRadius: 4` | Dots on a dense line are noise; keep them for the hover target only |
+| Grid | one axis only, solid hairline in `--border` | Dashed grid lines compete with dashed data lines. Grid on the value axis, none on the category axis |
+| Axis borders | `border: { display: false }` | The grid already implies the frame |
+
+Fill opacity belongs at the palette level, not per-dataset: a series color at full strength with a `~15%` companion for area fills keeps the line legible over its own fill.
+
+### Tooltips and Hit Targets
+
+**Tooltips enhance, never gate.** Anything a reader *needs* — the value of the tallest bar, the label of the outlier, the total — is on the page as a direct label, an axis tick, or a KPI card. A tooltip carries the second-order detail: exact figures, timestamps, an extra dimension. A number reachable only by hover is unreachable on touch, in print, and by keyboard.
+
+**Interactive targets are at least 24px** in their smallest dimension — chart hover regions, legend toggles, zoom controls, theme toggle. Under that, the control works with a mouse and fails with a thumb. Chart.js: widen the grab area with `interaction: { mode: 'index', intersect: false }` rather than by enlarging the marks.
+
+**Build the legend in HTML, not Chart.js.** Its built-in legend draws ~12px swatches and makes each one a click-to-hide toggle — a sub-24px target on a control that silently deletes a series when a thumb lands on it. Set `plugins: { legend: { display: false } }` and put the key in markup beside the canvas, where it inherits the page's type, wraps at narrow widths, and survives print and screen readers:
+
+```html
+<div class="legend">
+  <span><i style="background:var(--c1)"></i>references/</span>
+  <span><i style="background:var(--c2)"></i>templates/</span>
+</div>
+```
+```css
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 14px; font-size: 12.5px; color: var(--text-dim); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.legend i { width: 11px; height: 11px; border-radius: 3px; flex: 0 0 auto; }
+```
+
+A single-series chart needs no legend at all — the caption names what the bars are.
+
+### Direct Labels
+
+"Tooltips never gate" is unenforceable without a way to draw the values, and Chart.js ships no built-in for it. Register one plugin and every value lands on the page:
+
+```js
+const valueLabels = {
+  id: 'valueLabels',
+  afterDatasetsDraw(chart, _args, opts) {
+    const { ctx } = chart;
+    // Horizontal bars get the label past the bar end; vertical bars get it above.
+    const horizontal = chart.options.indexAxis === 'y';
+    ctx.save();
+    ctx.font = '600 11px ' + opts.font;
+    ctx.fillStyle = opts.color;
+    ctx.textAlign = horizontal ? 'left' : 'center';
+    ctx.textBaseline = horizontal ? 'middle' : 'bottom';
+    chart.data.datasets.forEach((ds, di) => {
+      chart.getDatasetMeta(di).data.forEach((mark, i) => {
+        const v = ds.data[i];
+        if (v == null) return;
+        const text = opts.fmt ? opts.fmt(v) : String(v);
+        ctx.fillText(text, horizontal ? mark.x + 8 : mark.x, horizontal ? mark.y : mark.y - 6);
+      });
+    });
+    ctx.restore();
+  }
+};
+Chart.register(valueLabels);
+```
+
+Per chart, pass its options and reserve room — a label drawn past the chart area is clipped at the canvas edge. `padding.right` for horizontal bars, `padding.top` for vertical:
+
+```js
+options: {
+  layout: { padding: { right: 56 } },   // room for the widest label
+  plugins: {
+    valueLabels: { color: inkColor, font: fontFamily, fmt: v => v.toLocaleString() },
+  }
+}
+```
+
+Registering globally runs it on *every* chart, including ones where labels would collide — a scatter of 13 points, a dense line. Opt those out with `plugins: { valueLabels: false }` and let the table twin carry the numbers.
+
+Prefer horizontal bars when the category names are long: each label gets a full text line instead of a column's width, and the values read down a clean edge.
+
+### Webfont Measurement
+
+Chart.js measures tick labels at construction time with whatever font is resolved *then*. Build before the webfont lands and the axis is sized for the fallback metrics, so the widest category label is drawn clipped at the canvas edge — a defect that never appears in the console and only shows up in a screenshot.
+
+Build once, then again when the font is ready:
+
+```js
+build();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(build);
+addEventListener('themechange', build);   // same function; see the theme note above
+```
+
+`build()` must `destroy()` its previous instances or they stack up on the same canvas. When one label still dominates the axis, claim the width outright and shorten it on small viewports rather than letting it clip:
+
+```js
+y: {
+  ticks: {
+    ...tickStyle,
+    callback(v) {                      // ellipsis reads as a decision; a clip reads as a bug
+      const s = this.getLabelForValue(v);
+      return this.chart.width > 560 || s.length <= 15 ? s : s.slice(0, 14) + '…';
+    }
+  },
+  afterFit: s => { if (s.chart.width > 560) s.width = Math.max(s.width, 176); }
+}
+```
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
@@ -444,7 +567,8 @@ Use for bar charts, line charts, pie/doughnut charts, radar charts, and other da
 <canvas id="myChart" width="600" height="300"></canvas>
 
 <script>
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  // Attribute, not matchMedia — the toggle's choice must win.
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   const textColor = isDark ? '#8b949e' : '#6b7280';
   const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
   const fontFamily = getComputedStyle(document.documentElement)
@@ -458,19 +582,25 @@ Use for bar charts, line charts, pie/doughnut charts, radar charts, and other da
         label: 'Feedback Items',
         data: [45, 62, 78, 91, 120],
         backgroundColor: isDark ? 'rgba(129, 140, 248, 0.6)' : 'rgba(79, 70, 229, 0.6)',
-        borderColor: isDark ? '#818cf8' : '#4f46e5',
-        borderWidth: 1,
+        borderWidth: 0,
         borderRadius: 4,
+        maxBarThickness: 24,
       }]
     },
     options: {
       responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      layout: { padding: { top: 18 } },   // room for the value labels
       plugins: {
-        legend: { labels: { color: textColor, font: { family: fontFamily } } },
+        // One series, so no key is needed; a multi-series chart gets an HTML
+        // legend instead — see "Tooltips and Hit Targets".
+        legend: { display: false },
+        valueLabels: { color: textColor, font: fontFamily },
       },
       scales: {
-        x: { ticks: { color: textColor, font: { family: fontFamily } }, grid: { color: gridColor } },
-        y: { ticks: { color: textColor, font: { family: fontFamily } }, grid: { color: gridColor } },
+        // Grid on the value axis only — see Mark Specs.
+        x: { ticks: { color: textColor, font: { family: fontFamily } }, grid: { display: false }, border: { display: false } },
+        y: { ticks: { color: textColor, font: { family: fontFamily } }, grid: { color: gridColor }, border: { display: false } },
       }
     }
   });
@@ -548,11 +678,7 @@ When using anime.js, set initial opacity to 0 in CSS so elements don't flash bef
 
 Always load with `display=swap` for fast rendering. Pick a distinctive pairing — body + mono at minimum, optionally a display font for the title.
 
-**FORBIDDEN as `--font-body` (AI slop signals):**
-- Inter — the single most overused AI default font
-- Roboto — generic Android/Google default
-- Arial, Helvetica — system defaults with no character
-- system-ui alone without a named font — signals zero design intent
+Forbidden `--font-body` values are listed under Typography in the skill's Anti-Patterns.
 
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -570,23 +696,25 @@ Define as CSS variables for easy reference:
 
 **Font pairings** (rotate — never use the same pairing twice in a row):
 
-| Body / Headings | Mono / Labels | Feel | Use for |
-|---|---|---|---|
-| DM Sans | Fira Code | Friendly, developer | Blueprint, technical docs |
-| Instrument Serif | JetBrains Mono | Editorial, refined | Plan reviews, decision logs |
-| IBM Plex Sans | IBM Plex Mono | Reliable, readable | Architecture diagrams |
-| Bricolage Grotesque | Fragment Mono | Bold, characterful | Data tables, dashboards |
-| Plus Jakarta Sans | Azeret Mono | Rounded, approachable | Status reports, audits |
-| Outfit | Space Mono | Clean geometric, modern | Flowcharts, pipelines |
-| Sora | IBM Plex Mono | Technical, precise | ER diagrams, schemas |
-| Crimson Pro | Noto Sans Mono | Scholarly, serious | RFC reviews, specs |
-| Fraunces | Source Code Pro | Warm, distinctive | Project recaps |
-| Geist | Geist Mono | Vercel-inspired, sharp | Modern API docs |
-| Red Hat Display | Red Hat Mono | Cohesive family | System overviews |
-| Libre Franklin | Inconsolata | Classic, reliable | Data-dense tables |
-| Playfair Display | Roboto Mono | Elegant contrast | Executive summaries |
+| Rec | Body / Headings | Mono / Labels | Feel | Use for |
+|---|---|---|---|---|
+| ✓ | DM Sans | Fira Code | Friendly, developer | Blueprint, technical docs |
+| ✓ | Crimson Pro | Noto Sans Mono | Editorial, refined — set headlines at 600 | The `editorial` direction, plan reviews, decision logs |
+| ✓ | IBM Plex Sans | IBM Plex Mono | Reliable, readable | Architecture diagrams |
+| ✓ | Bricolage Grotesque | Fragment Mono | Bold, characterful | Data tables, dashboards |
+| ✓ | Plus Jakarta Sans | Azeret Mono | Rounded, approachable | Status reports, audits |
+| | Outfit | Space Mono | Clean geometric, modern | Flowcharts, pipelines |
+| | Sora | IBM Plex Mono | Technical, precise | ER diagrams, schemas |
+| | Instrument Serif | JetBrains Mono | Display serif, high contrast | Pull quotes, covers, mastheads, slides — **not body text on a scrollable page** |
+| | Fraunces | Source Code Pro | Warm, distinctive | Project recaps |
+| | Geist | Geist Mono | Vercel-inspired, sharp | Modern API docs |
+| | Red Hat Display | Red Hat Mono | Cohesive family | System overviews |
+| | Libre Franklin | Inconsolata | Classic, reliable | Data-dense tables |
+| | Playfair Display | Roboto Mono | Elegant contrast | Executive summaries |
 
-The first 5 pairings are recommended for most use cases. Vary across consecutive diagrams.
+The **Rec** rows are recommended for most use cases. Vary across consecutive diagrams.
+
+The mark rides the row rather than its position, so reordering this table cannot silently change what is recommended — an earlier "the first 5 pairings" claim did exactly that when a row was inserted above it. SKILL.md's "Good pairings (use these)" list mirrors these five, so adding or removing a mark means editing the skill too. A display face like Instrument Serif or Playfair Display is never marked, because the mark means "safe as a body stack at reading size" and they aren't — they hold up on a masthead or a slide, and go limp below roughly 16px. Listed is not the same as recommended.
 
 ### Typography by Content Voice
 

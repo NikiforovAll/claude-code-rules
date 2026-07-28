@@ -20,16 +20,34 @@
   - Color-coded legend, three-column output row
   - Staggered fade-in via --i CSS variable (works with interleaved elements)
   - Reduced motion respect, responsive single-column fallback
+  - REQUIRED theme toggle: data-theme attribute, boot script, localStorage persistence
 -->
+<script>
+  // Resolve theme before first paint. Order: saved choice > page default > OS.
+  (function () {
+    var DEFAULT = 'auto';            // 'auto' | 'light' | 'dark' — set from the --theme flag
+    var saved = null;
+    try { saved = localStorage.getItem('ve-theme'); } catch (e) {}
+    var pref = saved || DEFAULT;
+    if (pref !== 'light' && pref !== 'dark') {
+      pref = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', pref);
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* ============ THEME ============ */
+  /* Light-first: the light palette also owns the bare :root so the page is
+     still styled if the boot script never runs (JS disabled). */
   :root {
     --font-body: 'IBM Plex Sans', system-ui, sans-serif;
     --font-mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
+  }
 
+  :root, :root[data-theme="light"] {
     /* Light theme — warm terracotta + sage palette */
     --bg: #faf7f5;
     --surface: #ffffff;
@@ -53,30 +71,52 @@
     --plum-dim: rgba(159, 18, 57, 0.07);
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1a1412;
-      --surface: #231d1a;
-      --surface2: #2e2622;
-      --surface-elevated: #352d28;
-      --border: rgba(255, 255, 255, 0.06);
-      --border-bright: rgba(255, 255, 255, 0.12);
-      --text: #ede5dd;
-      --text-dim: #a69889;
-      --accent: #fb923c;
-      --accent-dim: rgba(251, 146, 60, 0.12);
-      --green: #a3e635;
-      --green-dim: rgba(163, 230, 53, 0.1);
-      --orange: #fbbf24;
-      --orange-dim: rgba(251, 191, 36, 0.1);
-      --sage: #bef264;
-      --sage-dim: rgba(190, 242, 100, 0.1);
-      --teal: #5eead4;
-      --teal-dim: rgba(94, 234, 212, 0.1);
-      --plum: #fda4af;
-      --plum-dim: rgba(253, 164, 175, 0.1);
-    }
+  :root[data-theme="dark"] {
+    --bg: #1a1412;
+    --surface: #231d1a;
+    --surface2: #2e2622;
+    --surface-elevated: #352d28;
+    --border: rgba(255, 255, 255, 0.06);
+    --border-bright: rgba(255, 255, 255, 0.12);
+    --text: #ede5dd;
+    --text-dim: #a69889;
+    --accent: #fb923c;
+    --accent-dim: rgba(251, 146, 60, 0.12);
+    --green: #a3e635;
+    --green-dim: rgba(163, 230, 53, 0.1);
+    --orange: #fbbf24;
+    --orange-dim: rgba(251, 191, 36, 0.1);
+    --sage: #bef264;
+    --sage-dim: rgba(190, 242, 100, 0.1);
+    --teal: #5eead4;
+    --teal-dim: rgba(94, 234, 212, 0.1);
+    --plum: #fda4af;
+    --plum-dim: rgba(253, 164, 175, 0.1);
   }
+
+  /* ============ THEME TOGGLE (required on every page) ============ */
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    background: var(--surface);
+    color: var(--text-dim);
+    border: 1px solid var(--border-bright);
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 100;
+    transition: color .18s ease, border-color .18s ease, transform .18s ease;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .theme-toggle svg { grid-area: 1 / 1; }
+  :root[data-theme="light"] .theme-toggle__moon { display: none; }
+  :root[data-theme="dark"]  .theme-toggle__sun  { display: none; }
+  @media print { .theme-toggle { display: none; } }
 
   /* ============ RESET + BASE ============ */
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -440,6 +480,15 @@
 </head>
 <body>
 
+<button class="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">
+  <svg class="theme-toggle__sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+  </svg>
+  <svg class="theme-toggle__moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+</button>
+
 <h1>System Architecture</h1>
 <p class="subtitle">reference template &mdash; architecture diagram pattern</p>
 
@@ -591,6 +640,21 @@
   </div>
 
 </div>
+
+<script>
+  // Theme toggle: persist the choice, announce it for JS-rendered content.
+  (function () {
+    var root = document.documentElement;
+    var btn = document.querySelector('.theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('ve-theme', next); } catch (e) {}
+      dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
+    });
+  })();
+</script>
 
 </body>
 </html>

@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visual Explainer — Style Catalog</title>
+<script>
+  // Resolve theme before first paint. Order: saved choice > page default > OS.
+  (function () {
+    var DEFAULT = 'auto';
+    var saved = null;
+    try { saved = localStorage.getItem('ve-theme'); } catch (e) {}
+    var pref = saved || DEFAULT;
+    if (pref !== 'light' && pref !== 'dark') {
+      pref = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', pref);
+  })();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Fira+Code:wght@400&family=Instrument+Serif:ital@0;1&family=Crimson+Pro:wght@400;600&family=Noto+Sans+Mono:wght@400&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Source+Code+Pro:wght@400&family=Space+Mono:wght@400;700&family=Libre+Franklin:wght@400;500&family=Inconsolata:wght@400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root, :root[data-theme="light"] {
+    --bg: #f6f5f3;
+    --surface: #ffffff;
+    --surface-2: #fbfaf8;
+    --text: #1b1a17;
+    --text-dim: #6f6a62;
+    --border: #e2ded6;
+    --accent: #0f766e;
+  }
+  :root[data-theme="dark"] {
+    --bg: #12110f;
+    --surface: #1a1917;
+    --surface-2: #211f1c;
+    --text: #f2efe9;
+    --text-dim: #9d968b;
+    --border: #2b2926;
+    --accent: #5eb8ac;
+  }
+
+  /* Specimen cards carry their own fixed palette — a swatch must not shift
+     with the viewer's theme, or it stops being a specimen. */
+  [data-spec] {
+    background: var(--sp-bg);
+    color: var(--sp-text);
+    border-color: var(--sp-border);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0 28px 96px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; }
+
+  .theme-toggle {
+    position: fixed; top: 20px; right: 20px;
+    display: grid; place-items: center;
+    width: 38px; height: 38px;
+    background: var(--surface); color: var(--text-dim);
+    border: 1px solid var(--border); border-radius: 10px;
+    cursor: pointer; z-index: 100;
+    transition: color .18s ease, border-color .18s ease, transform .18s ease;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .theme-toggle svg { grid-area: 1 / 1; }
+  :root[data-theme="light"] .theme-toggle__moon { display: none; }
+  :root[data-theme="dark"]  .theme-toggle__sun  { display: none; }
+  @media print { .theme-toggle { display: none; } }
+
+  /* Masthead outweighs everything below it — the catalog has one hero. */
+  .mast { padding: 76px 0 30px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+  .mast__eyebrow {
+    margin: 0 0 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .mast__title {
+    margin: 0 0 16px;
+    font-family: 'Instrument Serif', serif; font-weight: 400;
+    font-size: clamp(2.5rem, 6vw, 4.1rem); line-height: 1.02; letter-spacing: -0.01em;
+  }
+  .mast__lede { margin: 0; max-width: 62ch; font-size: 1.05rem; color: var(--text-dim); }
+  .mast__lede code {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.86em;
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 5px; padding: 1px 5px; color: var(--text);
+  }
+
+  /* Sticky: the styles panel is still ~2 screens tall, so the other two axes
+     have to stay one click away from anywhere inside it. */
+  .tabs {
+    position: sticky; top: 0; z-index: 90;
+    display: flex; flex-wrap: wrap;
+    padding: 12px 0 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .tab {
+    appearance: none; background: none; border: 0;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    padding: 9px 16px 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.73rem; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--text-dim); cursor: pointer; white-space: nowrap;
+    transition: color .18s ease, border-color .18s ease;
+  }
+  .tab:first-child { padding-left: 0; }
+  .tab:hover { color: var(--text); }
+  .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+  .tab[aria-selected="true"] { color: var(--text); border-bottom-color: var(--accent); }
+  .tab__n { margin-left: 8px; font-variant-numeric: tabular-nums; opacity: .55; }
+  .tab[aria-selected="true"] .tab__n { color: var(--accent); opacity: 1; }
+
+  /* A printed catalog missing two thirds of its cards is a bug, not a saving. */
+  @media print {
+    .tabs { display: none; }
+    .panel[hidden] { display: block !important; content-visibility: visible !important; }
+  }
+
+  .group { padding-top: 54px; }
+  /* The sticky bar already separates the panel from the masthead. */
+  .panel > .group:first-child { padding-top: 38px; }
+  .group__head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
+  .group__label {
+    margin: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .group__label::before {
+    content: ''; display: inline-block;
+    width: 6px; height: 6px; margin-right: 9px;
+    border-radius: 50%; background: var(--accent);
+    vertical-align: 0.12em;
+  }
+  .group__note { margin: 0 0 26px; max-width: 68ch; color: var(--text-dim); font-size: 0.94rem; }
+
+  .grid { display: grid; gap: 20px; }
+  .grid--lg { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+  .grid--sm { grid-template-columns: repeat(auto-fill, minmax(246px, 1fr)); }
+
+  /* Equal-height rows would otherwise leave the specimen color showing below a
+     short .meta, reading as an unintended band. */
+  .card { display: flex; flex-direction: column; border: 1px solid; border-radius: 14px; overflow: hidden; }
+  .meta { flex: 1; }
+  .card--grid .spec {
+    background-image:
+      linear-gradient(var(--sp-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--sp-border) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  .spec { padding: 22px 22px 20px; }
+  .card--sm .spec { padding: 16px 16px 14px; }
+  .spec-eyebrow {
+    margin: 0 0 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.63rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--sp-dim);
+  }
+  .spec-title { margin: 0 0 10px; font-size: 1.5rem; line-height: 1.1; font-weight: 500; }
+  .card--sm .spec-title { font-size: 1.12rem; margin-bottom: 12px; }
+  .spec-body { margin: 0 0 16px; font-size: 0.9rem; color: var(--sp-text); opacity: 0.86; }
+  .spec-code {
+    margin: 0; padding: 10px 12px;
+    background: var(--sp-surface); border: 1px solid var(--sp-border); border-radius: 8px;
+    font-size: 0.78rem; color: var(--sp-text);
+    white-space: pre; overflow-x: auto;
+  }
+  .spec-code .t1 { color: var(--sp-a1); }
+  .spec-code .t2 { color: var(--sp-dim); }
+  .spec-code .t3 { color: var(--sp-a2); }
+
+  .spec-table { width: 100%; border-collapse: collapse; font-size: 0.74rem; }
+  .spec-table th {
+    text-align: left; padding: 3px 8px 5px;
+    font-family: 'Inconsolata', monospace; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.63rem;
+    color: var(--sp-dim); border-bottom: 1px solid var(--sp-border);
+  }
+  .spec-table td { padding: 3px 8px; border-bottom: 1px solid var(--sp-border); font-variant-numeric: tabular-nums; }
+  .spec-table td:first-child { font-family: 'Inconsolata', monospace; }
+  .spec-table .ok { color: var(--sp-a2); }
+  .spec-table .warn { color: var(--sp-a3); }
+
+  /* Per-direction type: the specimen has to demonstrate the pairing, not describe it. */
+  [style*="--sp"][data-spec] .spec-title { font-family: 'IBM Plex Sans', sans-serif; }
+  #blueprint .spec-title, #blueprint .spec-body { font-family: 'DM Sans', sans-serif; }
+  #blueprint .spec-code { font-family: 'Fira Code', monospace; }
+  #editorial .spec-title, #editorial .spec-body { font-family: 'Crimson Pro', serif; }
+  /* 600, not 400: Crimson Pro is a text serif and goes limp at display size. */
+  #editorial .spec-title { font-weight: 600; font-size: 1.75rem; }
+  #editorial .spec-body { font-size: 1rem; }
+  #editorial .spec-code { font-family: 'Noto Sans Mono', monospace; }
+  #paper .spec-title, #paper .spec-body { font-family: 'Fraunces', serif; }
+  #paper .spec-title { font-weight: 600; }
+  #paper .spec-code { font-family: 'Source Code Pro', monospace; }
+  #terminal .spec-title, #terminal .spec-body, #terminal .spec-code { font-family: 'Space Mono', monospace; }
+  #terminal .spec-title { text-transform: lowercase; letter-spacing: -0.02em; }
+  #data-dense .spec-title, #data-dense .spec-body { font-family: 'Libre Franklin', sans-serif; }
+  #data-dense .spec-body { font-size: 0.82rem; }
+  /* This card's specimen is a table, not a code block — so the table is where its
+     mono half has to show, or the pairing it names is half unproven. */
+  #data-dense .spec-table { font-family: 'Inconsolata', monospace; }
+  .card--sm .spec-code { font-family: 'IBM Plex Mono', monospace; }
+
+  .meta {
+    padding: 16px 22px 18px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    color: var(--text);
+  }
+  .card--sm .meta { padding: 12px 16px 14px; }
+  .badge {
+    display: inline-block; margin: 0 0 10px; padding: 2px 8px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.63rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); border: 1px solid var(--accent); border-radius: 4px;
+  }
+  .tagline { margin: 0 0 14px; font-size: 0.88rem; color: var(--text-dim); }
+
+  .swatches { display: grid; gap: 3px; margin: 0 0 14px; padding: 0; list-style: none; }
+  .swatches li {
+    display: grid; grid-template-columns: 14px 1fr auto; align-items: center; gap: 9px;
+    font-size: 0.72rem;
+  }
+  .swatches b { font-weight: 500; color: var(--text-dim); }
+  .swatches code {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+    color: var(--text-dim); font-variant-numeric: tabular-nums;
+  }
+  /* display:block is load-bearing — an inline span ignores width/height, so the
+     chip collapses to nothing wherever its li is not itself a grid container. */
+  .sw { display: block; width: 14px; height: 14px; border-radius: 4px; box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.18); }
+  .swatches--dots { display: flex; flex-wrap: wrap; gap: 4px; }
+  .swatches--dots li { display: block; }
+  .swatches--dots .sw { width: 15px; height: 15px; border-radius: 3px; }
+
+  .pairing {
+    margin: 0 0 12px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 0.04em; color: var(--text-dim);
+  }
+
+  .pick { display: flex; align-items: center; gap: 8px; }
+  .pick code {
+    flex: 1; min-width: 0; padding: 6px 9px;
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 7px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;
+    white-space: nowrap; overflow-x: auto;
+  }
+  .copy {
+    flex: none; padding: 6px 11px;
+    background: transparent; color: var(--text-dim);
+    border: 1px solid var(--border); border-radius: 7px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+    cursor: pointer;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .copy:hover { color: var(--accent); border-color: var(--accent); }
+  .copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .copy[data-copied] { color: var(--accent); border-color: var(--accent); }
+
+  .grid--fmt { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .fmt {
+    display: grid; grid-template-rows: auto 1fr;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    overflow: hidden;
+  }
+  .wire {
+    display: block; width: 100%; height: auto;
+    background: var(--surface-2); border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+  }
+  .wire rect, .wire circle { fill: var(--accent); }
+  .wire .wire-dim { fill: var(--text-dim); opacity: 0.45; }
+  .wire .wire-frame { fill: none; stroke: var(--border); stroke-width: 1.5; }
+  .wire .wire-edge { fill: none; stroke: var(--text-dim); stroke-width: 1.5; opacity: 0.5; }
+  .fmt__body { padding: 16px 20px 18px; }
+  .fmt__name { margin: 0 0 8px; font-size: 1.15rem; font-weight: 600; }
+  .fmt__name span {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+    font-weight: 400; color: var(--text-dim); margin-left: 6px;
+  }
+  .fmt__blurb { margin: 0 0 14px; font-size: 0.88rem; color: var(--text-dim); }
+  .copy--fmt { align-self: center; }
+
+  .grid--cmd { grid-template-columns: repeat(auto-fit, minmax(298px, 1fr)); }
+  .cmd {
+    /* wire · head · blurb · outline · pick — the outline row absorbs slack, so an
+       open outline pushes nothing out of line and the copy row stays bottom-anchored. */
+    display: grid; grid-template-rows: auto auto auto 1fr auto;
+    padding: 16px 18px 17px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    overflow: hidden;
+  }
+  /* Cancels the card's own padding so the band meets the border, as on .fmt —
+     the two tabs should read as one family of card. */
+  /* width:auto, not the inherited 100%: a percentage resolves against the content
+     box, so the negative margins would shift the band without widening it. */
+  .wire--cmd { margin: -16px -18px 13px; padding: 12px 0; width: auto; }
+
+  .outline { margin: 0 0 14px; }
+  .outline__sum {
+    display: flex; align-items: center; gap: 7px;
+    list-style: none; cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.69rem;
+    letter-spacing: 0.09em; text-transform: uppercase; color: var(--text-dim);
+  }
+  .outline__sum::-webkit-details-marker { display: none; }
+  .outline__sum::before {
+    content: ''; flex: none;
+    width: 0; height: 0;
+    border-left: 4.5px solid currentColor;
+    border-top: 3.5px solid transparent; border-bottom: 3.5px solid transparent;
+    transition: transform .18s ease;
+  }
+  .outline[open] .outline__sum::before { transform: rotate(90deg); }
+  .outline__sum:hover, .outline__sum:focus-visible { color: var(--accent); }
+  .outline__list {
+    margin: 11px 0 0; padding: 0; list-style: none;
+    counter-reset: sec; font-size: 0.82rem; color: var(--text-dim);
+  }
+  .outline__list li { counter-increment: sec; position: relative; padding-left: 25px; line-height: 1.55; }
+  .outline__list li::before {
+    content: counter(sec, decimal-leading-zero);
+    position: absolute; left: 0;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.71rem;
+    color: var(--accent); opacity: 0.75; font-variant-numeric: tabular-nums;
+  }
+  /* Three commands have no fixed output structure — that is a fact about them,
+     so the slot says which instead of sitting empty. */
+  .cmd__shape { margin: 0 0 14px; font-size: 0.82rem; font-style: italic; color: var(--text-dim); }
+  /* An invocation is far longer than a bare flag, and `.pick code` is nowrap —
+     without this the row's intrinsic width pushes the card past its track. */
+  .cmd > * { min-width: 0; }
+  /* Flags fit on one line; invocations don't always. Wrap rather than scroll —
+     a clipped command reads as a typo, and there is nothing to hint at scrolling. */
+  .cmd .pick code { white-space: normal; overflow-wrap: anywhere; overflow-x: visible; }
+  /* Name and format affinity share a baseline: the affinity is a property of the
+     command, not a separate fact about it. */
+  .cmd__head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 12px; margin-bottom: 7px;
+  }
+  .cmd__name {
+    margin: 0; min-width: 0;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.92rem; font-weight: 500;
+    overflow-wrap: break-word;
+  }
+  .cmd__fmt {
+    flex: none;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.66rem;
+    letter-spacing: 0.04em; color: var(--text-dim); white-space: nowrap;
+  }
+  .cmd__blurb { margin: 0 0 14px; font-size: 0.88rem; color: var(--text-dim); }
+
+  .outro { margin-top: 62px; padding-top: 26px; border-top: 1px solid var(--border); }
+  .outro h2 {
+    margin: 0 0 12px;
+    font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 1.7rem;
+  }
+  .outro p { margin: 0 0 10px; max-width: 72ch; color: var(--text-dim); }
+  .outro code {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.86em;
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 5px; padding: 1px 5px; color: var(--text);
+  }
+
+  @media (max-width: 620px) {
+    body { padding: 0 16px 64px; }
+    .mast { padding-top: 58px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<button class="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">
+  <svg class="theme-toggle__sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+  </svg>
+  <svg class="theme-toggle__moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+</button>
+
+<div class="wrap">
+  <header class="mast">
+    <p class="mast__eyebrow">visual-explainer · style catalog</p>
+    <h1 class="mast__title">Pick a style, then generate.</h1>
+    <p class="mast__lede">Every value <code>--style</code> accepts, as a specimen — each card shows the palette committed to real hex values, the font pairing, and the flag to copy. The other two tabs hold the commands to spend a style on and the output formats. Hand a name back to the agent, or paste the flag onto any command.</p>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Catalog sections">
+    <button class="tab" type="button" role="tab" id="t-styles" aria-controls="p-styles" aria-selected="true">Styles<span class="tab__n">14</span></button>
+    <button class="tab" type="button" role="tab" id="t-commands" aria-controls="p-commands" aria-selected="false" tabindex="-1">Commands<span class="tab__n">7</span></button>
+    <button class="tab" type="button" role="tab" id="t-formats" aria-controls="p-formats" aria-selected="false" tabindex="-1">Formats<span class="tab__n">3</span></button>
+  </div>
+
+  <div class="panel" id="p-styles" role="tabpanel" aria-labelledby="t-styles" tabindex="0">
+  <section class="group" aria-labelledby="g-directions">
+    <div class="group__head"><h2 class="group__label" id="g-directions">Design directions</h2></div>
+    <p class="group__note">Constrained by intent, not just color — each one carries layout and typography requirements that crowd out generic output. Prefer these.</p>
+    <div class="grid grid--lg">
+        <article id="blueprint" class="card card--lg card--grid" data-spec="dark" style="--sp-bg:#0f172a;--sp-surface:#1a2438;--sp-text:#e2e8f0;--sp-dim:#7d8ba4;--sp-border:#2a3852;--sp-a1:#38bdf8;--sp-a2:#5eead4;--sp-a3:#fbbf24">
+          <div class="spec">
+            <p class="spec-eyebrow">dark · Fira Code</p>
+            <h3 class="spec-title">Blueprint</h3>
+            <p class="spec-body">Sample body text set in DM Sans. The palette below is the specimen, not the page.</p>
+            <pre class="spec-code">gateway --bind 0.0.0.0:8080</pre>
+          </div>
+          <div class="meta">
+            
+            <p class="tagline">Technical drawing — subtle grid, precise borders, monospace labels.</p>
+            <ul class="swatches">
+            <li><span class="sw" style="background:#0f172a"></span><b>canvas</b><code>#0f172a</code></li>
+            <li><span class="sw" style="background:#1a2438"></span><b>card</b><code>#1a2438</code></li>
+            <li><span class="sw" style="background:#38bdf8"></span><b>primary</b><code>#38bdf8</code></li>
+            <li><span class="sw" style="background:#5eead4"></span><b>secondary</b><code>#5eead4</code></li>
+            <li><span class="sw" style="background:#fbbf24"></span><b>signal</b><code>#fbbf24</code></li>
+            </ul>
+            <p class="pairing">DM Sans / Fira Code</p>
+            <div class="pick">
+              <code>--style blueprint</code>
+              <button type="button" class="copy" data-flag="--style blueprint">copy</button>
+            </div>
+          </div>
+        </article>
+        <article id="editorial" class="card card--lg" data-spec="light" style="--sp-bg:#fbfaf8;--sp-surface:#ffffff;--sp-text:#141b2d;--sp-dim:#6b7280;--sp-border:#e4e1da;--sp-a1:#1e3a5f;--sp-a2:#a67c2e;--sp-a3:#7d2b3d">
+          <div class="spec">
+            <p class="spec-eyebrow">light · Noto Sans Mono</p>
+            <h3 class="spec-title">Editorial</h3>
+            <p class="spec-body">Sample body text set in Crimson Pro. The palette below is the specimen, not the page.</p>
+            <pre class="spec-code">retries: 2  duration=142ms</pre>
+          </div>
+          <div class="meta">
+            
+            <p class="tagline">Serif headlines, generous whitespace, deep navy and gold.</p>
+            <ul class="swatches">
+            <li><span class="sw" style="background:#fbfaf8"></span><b>stock</b><code>#fbfaf8</code></li>
+            <li><span class="sw" style="background:#141b2d"></span><b>ink</b><code>#141b2d</code></li>
+            <li><span class="sw" style="background:#1e3a5f"></span><b>navy</b><code>#1e3a5f</code></li>
+            <li><span class="sw" style="background:#a67c2e"></span><b>gold</b><code>#a67c2e</code></li>
+            <li><span class="sw" style="background:#7d2b3d"></span><b>claret</b><code>#7d2b3d</code></li>
+            </ul>
+            <p class="pairing">Crimson Pro / Noto Sans Mono</p>
+            <div class="pick">
+              <code>--style editorial</code>
+              <button type="button" class="copy" data-flag="--style editorial">copy</button>
+            </div>
+          </div>
+        </article>
+        <article id="paper" class="card card--lg" data-spec="light" style="--sp-bg:#faf7f5;--sp-surface:#ffffff;--sp-text:#2d2724;--sp-dim:#8a7f77;--sp-border:#e8e0d9;--sp-a1:#c2643c;--sp-a2:#6b8e5a;--sp-a3:#b08430">
+          <div class="spec">
+            <p class="spec-eyebrow">light · Source Code Pro</p>
+            <h3 class="spec-title">Paper</h3>
+            <p class="spec-body">Sample body text set in Fraunces. The palette below is the specimen, not the page.</p>
+            <pre class="spec-code">retries: 2  duration=142ms</pre>
+          </div>
+          <div class="meta">
+            
+            <p class="tagline">Warm cream stock, terracotta and sage, informal.</p>
+            <ul class="swatches">
+            <li><span class="sw" style="background:#faf7f5"></span><b>cream</b><code>#faf7f5</code></li>
+            <li><span class="sw" style="background:#c2643c"></span><b>terracotta</b><code>#c2643c</code></li>
+            <li><span class="sw" style="background:#6b8e5a"></span><b>sage</b><code>#6b8e5a</code></li>
+            <li><span class="sw" style="background:#b08430"></span><b>ochre</b><code>#b08430</code></li>
+            <li><span class="sw" style="background:#e8e0d9"></span><b>rule</b><code>#e8e0d9</code></li>
+            </ul>
+            <p class="pairing">Fraunces / Source Code Pro</p>
+            <div class="pick">
+              <code>--style paper</code>
+              <button type="button" class="copy" data-flag="--style paper">copy</button>
+            </div>
+          </div>
+        </article>
+        <article id="terminal" class="card card--lg" data-spec="dark" style="--sp-bg:#080a08;--sp-surface:#111511;--sp-text:#c8facc;--sp-dim:#4d7a52;--sp-border:#1e2a1f;--sp-a1:#37d67a;--sp-a2:#ffb454;--sp-a3:#e05252">
+          <div class="spec">
+            <p class="spec-eyebrow">dark · Space Mono</p>
+            <h3 class="spec-title">Terminal</h3>
+            <p class="spec-body">Sample body text set in Space Mono. The palette below is the specimen, not the page.</p>
+            <pre class="spec-code">retries: 2  duration=142ms</pre>
+          </div>
+          <div class="meta">
+            
+            <p class="tagline">Monochrome — green or amber on near-black, monospace everything.</p>
+            <ul class="swatches">
+            <li><span class="sw" style="background:#080a08"></span><b>void</b><code>#080a08</code></li>
+            <li><span class="sw" style="background:#c8facc"></span><b>phosphor</b><code>#c8facc</code></li>
+            <li><span class="sw" style="background:#37d67a"></span><b>green</b><code>#37d67a</code></li>
+            <li><span class="sw" style="background:#ffb454"></span><b>amber</b><code>#ffb454</code></li>
+            <li><span class="sw" style="background:#e05252"></span><b>alert</b><code>#e05252</code></li>
+            </ul>
+            <p class="pairing">Space Mono / Space Mono</p>
+            <div class="pick">
+              <code>--style terminal</code>
+              <button type="button" class="copy" data-flag="--style terminal">copy</button>
+            </div>
+          </div>
+        </article>
+        <article id="data-dense" class="card card--lg" data-spec="light" style="--sp-bg:#f7f7f8;--sp-surface:#ffffff;--sp-text:#1f2225;--sp-dim:#71767c;--sp-border:#dcdee1;--sp-a1:#2f6f8f;--sp-a2:#4a7a5c;--sp-a3:#9a5b28">
+          <div class="spec">
+            <p class="spec-eyebrow">light · Inconsolata</p>
+            <h3 class="spec-title">Data-dense</h3>
+            <p class="spec-body">Sample body text set in Libre Franklin. The palette below is the specimen, not the page.</p>
+            <table class="spec-table">
+              <tr><th>route</th><th>p95</th><th>err</th></tr>
+              <tr><td>/v1/ingest</td><td>142ms</td><td class="ok">0.02%</td></tr>
+              <tr><td>/v1/query</td><td>318ms</td><td class="warn">1.40%</td></tr>
+              <tr><td>/v1/health</td><td>4ms</td><td class="ok">0.00%</td></tr>
+            </table>
+          </div>
+          <div class="meta">
+            
+            <p class="tagline">Small type, tight spacing, maximum information, muted colors.</p>
+            <ul class="swatches">
+            <li><span class="sw" style="background:#f7f7f8"></span><b>canvas</b><code>#f7f7f8</code></li>
+            <li><span class="sw" style="background:#dcdee1"></span><b>gridline</b><code>#dcdee1</code></li>
+            <li><span class="sw" style="background:#2f6f8f"></span><b>steel</b><code>#2f6f8f</code></li>
+            <li><span class="sw" style="background:#4a7a5c"></span><b>moss</b><code>#4a7a5c</code></li>
+            <li><span class="sw" style="background:#9a5b28"></span><b>rust</b><code>#9a5b28</code></li>
+            </ul>
+            <p class="pairing">Libre Franklin / Inconsolata</p>
+            <div class="pick">
+              <code>--style data-dense</code>
+              <button type="button" class="copy" data-flag="--style data-dense">copy</button>
+            </div>
+          </div>
+        </article>
+    </div>
+  </section>
+
+  <section class="group" aria-labelledby="g-schemes">
+    <div class="group__head"><h2 class="group__label" id="g-schemes">Editor schemes</h2></div>
+    <p class="group__note">A real editor scheme, committed to exactly. These fix the <em>palette only</em> — you still choose a font pairing and a layout on top of one.</p>
+    <div class="grid grid--sm">
+        <article id="dracula" class="card card--sm" data-spec="dark" style="--sp-bg:#282a36;--sp-surface:#44475a;--sp-text:#f8f8f2;--sp-dim:#6272a4;--sp-border:#44475a;--sp-a1:#bd93f9;--sp-a2:#50fa7b;--sp-a3:#ff79c6">
+          <div class="spec">
+            <p class="spec-eyebrow">dark</p>
+            <h3 class="spec-title">Dracula</h3>
+            <pre class="spec-code"><span class="t1">const</span> limit <span class="t2">=</span> <span class="t3">42</span>;</pre>
+          </div>
+          <div class="meta">
+            <ul class="swatches swatches--dots"><li title="bg #282a36"><span class="sw" style="background:#282a36"></span></li><li title="line #44475a"><span class="sw" style="background:#44475a"></span></li><li title="fg #f8f8f2"><span class="sw" style="background:#f8f8f2"></span></li><li title="comment #6272a4"><span class="sw" style="background:#6272a4"></span></li><li title="purple #bd93f9"><span class="sw" style="background:#bd93f9"></span></li><li title="green #50fa7b"><span class="sw" style="background:#50fa7b"></span></li><li title="pink #ff79c6"><span class="sw" style="background:#ff79c6"></span></li><li title="cyan #8be9fd"><span class="sw" style="background:#8be9fd"></span></li><li title="orange #ffb86c"><span class="sw" style="background:#ffb86c"></span></li><li title="yellow #f1fa8c"><span class="sw" style="background:#f1fa8c"></span></li><li title="red #ff5555"><span class="sw" style="background:#ff5555"></span></li></ul>
+            <div class="pick">
+              <code>--style dracula</code>
+              <button type="button" class="copy" data-flag="--style dracula">copy</button>
+            </div>
+          </div>
+        </article>
+        <article id="nord" class="card card--sm" data-spec="dark" style="--sp-bg:#2e3440;--sp-surface:#3b4252;--sp-text:#eceff4;--sp-dim:#7b88a1;--sp-border:#434c5e;--sp-a1:#88c0d0;--sp-a2:#a3be8c;--sp-a3:#ebcb8b">
+          <div class="spec">
+            <p class="spec-eyebrow">dark</p>
+            <h3 class="spec-title">Nord</h3>
+            <pre class="spec-code"><span class="t1">const</span> limit <span class="t2">=</span> <span class="t3">42</span>;</pre>
+          </div>
+          <div class="meta">
+            <ul class="swatches swatches--dots"><li title="night0 #2e3440"><span class="sw" style="background:#2e3440"></span></li><li title="night1 #3b4252"><span class="sw" style="background:#3b4252"></span></li><li title="snow #eceff4"><span class="sw" style="background:#eceff4"></span></li><li title="frost0 #8fbcbb"><span class="sw" style="background:#8fbcbb"></span></li><li title="frost1 #88c0d0"><span class="sw" style="background:#88c0d0"></span></li><li title="frost2 #81a1c1"><span class="sw" style="background:#81a1c1"></span></li><li title="frost3 #5e81ac"><span class="sw" style="background:#5e81ac"></span></li><li title="red #bf616a"><span class="sw" style="background:#bf616a"></span></li><li title="orange #d08770"><span class="sw" style="background:#d08770"></span></li><li title="yellow #ebcb8b"><span class="sw" style="background:#ebcb8b"></span></li><li title="green #a3be8c"><span class="sw" style="background:#a3be8c"></span></li><li title="purple #b48ead"><span class="sw" style="background:#b48ead"></span></li></ul>
+            <div class="pick">
+              <code>--style nord</code>
+              <button type="button" class="copy" data-flag="--style nord">copy</button>
+            </div>
+          </div>
+        </article>
+        <article id="catppuccin-mocha" class="card card--sm" data-spec="dark" style="--sp-bg:#1e1e2e;--sp-surface:#313244;--sp-text:#cdd6f4;--sp-dim:#a6adc8;--sp-border:#45475a;--sp-a1:#89b4fa;--sp-a2:#a6e3a1;--sp-a3:#f5c2e7">
+          <div class="spec">
+            <p class="spec-eyebrow">dark</p>
+            <h3 class="spec-title">Catppuccin Mocha</h3>
+            <pre class="spec-code"><span class="t1">const</span> limit <span class="t2">=</span> <span class="t3">42</span>;</pre>
+          </div>
+          <div class="meta">
+            <ul class="swatches swatches--dots"><li title="base #1e1e2e"><span class="sw" style="background:#1e1e2e"></span></li><li title="mantle #181825"><span class="sw" style="background:#181825"></span></li><li title="surface0 #313244"><span class="sw" style="background:#313244"></span></li><li title="text #cdd6f4"><span class="sw" style="background:#cdd6f4"></span></li><li title="subtext0 #a6adc8"><span class="sw" style="background:#a6adc8"></span></li><li title="blue #89b4fa"><span class="sw" style="background:#89b4fa"></span></li><li title="mauve #cba6f7"><span class="sw" style="background:#cba6f7"></span></li><li title="pink #f5c2e7"><span class="sw" style="background:#f5c2e7"></span></li><li title="red #f38ba8"><span class="sw" style="background:#f38ba8"></span></li><li title="peach #fab387"><span class="sw" style="background:#fab387"></span></li><li title="yellow #f9e2af"><span class="sw" style="background:#f9e2af"></span></li><li title="green #a6e3a1"><span class="sw" style="background:#a6e3a1"></span></li><li title="teal #94e2d5"><span class="sw" style="background:#94e2d5"></span></li></ul>
+            <div class="pick">
+              <code>--style catppuccin-mocha</code>
+              <button type="button" class="copy" data-flag="--style catppuccin-mocha">copy</button>
+            </div>
+          </div>
+        </article>
+        <article id="catppuccin-latte" class="card card--sm" data-spec="light" style="--sp-bg:#eff1f5;--sp-surface:#ffffff;--sp-text:#4c4f69;--sp-dim:#6c6f85;--sp-border:#ccd0da;--sp-a1:#1e66f5;--sp-a2:#40a02b;--sp-a3:#8839ef">
+          <div class="spec">
+            <p class="spec-eyebrow">light</p>
+            <h3 class="spec-title">Catppuccin Latte</h3>
+            <pre class="spec-code"><span class="t1">const</span> limit <span class="t2">=</span> <span class="t3">42</span>;</pre>
+          </div>
+          <div class="meta">
+            <ul class="swatches swatches--dots"><li title="base #eff1f5"><span class="sw" style="background:#eff1f5"></span></li><li title="mantle #e6e9ef"><span class="sw" style="background:#e6e9ef"></span></li><li title="surface0 #ccd0da"><span class="sw" style="background:#ccd0da"></span></li><li title="text #4c4f69"><span class="sw" style="background:#4c4f69"></span></li><li title="subtext0 #6c6f85"><span class="sw" style="background:#6c6f85"></span></li><li title="blue #1e66f5"><span class="sw" style="background:#1e66f5"></span></li><li title="mauve #8839ef"><span class="sw" style="background:#8839ef"></span></li><li title="red #d20f39"><span class="sw" style="background:#d20f39"></span></li><li title="peach #fe640b"><span class="sw" style="background:#fe640b"></span></li><li title="yellow #df8e1d"><span class="sw" style="background:#df8e1d"></span></li><li title="green #40a02b"><span class="sw" style="background:#40a02b"></span></li><li title="teal #179299"><span class="sw" style="background:#179299"></span></li></ul>
+            <div class="pick">
+              <code>--style catppuccin-latte</code>
+              <button type="button" class="copy" data-flag="--style catppuccin-latte">copy</button>
+            </div>
+          </div>
+        </article>
+        <article id="solarized-dark" class="card card--sm" data-spec="dark" style="--sp-bg:#002b36;--sp-surface:#073642;--sp-text:#93a1a1;--sp-dim:#586e75;--sp-border:#0b4451;--sp-a1:#268bd2;--sp-a2:#2aa198;--sp-a3:#b58900">
+          <div class="spec">
+            <p class="spec-eyebrow">dark</p>
+            <h3 class="spec-title">Solarized Dark</h3>
+            <pre class="spec-code"><span class="t1">const</span> limit <span class="t2">=</span> <span class="t3">42</span>;</pre>
+          </div>
+          <div class="meta">
+            <ul class="swatches swatches--dots"><li title="base03 #002b36"><span class="sw" style="background:#002b36"></span></li><li title="base02 #073642"><span class="sw" style="background:#073642"></span></li><li title="base01 #586e75"><span class="sw" style="background:#586e75"></span></li><li title="base1 #93a1a1"><span class="sw" style="background:#93a1a1"></span></li><li title="yellow #b58900"><span class="sw" style="background:#b58900"></span></li><li title="orange #cb4b16"><span class="sw" style="background:#cb4b16"></span></li><li title="red #dc322f"><span class="sw" style="background:#dc322f"></span></li><li title="magenta #d33682"><span class="sw" style="background:#d33682"></span></li><li title="violet #6c71c4"><span class="sw" style="background:#6c71c4"></span></li><li title="blue #268bd2"><span class="sw" style="background:#268bd2"></span></li><li title="cyan #2aa198"><span class="sw" style="background:#2aa198"></span></li><li title="green #859900"><span class="sw" style="background:#859900"></span></li></ul>
+            <div class="pick">
+              <code>--style solarized-dark</code>
+              <button type="button" class="copy" data-flag="--style solarized-dark">copy</button>
+            </div>
+          </div>
+        </article>
+        <article id="solarized-light" class="card card--sm" data-spec="light" style="--sp-bg:#fdf6e3;--sp-surface:#eee8d5;--sp-text:#586e75;--sp-dim:#93a1a1;--sp-border:#e3dcc6;--sp-a1:#268bd2;--sp-a2:#859900;--sp-a3:#cb4b16">
+          <div class="spec">
+            <p class="spec-eyebrow">light</p>
+            <h3 class="spec-title">Solarized Light</h3>
+            <pre class="spec-code"><span class="t1">const</span> limit <span class="t2">=</span> <span class="t3">42</span>;</pre>
+          </div>
+          <div class="meta">
+            <ul class="swatches swatches--dots"><li title="base3 #fdf6e3"><span class="sw" style="background:#fdf6e3"></span></li><li title="base2 #eee8d5"><span class="sw" style="background:#eee8d5"></span></li><li title="base00 #657b83"><span class="sw" style="background:#657b83"></span></li><li title="base01 #586e75"><span class="sw" style="background:#586e75"></span></li><li title="yellow #b58900"><span class="sw" style="background:#b58900"></span></li><li title="orange #cb4b16"><span class="sw" style="background:#cb4b16"></span></li><li title="red #dc322f"><span class="sw" style="background:#dc322f"></span></li><li title="magenta #d33682"><span class="sw" style="background:#d33682"></span></li><li title="violet #6c71c4"><span class="sw" style="background:#6c71c4"></span></li><li title="blue #268bd2"><span class="sw" style="background:#268bd2"></span></li><li title="cyan #2aa198"><span class="sw" style="background:#2aa198"></span></li><li title="green #859900"><span class="sw" style="background:#859900"></span></li></ul>
+            <div class="pick">
+              <code>--style solarized-light</code>
+              <button type="button" class="copy" data-flag="--style solarized-light">copy</button>
+            </div>
+          </div>
+        </article>
+        <article id="gruvbox" class="card card--sm" data-spec="dark" style="--sp-bg:#282828;--sp-surface:#3c3836;--sp-text:#ebdbb2;--sp-dim:#928374;--sp-border:#504945;--sp-a1:#fabd2f;--sp-a2:#b8bb26;--sp-a3:#fe8019">
+          <div class="spec">
+            <p class="spec-eyebrow">dark</p>
+            <h3 class="spec-title">Gruvbox</h3>
+            <pre class="spec-code"><span class="t1">const</span> limit <span class="t2">=</span> <span class="t3">42</span>;</pre>
+          </div>
+          <div class="meta">
+            <ul class="swatches swatches--dots"><li title="bg0 #282828"><span class="sw" style="background:#282828"></span></li><li title="bg1 #3c3836"><span class="sw" style="background:#3c3836"></span></li><li title="fg #ebdbb2"><span class="sw" style="background:#ebdbb2"></span></li><li title="gray #928374"><span class="sw" style="background:#928374"></span></li><li title="red #fb4934"><span class="sw" style="background:#fb4934"></span></li><li title="green #b8bb26"><span class="sw" style="background:#b8bb26"></span></li><li title="yellow #fabd2f"><span class="sw" style="background:#fabd2f"></span></li><li title="blue #83a598"><span class="sw" style="background:#83a598"></span></li><li title="purple #d3869b"><span class="sw" style="background:#d3869b"></span></li><li title="aqua #8ec07c"><span class="sw" style="background:#8ec07c"></span></li><li title="orange #fe8019"><span class="sw" style="background:#fe8019"></span></li></ul>
+            <div class="pick">
+              <code>--style gruvbox</code>
+              <button type="button" class="copy" data-flag="--style gruvbox">copy</button>
+            </div>
+          </div>
+        </article>
+        <article id="one-dark" class="card card--sm" data-spec="dark" style="--sp-bg:#282c34;--sp-surface:#21252b;--sp-text:#abb2bf;--sp-dim:#5c6370;--sp-border:#3e4451;--sp-a1:#61afef;--sp-a2:#98c379;--sp-a3:#c678dd">
+          <div class="spec">
+            <p class="spec-eyebrow">dark</p>
+            <h3 class="spec-title">One Dark</h3>
+            <pre class="spec-code"><span class="t1">const</span> limit <span class="t2">=</span> <span class="t3">42</span>;</pre>
+          </div>
+          <div class="meta">
+            <ul class="swatches swatches--dots"><li title="bg #282c34"><span class="sw" style="background:#282c34"></span></li><li title="gutter #21252b"><span class="sw" style="background:#21252b"></span></li><li title="fg #abb2bf"><span class="sw" style="background:#abb2bf"></span></li><li title="comment #5c6370"><span class="sw" style="background:#5c6370"></span></li><li title="red #e06c75"><span class="sw" style="background:#e06c75"></span></li><li title="green #98c379"><span class="sw" style="background:#98c379"></span></li><li title="yellow #e5c07b"><span class="sw" style="background:#e5c07b"></span></li><li title="orange #d19a66"><span class="sw" style="background:#d19a66"></span></li><li title="blue #61afef"><span class="sw" style="background:#61afef"></span></li><li title="purple #c678dd"><span class="sw" style="background:#c678dd"></span></li><li title="cyan #56b6c2"><span class="sw" style="background:#56b6c2"></span></li></ul>
+            <div class="pick">
+              <code>--style one-dark</code>
+              <button type="button" class="copy" data-flag="--style one-dark">copy</button>
+            </div>
+          </div>
+        </article>
+        <article id="rose-pine" class="card card--sm" data-spec="dark" style="--sp-bg:#191724;--sp-surface:#1f1d2e;--sp-text:#e0def4;--sp-dim:#908caa;--sp-border:#26233a;--sp-a1:#9ccfd8;--sp-a2:#f6c177;--sp-a3:#eb6f92">
+          <div class="spec">
+            <p class="spec-eyebrow">dark</p>
+            <h3 class="spec-title">Rosé Pine</h3>
+            <pre class="spec-code"><span class="t1">const</span> limit <span class="t2">=</span> <span class="t3">42</span>;</pre>
+          </div>
+          <div class="meta">
+            <ul class="swatches swatches--dots"><li title="base #191724"><span class="sw" style="background:#191724"></span></li><li title="surface #1f1d2e"><span class="sw" style="background:#1f1d2e"></span></li><li title="overlay #26233a"><span class="sw" style="background:#26233a"></span></li><li title="text #e0def4"><span class="sw" style="background:#e0def4"></span></li><li title="subtle #908caa"><span class="sw" style="background:#908caa"></span></li><li title="muted #6e6a86"><span class="sw" style="background:#6e6a86"></span></li><li title="love #eb6f92"><span class="sw" style="background:#eb6f92"></span></li><li title="gold #f6c177"><span class="sw" style="background:#f6c177"></span></li><li title="rose #ebbcba"><span class="sw" style="background:#ebbcba"></span></li><li title="pine #31748f"><span class="sw" style="background:#31748f"></span></li><li title="foam #9ccfd8"><span class="sw" style="background:#9ccfd8"></span></li><li title="iris #c4a7d7"><span class="sw" style="background:#c4a7d7"></span></li></ul>
+            <div class="pick">
+              <code>--style rose-pine</code>
+              <button type="button" class="copy" data-flag="--style rose-pine">copy</button>
+            </div>
+          </div>
+        </article>
+    </div>
+  </section>
+
+  </div>
+
+  <div class="panel" id="p-commands" role="tabpanel" aria-labelledby="t-commands" tabindex="0" hidden="until-found">
+  <section class="group" aria-labelledby="g-commands">
+    <div class="group__head"><h2 class="group__label" id="g-commands">Commands</h2></div>
+    <p class="group__note">Where a style gets spent. Every one of these takes <code>--style</code> and the format flags, so any style composes with any command. The format shown is what the command reaches for on its own — an affinity, not a restriction. Open a section list to see the structure that command emits, taken from its own definition; three of them have no fixed structure and say so. Prefix with <code>handbook-visual-explainer:</code> only if the name collides with another plugin's.</p>
+    <div class="grid grid--cmd">
+        <article id="cmd-web-diagram" class="cmd">
+          <svg class="wire wire--cmd" viewBox="0 0 160 76" role="img" aria-label="Nodes joined by edges">
+            <rect x="10" y="8" width="42" height="18" rx="3"/>
+      <rect x="108" y="8" width="42" height="18" rx="3" class="wire-dim"/>
+      <rect x="59" y="46" width="42" height="18" rx="3" class="wire-dim"/>
+      <path d="M52 17h56M31 26v9h49v11M129 26v9H80" class="wire-edge"/>
+          </svg>
+          <div class="cmd__head">
+            <h3 class="cmd__name">web-diagram</h3>
+            <span class="cmd__fmt">page</span>
+          </div>
+          <p class="cmd__blurb">An HTML diagram for any topic — architecture, flow, sequence, schema, state machine. The general entry point.</p>
+          <p class="cmd__shape">No fixed outline — the content type picks the layout: diagram, table, timeline or dashboard.</p>
+          <div class="pick">
+            <code>/web-diagram how OAuth works</code>
+            <button type="button" class="copy" data-flag="/web-diagram how OAuth works">copy</button>
+          </div>
+        </article>
+        <article id="cmd-visual-plan" class="cmd">
+          <svg class="wire wire--cmd" viewBox="0 0 160 76" role="img" aria-label="Title, before and after panels, a table">
+            <rect x="10" y="7" width="64" height="8" rx="2"/>
+      <rect x="10" y="23" width="66" height="22" rx="3" class="wire-dim"/>
+      <rect x="84" y="23" width="66" height="22" rx="3"/>
+      <rect x="10" y="53" width="140" height="5" rx="2" class="wire-dim"/>
+      <rect x="10" y="62" width="118" height="5" rx="2" class="wire-dim"/>
+          </svg>
+          <div class="cmd__head">
+            <h3 class="cmd__name">visual-plan</h3>
+            <span class="cmd__fmt">page · document</span>
+          </div>
+          <p class="cmd__blurb">A visual implementation plan for a feature: phases, files to touch, risks, open questions.</p>
+          <details class="outline">
+            <summary class="outline__sum">10 sections</summary>
+            <ol class="outline__list">
+              <li>Header</li>
+              <li>The Problem</li>
+              <li>State Machine</li>
+              <li>State Variables</li>
+              <li>Modified Functions</li>
+              <li>Commands / API</li>
+              <li>Edge Cases</li>
+              <li>Test Requirements</li>
+              <li>File References</li>
+              <li>Implementation Notes</li>
+            </ol>
+          </details>
+          <div class="pick">
+            <code>/visual-plan rate limiting</code>
+            <button type="button" class="copy" data-flag="/visual-plan rate limiting">copy</button>
+          </div>
+        </article>
+        <article id="cmd-slides" class="cmd">
+          <svg class="wire wire--cmd" viewBox="0 0 160 76" role="img" aria-label="One framed slide with position dots">
+            <rect x="18" y="6" width="124" height="52" rx="4" class="wire-frame"/>
+      <rect x="30" y="20" width="70" height="12" rx="3"/>
+      <rect x="30" y="37" width="46" height="6" rx="2" class="wire-dim"/>
+      <circle cx="68" cy="68" r="3.5"/><circle cx="80" cy="68" r="3.5" class="wire-dim"/><circle cx="92" cy="68" r="3.5" class="wire-dim"/>
+          </svg>
+          <div class="cmd__head">
+            <h3 class="cmd__name">slides</h3>
+            <span class="cmd__fmt">deck</span>
+          </div>
+          <p class="cmd__blurb">A magazine-quality deck — one viewport per slide. The only command that picks the deck format for you.</p>
+          <p class="cmd__shape">No fixed outline — the agent composes a narrative arc for your topic and adds slides until the source is covered.</p>
+          <div class="pick">
+            <code>/slides our caching strategy</code>
+            <button type="button" class="copy" data-flag="/slides our caching strategy">copy</button>
+          </div>
+        </article>
+        <article id="cmd-diff-review" class="cmd">
+          <svg class="wire wire--cmd" viewBox="0 0 160 76" role="img" aria-label="KPI row above two comparison panels">
+            <rect x="10" y="6" width="30" height="14" rx="3"/><rect x="45" y="6" width="30" height="14" rx="3"/>
+      <rect x="80" y="6" width="30" height="14" rx="3" class="wire-dim"/><rect x="115" y="6" width="35" height="14" rx="3" class="wire-dim"/>
+      <rect x="10" y="28" width="66" height="40" rx="3" class="wire-frame"/>
+      <rect x="84" y="28" width="66" height="40" rx="3" class="wire-frame"/>
+      <rect x="16" y="34" width="42" height="5" rx="2" class="wire-dim"/><rect x="16" y="43" width="52" height="5" rx="2" class="wire-dim"/>
+      <rect x="90" y="34" width="52" height="5" rx="2"/><rect x="90" y="43" width="40" height="5" rx="2"/><rect x="90" y="52" width="48" height="5" rx="2"/>
+          </svg>
+          <div class="cmd__head">
+            <h3 class="cmd__name">diff-review</h3>
+            <span class="cmd__fmt">page · deck</span>
+          </div>
+          <p class="cmd__blurb">Visual diff review: before/after architecture comparison plus a code review of the change.</p>
+          <details class="outline">
+            <summary class="outline__sum">10 sections</summary>
+            <ol class="outline__list">
+              <li>Executive summary</li>
+              <li>KPI dashboard</li>
+              <li>Module architecture</li>
+              <li>Major feature comparisons</li>
+              <li>Flow diagrams</li>
+              <li>File map</li>
+              <li>Test coverage</li>
+              <li>Code review</li>
+              <li>Decision log</li>
+              <li>Re-entry context</li>
+            </ol>
+          </details>
+          <div class="pick">
+            <code>/diff-review main..HEAD</code>
+            <button type="button" class="copy" data-flag="/diff-review main..HEAD">copy</button>
+          </div>
+        </article>
+        <article id="cmd-plan-review" class="cmd">
+          <svg class="wire wire--cmd" viewBox="0 0 160 76" role="img" aria-label="Current and planned diagrams above risk cards">
+            <rect x="10" y="6" width="66" height="30" rx="3" class="wire-frame"/>
+      <rect x="20" y="14" width="20" height="9" rx="2" class="wire-dim"/><rect x="48" y="14" width="20" height="9" rx="2" class="wire-dim"/>
+      <rect x="84" y="6" width="66" height="30" rx="3" class="wire-frame"/>
+      <rect x="94" y="14" width="20" height="9" rx="2"/><rect x="122" y="14" width="20" height="9" rx="2"/>
+      <rect x="10" y="44" width="44" height="24" rx="3"/><rect x="58" y="44" width="44" height="24" rx="3" class="wire-dim"/><rect x="106" y="44" width="44" height="24" rx="3" class="wire-dim"/>
+          </svg>
+          <div class="cmd__head">
+            <h3 class="cmd__name">plan-review</h3>
+            <span class="cmd__fmt">page · document</span>
+          </div>
+          <p class="cmd__blurb">Reads a plan against the codebase it targets and reports what doesn't line up, with a risk assessment.</p>
+          <details class="outline">
+            <summary class="outline__sum">9 sections</summary>
+            <ol class="outline__list">
+              <li>Plan summary</li>
+              <li>Impact dashboard</li>
+              <li>Current architecture</li>
+              <li>Planned architecture</li>
+              <li>Change-by-change breakdown</li>
+              <li>Dependency &amp; ripple analysis</li>
+              <li>Risk assessment</li>
+              <li>Plan review</li>
+              <li>Understanding gaps</li>
+            </ol>
+          </details>
+          <div class="pick">
+            <code>/plan-review docs/migration.md</code>
+            <button type="button" class="copy" data-flag="/plan-review docs/migration.md">copy</button>
+          </div>
+        </article>
+        <article id="cmd-project-recap" class="cmd">
+          <svg class="wire wire--cmd" viewBox="0 0 160 76" role="img" aria-label="A hero architecture diagram above KPI tiles">
+            <rect x="10" y="6" width="140" height="30" rx="3" class="wire-frame"/>
+      <rect x="24" y="15" width="26" height="12" rx="3"/><rect x="67" y="15" width="26" height="12" rx="3"/><rect x="110" y="15" width="26" height="12" rx="3" class="wire-dim"/>
+      <path d="M50 21h17M93 21h17" class="wire-edge"/>
+      <rect x="10" y="44" width="32" height="24" rx="3"/><rect x="46" y="44" width="32" height="24" rx="3" class="wire-dim"/>
+      <rect x="82" y="44" width="32" height="24" rx="3" class="wire-dim"/><rect x="118" y="44" width="32" height="24" rx="3" class="wire-dim"/>
+          </svg>
+          <div class="cmd__head">
+            <h3 class="cmd__name">project-recap</h3>
+            <span class="cmd__fmt">page · document</span>
+          </div>
+          <p class="cmd__blurb">A mental-model snapshot for context-switching back into a project after time away.</p>
+          <details class="outline">
+            <summary class="outline__sum">8 sections</summary>
+            <ol class="outline__list">
+              <li>Project identity</li>
+              <li>Architecture snapshot</li>
+              <li>Recent activity</li>
+              <li>Decision log</li>
+              <li>State of things</li>
+              <li>Mental model essentials</li>
+              <li>Cognitive debt hotspots</li>
+              <li>Next steps</li>
+            </ol>
+          </details>
+          <div class="pick">
+            <code>/project-recap since last week</code>
+            <button type="button" class="copy" data-flag="/project-recap since last week">copy</button>
+          </div>
+        </article>
+        <article id="cmd-fact-check" class="cmd">
+          <svg class="wire wire--cmd" viewBox="0 0 160 76" role="img" aria-label="A document whose lines carry check marks, one flagged">
+            <rect x="10" y="6" width="140" height="62" rx="3" class="wire-frame"/>
+      <rect x="34" y="14" width="104" height="5" rx="2" class="wire-dim"/>
+      <rect x="34" y="26" width="88" height="5" rx="2" class="wire-dim"/>
+      <rect x="34" y="38" width="96" height="5" rx="2"/>
+      <rect x="34" y="50" width="76" height="5" rx="2" class="wire-dim"/>
+      <path d="M20 15l3 3 5-6M20 27l3 3 5-6M20 51l3 3 5-6" class="wire-edge"/>
+      <path d="M19 37l9 7M28 37l-9 7" class="wire-edge"/>
+          </svg>
+          <div class="cmd__head">
+            <h3 class="cmd__name">fact-check</h3>
+            <span class="cmd__fmt">page · document</span>
+          </div>
+          <p class="cmd__blurb">Extracts every checkable claim from a document, verifies it against the code, and corrects it in place.</p>
+          <p class="cmd__shape">Edits your document in place — no new page. Appends a summary: claims checked, confirmed, corrected, unverifiable.</p>
+          <div class="pick">
+            <code>/fact-check README.md</code>
+            <button type="button" class="copy" data-flag="/fact-check README.md">copy</button>
+          </div>
+        </article>
+    </div>
+  </section>
+
+  </div>
+
+  <div class="panel" id="p-formats" role="tabpanel" aria-labelledby="t-formats" tabindex="0" hidden="until-found">
+  <section class="group" aria-labelledby="g-formats">
+    <div class="group__head"><h2 class="group__label" id="g-formats">Output formats</h2></div>
+    <p class="group__note">A separate axis from style: these set <em>structure</em>, and combine with any style. <code>--handbook --style nord</code> is a document in the Nord palette. The two flags are mutually exclusive — a deck isn't a document.</p>
+    <div class="grid grid--fmt">
+        <article id="fmt-page" class="fmt">
+          <svg class="wire" viewBox="0 0 160 110" role="img" aria-label="Page layout">
+            <rect x="8" y="8" width="144" height="20" rx="3"/>
+           <rect x="8" y="34" width="68" height="30" rx="3"/>
+           <rect x="84" y="34" width="68" height="30" rx="3"/>
+           <rect x="8" y="70" width="102" height="10" rx="2"/>
+           <rect x="8" y="86" width="144" height="18" rx="3"/>
+          </svg>
+          <div class="fmt__body">
+            <h3 class="fmt__name">Page <span>(default)</span></h3>
+            <p class="fmt__blurb">A scrollable visual page — cards, grids, tables, diagrams. What you get when neither flag is passed.</p>
+            
+          </div>
+        </article>
+        <article id="fmt-slides" class="fmt">
+          <svg class="wire" viewBox="0 0 160 110" role="img" aria-label="Deck layout">
+            <rect x="8" y="10" width="144" height="76" rx="4" class="wire-frame"/>
+           <rect x="22" y="30" width="88" height="14" rx="3"/>
+           <rect x="22" y="50" width="60" height="7" rx="2"/>
+           <circle cx="66" cy="98" r="3.5"/><circle cx="80" cy="98" r="3.5" class="wire-dim"/><circle cx="94" cy="98" r="3.5" class="wire-dim"/>
+          </svg>
+          <div class="fmt__body">
+            <h3 class="fmt__name">Deck <span>--slides</span></h3>
+            <p class="fmt__blurb">One viewport per slide, no scrolling within one. Typography 2–3× larger, bolder compositions. Opt-in only — never chosen for you.</p>
+            <div class="pick">
+              <code>--slides</code>
+              <button type="button" class="copy copy--fmt" data-flag="--slides">copy</button>
+            </div>
+          </div>
+        </article>
+        <article id="fmt-handbook" class="fmt">
+          <svg class="wire" viewBox="0 0 160 110" role="img" aria-label="Document layout">
+            <rect x="8" y="10" width="34" height="6" rx="2"/>
+           <rect x="8" y="22" width="28" height="5" rx="2" class="wire-dim"/>
+           <rect x="8" y="32" width="30" height="5" rx="2" class="wire-dim"/>
+           <rect x="8" y="42" width="26" height="5" rx="2" class="wire-dim"/>
+           <rect x="54" y="10" width="98" height="12" rx="3"/>
+           <rect x="54" y="30" width="86" height="6" rx="2" class="wire-dim"/>
+           <rect x="54" y="41" width="92" height="6" rx="2" class="wire-dim"/>
+           <rect x="54" y="58" width="70" height="10" rx="3"/>
+           <rect x="54" y="75" width="90" height="6" rx="2" class="wire-dim"/>
+           <rect x="54" y="86" width="80" height="6" rx="2" class="wire-dim"/>
+          </svg>
+          <div class="fmt__body">
+            <h3 class="fmt__name">Document <span>--handbook</span></h3>
+            <p class="fmt__blurb">Read top to bottom, then returned to: sticky contents rail, numbered chapters, marginalia. Auto-selected for longform docs.</p>
+            <div class="pick">
+              <code>--handbook</code>
+              <button type="button" class="copy copy--fmt" data-flag="--handbook">copy</button>
+            </div>
+          </div>
+        </article>
+    </div>
+  </section>
+
+  </div>
+
+  <!-- Outside the panels: overrides and rejected values apply to every tab. -->
+  <section class="outro">
+    <h2>Composing</h2>
+    <p>Override a single axis without leaving a style: <code>--palette terracotta+sage</code>, <code>--font fraunces+source-code-pro</code>, <code>--theme dark</code>.</p>
+    <p>Two values are rejected outright: <code>neon</code> and <code>gradient-mesh</code>. They always produce generic output.</p>
+  </section>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  document.querySelector('.theme-toggle')?.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('ve-theme', next); } catch (e) {}
+    dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
+  });
+
+  var tabs = [].slice.call(document.querySelectorAll('.tab'));
+  function show(tab, focus) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      var panel = document.getElementById(t.getAttribute('aria-controls'));
+      // until-found, not a bare hide: Ctrl+F still reaches an inactive panel.
+      if (on) panel.removeAttribute('hidden');
+      else panel.setAttribute('hidden', 'until-found');
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { show(tab); });
+    tab.addEventListener('keydown', function (e) {
+      var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (d) { e.preventDefault(); show(tabs[(i + d + tabs.length) % tabs.length], true); }
+      else if (e.key === 'Home' || e.key === 'End') {
+        e.preventDefault(); show(e.key === 'Home' ? tabs[0] : tabs[tabs.length - 1], true);
+      }
+    });
+    // Find-in-page revealed this panel — sync the bar rather than let it lie.
+    document.getElementById(tab.getAttribute('aria-controls'))
+      .addEventListener('beforematch', function () { show(tab); });
+  });
+
+  // A closed <details> is hidden by the UA, which no print rule can override —
+  // so open every outline before printing, for the same reason print shows all tabs.
+  addEventListener('beforeprint', function () {
+    document.querySelectorAll('.outline').forEach(function (d) { d.open = true; });
+  });
+
+  document.querySelectorAll('.copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var flag = btn.getAttribute('data-flag');
+      var done = function () {
+        btn.setAttribute('data-copied', '');
+        btn.textContent = 'copied';
+        setTimeout(function () { btn.removeAttribute('data-copied'); btn.textContent = 'copy'; }, 1400);
+      };
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(flag).then(done, done);
+      } else {
+        // file:// without a secure context has no clipboard API — select instead
+        // of failing silently, so the value is still reachable.
+        var r = document.createRange();
+        r.selectNodeContents(btn.previousElementSibling);
+        getSelection().removeAllRanges();
+        getSelection().addRange(r);
+        done();
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

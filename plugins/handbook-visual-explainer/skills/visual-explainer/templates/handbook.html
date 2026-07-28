@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handbook Layout — Reference Template</title>
+<!--
+  Reference template for the visual-explainer skill: Handbook Mode (`--handbook`) — a longform
+  documentation page read top-to-bottom and returned to, not a diagram.
+  Clay/gold + deep teal on warm stock — distinct from the terracotta/sage (architecture),
+  teal (mermaid) and rose (data-table) templates so agents absorb variety.
+  Contains NO diagram: this is the template for the documentation branch.
+  Key patterns demonstrated:
+  - Serif / sans / mono triad, each with one job: headlines / body / labels
+  - Masthead: mono eyebrow, mono kicker, serif headline, dek at 66ch, stat band
+  - Numbered chapters via CSS counters (decimal-leading-zero) — reorder-safe
+  - `section + section` hairline for rhythm without divider markup
+  - Sticky TOC rail with scroll-spy, collapsing to a tab strip (see responsive-nav.md)
+  - Annotated code block: inline callouts pointing at the lines they explain
+  - Gradient-fade card tint (accent fades out) instead of a flat color-mix
+  - Definition-list Q&A for FAQ sections
+  - Capped stagger: delay stops growing after the 8th element
+  - Prose measure held at 74-76ch throughout
+  - REQUIRED theme toggle: data-theme attribute, boot script, localStorage persistence
+-->
+<script>
+  // Resolve theme before first paint. Order: saved choice > page default > OS.
+  (function () {
+    var DEFAULT = 'auto';            // 'auto' | 'light' | 'dark' — set from the --theme flag
+    var saved = null;
+    try { saved = localStorage.getItem('ve-theme'); } catch (e) {}
+    var pref = saved || DEFAULT;
+    if (pref !== 'light' && pref !== 'dark') {
+      pref = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', pref);
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Palettes: each declared exactly once, no media query ─────────────── */
+:root, :root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #faf8f4;
+  --stock: #f3efe7;
+  --surface: #fffdf9;
+  --surface-sunk: #f0ebe1;
+  --text: #221e1a;
+  --text-2: #574f46;
+  --text-dim: #8a8175;
+  --border: rgba(34, 30, 26, 0.14);
+  --border-soft: rgba(34, 30, 26, 0.07);
+  --accent: #a16207;            /* clay / gold — primary */
+  --accent-soft: rgba(161, 98, 7, 0.10);
+  --teal: #0f766e;              /* deep teal — affirmative */
+  --teal-soft: rgba(15, 118, 110, 0.10);
+  --rose: #9f1239;              /* rose — caution */
+  --rose-soft: rgba(159, 18, 57, 0.09);
+  --shadow: 0 1px 2px rgba(34, 30, 26, 0.05), 0 10px 26px -18px rgba(34, 30, 26, 0.45);
+  --font-head: "Fraunces", Georgia, serif;
+  --font-body: "Public Sans", -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Spline Sans Mono", ui-monospace, Consolas, monospace;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #17150f;
+  --stock: #1f1c15;
+  --surface: #241f17;
+  --surface-sunk: #1c1913;
+  --text: #f4efe4;
+  --text-2: #c2b7a4;
+  --text-dim: #8d8474;
+  --border: rgba(244, 239, 228, 0.15);
+  --border-soft: rgba(244, 239, 228, 0.07);
+  --accent: #e0b048;
+  --accent-soft: rgba(224, 176, 72, 0.13);
+  --teal: #5eb8ac;
+  --teal-soft: rgba(94, 184, 172, 0.13);
+  --rose: #ef7b96;
+  --rose-soft: rgba(239, 123, 150, 0.13);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 12px 30px -20px rgba(0, 0, 0, 0.9);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16.5px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  /* Atmosphere: off-center wash, not a flat void */
+  background-image: radial-gradient(ellipse 80% 50% at 62% -10%, var(--accent-soft), transparent 70%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+code, pre, .mono { font-family: var(--font-mono); }
+h1, h2, h3 { font-family: var(--font-head); font-weight: 600; letter-spacing: -0.02em; }
+a { color: var(--accent); }
+p { max-width: 76ch; }
+
+/* ── Theme toggle (REQUIRED) ──────────────────────────────────────────── */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  background: var(--surface);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  z-index: 100;
+  box-shadow: var(--shadow);
+  transition: color .18s ease, border-color .18s ease, transform .18s ease;
+}
+.theme-toggle:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.theme-toggle svg { grid-area: 1 / 1; }
+:root[data-theme="light"] .theme-toggle__moon { display: none; }
+:root[data-theme="dark"]  .theme-toggle__sun  { display: none; }
+@media print { .theme-toggle { display: none; } }
+
+/* ── Masthead ─────────────────────────────────────────────────────────── */
+.shell { max-width: 1180px; margin: 0 auto; padding: 0 28px 96px; }
+
+.mast { padding: 64px 0 30px; border-bottom: 1px solid var(--border); }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.71rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 500;
+}
+.mast h1 {
+  font-size: clamp(2.2rem, 5.6vw, 3.7rem);
+  line-height: 1.02;
+  margin: 0.24em 0 0.18em;
+  font-weight: 700;
+}
+/* Kicker: the subject itself, in mono, above the human-readable headline */
+.mast h1 .kicker {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.52em;
+  font-weight: 500;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.15em;
+}
+.dek { font-size: 1.14rem; max-width: 66ch; color: var(--text-2); margin: 0; }
+
+/* Stat band — see also .kpi-row in css-patterns.md */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
+  gap: 12px;
+  margin-top: 26px;
+}
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 13px 15px;
+  box-shadow: var(--shadow);
+}
+.stat__value {
+  font-family: var(--font-head);
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.stat__label { font-size: 0.775rem; color: var(--text-dim); margin-top: 2px; }
+
+/* ── Layout: TOC rail + main ──────────────────────────────────────────── */
+.layout {
+  display: grid;
+  grid-template-columns: 196px minmax(0, 1fr);
+  gap: 44px;
+  align-items: start;
+}
+.main { min-width: 0; }
+
+.toc { position: sticky; top: 18px; align-self: start; font-size: 0.83rem; }
+.toc-title {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 9px;
+}
+.toc a {
+  display: block;
+  padding: 5px 0 5px 13px;
+  color: var(--text-dim);
+  text-decoration: none;
+  border-left: 2px solid var(--border-soft);
+  transition: color .15s ease, border-color .15s ease;
+}
+.toc a:hover { color: var(--text); }
+.toc a.active { color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
+/* Sibling-page links — a page family, not an isolated page */
+.toc__family { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+.toc__family a { border-left: none; padding-left: 0; font-size: 0.79rem; }
+
+@media (max-width: 940px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .toc {
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+  .toc-title { display: none; }
+  .toc__links, .toc__family { display: flex; gap: 3px; white-space: nowrap; overflow-x: auto; }
+  .toc__links::-webkit-scrollbar { display: none; }
+  .toc__family { border-top: none; margin-top: 0; padding-top: 0; }
+  .toc a {
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    padding: 6px 11px;
+    flex-shrink: 0;
+  }
+  .toc a.active { border-left: none; border-bottom-color: var(--accent); }
+  section { scroll-margin-top: 56px; }
+}
+
+/* ── Numbered chapters ────────────────────────────────────────────────── */
+.main { counter-reset: chapter; }
+section { padding: 50px 0 6px; scroll-margin-top: 20px; counter-increment: chapter; }
+/* Rhythm without divider markup — and no stray rule at either end */
+section + section { border-top: 1px solid var(--border-soft); }
+
+section > h2 { font-size: 1.72rem; margin: 0 0 6px; }
+section > h2::before {
+  content: counter(chapter, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--accent);
+  vertical-align: 0.7em;
+  margin-right: 11px;
+  letter-spacing: 0.1em;
+}
+.sub { color: var(--text-2); max-width: 74ch; margin: 0 0 20px; }
+
+/* ── Cards ────────────────────────────────────────────────────────────── */
+.g2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(272px, 1fr)); gap: 15px; }
+.g3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(228px, 1fr)); gap: 14px; }
+
+.ve-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+/* Gradient-fade tint: accent at the top edge, gone by 60%. Reads as light
+   falling on the card rather than as a flat wash of color. */
+.ve-card--tint-accent { background: linear-gradient(var(--accent-soft), transparent 60%), var(--surface); }
+.ve-card--tint-teal   { background: linear-gradient(var(--teal-soft), transparent 60%), var(--surface); }
+.ve-card--tint-rose   { background: linear-gradient(var(--rose-soft), transparent 60%), var(--surface); }
+.ve-card--recessed    { background: var(--surface-sunk); box-shadow: none; }
+
+.ve-card__label {
+  margin: 0 0 6px;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.ve-card--tint-teal .ve-card__label { color: var(--teal); }
+.ve-card--tint-rose .ve-card__label { color: var(--rose); }
+.ve-card p { margin: 0; font-size: 0.93rem; color: var(--text-2); max-width: none; }
+.ve-card p + p { margin-top: 8px; }
+.ve-card p strong { color: var(--text); }
+
+/* Step cards: numbered by counter, so reordering can't desync them */
+.steps { counter-reset: step; }
+.step { counter-increment: step; padding-left: 44px; position: relative; }
+.step::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 16px;
+  top: 15px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ── Semantic lists ───────────────────────────────────────────────────── */
+ul.list { margin: 0.5em 0; padding-left: 0; list-style: none; }
+ul.list li {
+  position: relative;
+  padding-left: 20px;
+  margin: 0.42em 0;
+  font-size: 0.93rem;
+  color: var(--text-2);
+  max-width: 74ch;
+}
+/* Absolute-positioned markers — never `display: flex` on <li> */
+ul.list li::before { content: "—"; position: absolute; left: 0; color: var(--accent); }
+ul.list--yes li::before { content: "✓"; color: var(--teal); font-size: 0.85em; }
+ul.list--no  li::before { content: "×"; color: var(--rose); font-weight: 700; }
+
+/* ── Tables ───────────────────────────────────────────────────────────── */
+.table-wrap {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+table { width: 100%; border-collapse: collapse; font-size: 0.885rem; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border-soft); vertical-align: top; overflow-wrap: break-word; }
+thead th {
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  font-size: 0.67rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+tbody tr:hover { background: var(--surface-sunk); }
+
+.pill {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+}
+.pill--accent { color: var(--accent); }
+.pill--teal { color: var(--teal); }
+.pill--rose { color: var(--rose); }
+.pill--mute { color: var(--text-dim); }
+
+/* ── Code ─────────────────────────────────────────────────────────────── */
+pre {
+  background: var(--surface-sunk);
+  border: 1px solid var(--border-soft);
+  border-radius: 11px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  font-size: 0.79rem;
+  line-height: 1.62;
+  margin: 0;
+  white-space: pre;              /* annotated blocks depend on exact columns */
+}
+.codebox {
+  margin: 16px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.codebox__head {
+  background: var(--surface);
+  padding: 8px 15px;
+  font-family: var(--font-mono);
+  font-size: 0.71rem;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.codebox pre { border: none; border-radius: 0; }
+/* Annotation spans inside an annotated block */
+.ann      { color: var(--text-dim); }   /* the commentary */
+.ann-key  { color: var(--accent); }     /* the part being pointed at */
+.ann-ok   { color: var(--teal); }
+code:not(pre code) {
+  background: var(--surface-sunk);
+  border: 1px solid var(--border-soft);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.85em;
+}
+
+/* ── Margin notes ─────────────────────────────────────────────────────── */
+.note {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+  border-radius: 0 12px 12px 0;
+  padding: 14px 18px;
+  margin: 18px 0;
+  font-size: 0.93rem;
+  box-shadow: var(--shadow);
+  max-width: 80ch;
+}
+.note--teal { border-left-color: var(--teal); }
+.note--rose { border-left-color: var(--rose); }
+.note b { display: block; margin-bottom: 3px; font-size: 0.95rem; }
+
+/* ── Q&A ──────────────────────────────────────────────────────────────── */
+dl.qa { margin: 0; }
+dl.qa dt { font-weight: 600; margin-top: 18px; font-size: 0.98rem; max-width: 74ch; }
+dl.qa dd { margin: 4px 0 0; color: var(--text-2); font-size: 0.93rem; max-width: 76ch; }
+
+footer {
+  margin-top: 48px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+/* ── Motion ───────────────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up {
+  animation: fadeUp 0.45s cubic-bezier(.2,.7,.3,1) both;
+  /* Capped: a long page must not take seconds to finish revealing */
+  animation-delay: calc(min(var(--i, 0), 7) * 0.05s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .fade-up { animation: none; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">
+  <svg class="theme-toggle__sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+  </svg>
+  <svg class="theme-toggle__moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+</button>
+
+<div class="shell">
+
+<header class="mast fade-up">
+  <div class="eyebrow">Reference template · Handbook Mode · visual-explainer</div>
+  <h1><span class="kicker">handbook.html</span>The layout for something people come back to</h1>
+  <p class="dek">A longform documentation page: numbered chapters, a contents rail that tracks your position, marginalia, and a stat band that states the thesis before any prose. No diagram anywhere on it — that is the point.</p>
+  <div class="stats">
+    <div class="stat"><div class="stat__value">5</div><div class="stat__label">chapters, numbered by counter</div></div>
+    <div class="stat"><div class="stat__value">3</div><div class="stat__label">typefaces, one job each</div></div>
+    <div class="stat"><div class="stat__value">74–76ch</div><div class="stat__label">prose measure, held throughout</div></div>
+    <div class="stat"><div class="stat__value">0</div><div class="stat__label">Mermaid diagrams</div></div>
+    <div class="stat"><div class="stat__value">940px</div><div class="stat__label">rail collapses to a tab strip</div></div>
+  </div>
+</header>
+
+<div class="layout">
+
+<nav class="toc" id="toc">
+  <div class="toc-title">Contents</div>
+  <div class="toc__links">
+    <a href="#when">1 · When to use it</a>
+    <a href="#anatomy">2 · Anatomy</a>
+    <a href="#chapters">3 · Chapter numbering</a>
+    <a href="#annotate">4 · Annotated blocks</a>
+    <a href="#qa">5 · Q&amp;A</a>
+  </div>
+  <div class="toc__family">
+    <a href="./architecture.html">→ architecture</a>
+    <a href="./data-table.html">→ data-table</a>
+  </div>
+</nav>
+
+<main class="main">
+
+<section id="when">
+  <h2>When to reach for this mode</h2>
+  <p class="sub">Handbook Mode is a format, not a palette. Pick it by how the page will be <em>read</em>, not by how it should look — then pick a <code>--style</code> separately.</p>
+  <div class="g2">
+    <div class="ve-card ve-card--tint-teal fade-up" style="--i: 0">
+      <h3 class="ve-card__label">use it for</h3>
+      <ul class="list list--yes">
+        <li>User guides and how-tos someone will return to</li>
+        <li>Anything with <strong>4+ sections read in order</strong></li>
+        <li>Reference pages with tables, caveats, and an FAQ</li>
+        <li>Explaining an output format, config file, or CLI contract</li>
+        <li>One page in a family of cross-linked pages</li>
+      </ul>
+    </div>
+    <div class="ve-card ve-card--tint-rose fade-up" style="--i: 1">
+      <h3 class="ve-card__label">not for</h3>
+      <ul class="list list--no">
+        <li>A single diagram — that is the mermaid or architecture template</li>
+        <li>Tabular data as the whole payload — use data-table</li>
+        <li>Under 4 sections: the rail is clutter, drop it</li>
+        <li>Anything presented rather than read — use slide mode</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note note--teal">
+    <b>The rail is the tell.</b>
+    If a reader would ever want to jump back to chapter 3, this is the right layout. If they read once, top to bottom, and never return, a plainer page serves them better.
+  </div>
+</section>
+
+<section id="anatomy">
+  <h2>Anatomy</h2>
+  <p class="sub">Six parts. The masthead and the rail do most of the work.</p>
+  <div class="g3 steps">
+    <div class="ve-card step fade-up" style="--i: 0">
+      <h3 class="ve-card__label">masthead</h3>
+      <p>Mono eyebrow, then the subject as a mono <strong>kicker</strong>, then a serif headline that reads as a sentence. The kicker carries the literal name; the headline carries the meaning.</p>
+    </div>
+    <div class="ve-card step fade-up" style="--i: 1">
+      <h3 class="ve-card__label">stat band</h3>
+      <p>Four to six hard numbers, serif values over small dim labels. States the page's thesis before a word of prose. Skip it if you have no real numbers — invented ones are worse than none.</p>
+    </div>
+    <div class="ve-card step fade-up" style="--i: 2">
+      <h3 class="ve-card__label">contents rail</h3>
+      <p>196px sticky column, scroll-spy active state, collapsing to a horizontal tab strip under 940px. Full pattern in <code>responsive-nav.md</code>.</p>
+    </div>
+    <div class="ve-card step fade-up" style="--i: 3">
+      <h3 class="ve-card__label">numbered chapters</h3>
+      <p>CSS counters, not hand-written numbers. A hairline between siblings gives rhythm with <strong>no divider markup</strong>.</p>
+    </div>
+    <div class="ve-card step ve-card--tint-accent fade-up" style="--i: 4">
+      <h3 class="ve-card__label">margin notes</h3>
+      <p>Left-border asides in three semantic colors. Used for the thing a careful reader would ask next — not only for warnings.</p>
+    </div>
+    <div class="ve-card step fade-up" style="--i: 5">
+      <h3 class="ve-card__label">page family</h3>
+      <p>Sibling pages listed under the rail and repeated in the footer, so a set of guides navigates as a set.</p>
+    </div>
+  </div>
+</section>
+
+<section id="chapters">
+  <h2>Chapter numbering, and where it breaks</h2>
+  <p class="sub">Numbers belong to the document structure, so let CSS derive them.</p>
+  <div class="table-wrap">
+    <table>
+      <colgroup><col style="width:30%"><col style="width:26%"><col style="width:44%"></colgroup>
+      <thead><tr><th>Approach</th><th>Verdict</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>counter-increment</code> on <code>section</code></td>
+          <td><span class="pill pill--teal">use this</span></td>
+          <td>Reordering or inserting a section renumbers everything automatically</td>
+        </tr>
+        <tr>
+          <td>Hand-written <code>&lt;span&gt;01&lt;/span&gt;</code></td>
+          <td><span class="pill pill--rose">avoid</span></td>
+          <td>Silently desyncs the moment a section moves — and it always moves</td>
+        </tr>
+        <tr>
+          <td><code>&lt;ol&gt;</code> of sections</td>
+          <td><span class="pill pill--mute">rarely</span></td>
+          <td>Correct semantics, but list styling fights the section layout for little gain</td>
+        </tr>
+        <tr>
+          <td>TOC link labels (<code>1 ·</code>, <code>2 ·</code>)</td>
+          <td><span class="pill pill--accent">by hand</span></td>
+          <td>Counters can't reach across to the nav, so these stay manual — keep them in sync</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note note--rose">
+    <b>Two counters, two scopes.</b>
+    Chapters count on <code>.main</code>; step cards count on each <code>.steps</code> grid. Reset them on different ancestors or the step numbers continue from the chapter number.
+  </div>
+</section>
+
+<section id="annotate">
+  <h2>Annotated blocks</h2>
+  <p class="sub">The one pattern here that prose genuinely cannot replace: explaining a <em>format</em> by pointing at it.</p>
+
+  <div class="codebox">
+    <div class="codebox__head"><span>what the reader will actually see</span><span>output</span></div>
+<pre class="code-annotated"><span class="ann-key">stat: ok</span>  duration=142ms          <span class="ann">← the field you check first</span>
+retries: <span class="ann-key">2</span>                        <span class="ann">← nonzero means the transport flapped;</span>
+                                    <span class="ann">correlate with the gateway log</span>
+payload: 4.1 KiB                  
+signature: <span class="ann-ok">verified</span>               <span class="ann-ok">← anything but `verified` invalidates</span>
+                                    <span class="ann-ok">everything above it</span></pre>
+  </div>
+
+  <p>Three rules make this work:</p>
+  <ul class="list">
+    <li><code>white-space: pre</code>, not <code>pre-wrap</code> — the annotation columns depend on exact character positions, and wrapping destroys the alignment</li>
+    <li>Wrap the block in <code>overflow-x: auto</code> so narrow viewports scroll instead of reflowing</li>
+    <li>Dim the commentary and accent only the <strong>token being pointed at</strong>. If every line is highlighted, nothing is</li>
+  </ul>
+  <div class="note">
+    <b>Keep it under about 12 lines.</b>
+    Past that the reader loses which arrow belongs to which line. Split into two annotated blocks with prose between them.
+  </div>
+</section>
+
+<section id="qa">
+  <h2>Q&amp;A</h2>
+  <dl class="qa">
+    <dt>Why a <code>&lt;dl&gt;</code> instead of cards?</dt>
+    <dd>An FAQ is definitions: a term and its explanation. <code>&lt;dl&gt;/&lt;dt&gt;/&lt;dd&gt;</code> says so semantically, costs about six lines of CSS, and copy-pastes into a document cleanly. Cards would give each answer equal visual weight, which is the opposite of what a tail-end reference section wants.</dd>
+
+    <dt>Does this mode ever include a diagram?</dt>
+    <dd>It can, and then the Mermaid container rules apply in full — shell, zoom controls, and re-render on <code>themechange</code>. But reach for <code>--handbook</code> because the page is a <em>document</em>. If a diagram is the payload, a different template fits better.</dd>
+
+    <dt>How is this different from <code>--style paper</code>?</dt>
+    <dd>Different axes, so it isn't a choice between them. <code>--style paper</code> sets the palette: warm cream and terracotta, informal. <code>--handbook</code> sets the structure — rail, chapters, stat band, marginalia — and accepts any palette. <code>--handbook --style paper</code> is both.</dd>
+
+    <dt>Can the rail be on the right?</dt>
+    <dd>Yes — flip the grid columns and the <code>border-left</code> to <code>border-right</code>. Left is the default because it matches the reading direction, but a right rail pairs well with a left-aligned masthead when you want the headline flush to the page edge.</dd>
+  </dl>
+</section>
+
+<footer>
+  <span class="mono">handbook.html</span> · reference template ·
+  <a href="./architecture.html">architecture</a> ·
+  <a href="./data-table.html">data-table</a> ·
+  <a href="./mermaid-flowchart.html">mermaid-flowchart</a>
+  <br>Fraunces / Public Sans / Spline Sans Mono
+</footer>
+
+</main>
+</div><!-- /layout -->
+</div><!-- /shell -->
+
+<script>
+// Theme toggle handler. Fires `themechange` so JS-rendered content can recolor.
+(function () {
+  var root = document.documentElement;
+  var btn = document.querySelector('.theme-toggle');
+  if (btn) btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('ve-theme', next); } catch (e) {}
+    dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
+  });
+})();
+
+// Scroll spy — see responsive-nav.md for the full pattern. Position-based, not
+// IntersectionObserver: any rootMargin band excludes a heading parked at y≈0,
+// which is exactly where a TOC jump leaves it.
+(function () {
+  var toc = document.getElementById('toc');
+  if (!toc) return;
+  var links = Array.prototype.slice.call(toc.querySelectorAll('.toc__links a'));
+  var sections = links
+    .map(function (link) {
+      return { link: link, el: document.getElementById(link.getAttribute('href').slice(1)) };
+    })
+    .filter(function (s) { return s.el; });
+  if (!sections.length) return;
+
+  var current = null;
+
+  function spy() {
+    // The last heading at or above the sightline is the active one. A heading at
+    // y≈0 after a jump still satisfies this; no band to fall outside of.
+    var sightline = window.innerHeight * 0.25;
+    var found = sections[0];
+    sections.forEach(function (s) {
+      if (s.el.getBoundingClientRect().top <= sightline) found = s;
+    });
+    // Scrolling runs out before a short last section reaches the sightline, so the
+    // bottom of the document means the last section — otherwise its link is the one
+    // link on the page that can never be reached, including by clicking it.
+    var scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    if (scrollable > 0 && window.scrollY >= scrollable - 2) found = sections[sections.length - 1];
+    if (found === current) return;              // no DOM writes when nothing changed
+    current = found;
+    links.forEach(function (l) { l.classList.remove('active'); });
+    found.link.classList.add('active');
+    // On the mobile tab strip, keep the active tab in view
+    if (window.innerWidth <= 940) {
+      found.link.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  }
+
+  var queued = false;
+  addEventListener('scroll', function () {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(function () { queued = false; spy(); });
+  }, { passive: true });
+  addEventListener('resize', spy);
+
+  links.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var id = a.getAttribute('href').slice(1);
+      var el = document.getElementById(id);
+      if (!el) return;
+      // Set active immediately: smooth scrolling means spy() would otherwise lag
+      // the click by the whole animation, and a jump to the last section may not
+      // move the scroll position at all.
+      links.forEach(function (l) { l.classList.remove('active'); });
+      a.classList.add('active');
+      sections.forEach(function (s) { if (s.link === a) current = s; });
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.replaceState(null, '', '#' + id);
+    });
+  });
+
+  spy();   // stamp an active link before the first scroll event
+})();
+</script>
+</body>
+</html>

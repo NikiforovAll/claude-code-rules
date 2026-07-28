@@ -1,5 +1,6 @@
 ---
 description: Generate a visual HTML implementation plan — detailed feature specification with state machines, code snippets, and edge cases
+argument-hint: "[feature] [--style <name>] [--theme light|dark] [--slides|--handbook]"
 ---
 Load the visual-explainer skill, then generate a comprehensive visual implementation plan for `$@` as a self-contained HTML page.
 
@@ -54,9 +55,9 @@ Verify each against the code. If something cannot be verified, mark it as uncert
 
 2. **The Problem** — side-by-side comparison panels showing current behavior vs. desired behavior. Use concrete examples, not abstract descriptions. Show what the user experiences or what the code does, step by step. *Visual treatment: two-column grid with rose-tinted "Before" header and sage-tinted "After" header. Numbered flow steps with arrows between them.*
 
-3. **State Machine** — Mermaid flowchart or stateDiagram showing the states and transitions. Label edges with the triggers (commands, events, conditions). *Wrap in `.mermaid-wrap` with zoom controls (+/−/reset/expand) and click-to-expand. Use `flowchart TD` instead of `stateDiagram-v2` if labels need special characters like colons or parentheses. Add explanatory caption below the diagram.*
+3. **State Machine** — Mermaid flowchart or stateDiagram showing the states and transitions. Label edges with the triggers (commands, events, conditions). *Wrap in `.mermaid-wrap` with the standard zoom controls — see "Zoom Controls" in css-patterns.md. Use `flowchart TD` instead of `stateDiagram-v2` if labels need special characters like colons or parentheses. Add explanatory caption below the diagram.*
 
-4. **State Variables** — card grid showing new state and existing state (if modified). Use code blocks with proper `white-space: pre-wrap`. *Visual treatment: two cards side-by-side, elevated depth, monospace labels.*
+4. **State Variables** — card grid showing new state and existing state (if modified). *Visual treatment: two cards side-by-side, elevated depth, monospace labels.*
 
 5. **Modified Functions** — for each function that needs changes, show:
    - Function name and file path
@@ -83,24 +84,12 @@ Verify each against the code. If something cannot be verified, mark it as uncert
 - Sections 4-6 are core implementation details (elevated cards, readable code blocks)
 - Sections 7-10 are reference material (flat or recessed depth, compact layout)
 
-**Typography and color:**
-- Pick a distinctive font pairing (not Inter/Roboto)
-- Use semantic accent colors: gold for primary accents, sage for "after"/success states, rose for "before"/warning states
-- Both light and dark themes must work
+**Semantic color roles for this page type:** gold for primary accents, sage for "after"/success states, rose for "before"/warning states.
 
+**Code blocks:** include file path headers where relevant, and keep snippets focused — show the pattern, not the full implementation.
 
-**Code block requirements:**
-- Always use `white-space: pre-wrap` and `word-break: break-word`
-- Include file path headers where relevant
-- Use syntax-appropriate highlighting via CSS classes if desired
-- Keep snippets focused — show the pattern, not the full implementation
+Typography, palette, theme toggle, code-block formatting, and overflow protection are the skill's rules — follow its §3 Style and Quality Checks.
 
-**Overflow prevention:**
-- Apply `min-width: 0` on all grid/flex children
-- Use `overflow-wrap: break-word` on all text containers
-- Never use `display: flex` on `<li>` for markers — use absolute positioning
-- Test tables with wide content don't overflow their container
-
-Write to `~/.agent/diagrams/` with a descriptive filename (e.g., `feature-name-plan.html`). Open the result in the browser. Tell the user the file path.
+Write to `~/.agent/diagrams/` with a descriptive filename (e.g., `feature-name-plan.html`). Tell the user the file path.
 
 Ultrathink.

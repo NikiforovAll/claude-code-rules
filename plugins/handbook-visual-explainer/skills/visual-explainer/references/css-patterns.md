@@ -6,11 +6,16 @@ Reusable patterns for layout, connectors, theming, and visual effects in self-co
 
 Always define both light and dark palettes via custom properties. Start with whichever fits the chosen aesthetic, ensure both work.
 
+Both palettes hang off `data-theme` — see "Theme Toggle (REQUIRED on every page)" below for the boot script, button, and handler that drive the attribute. The mode-primary palette also owns the bare `:root` so the page survives with JS disabled. Do **not** put a palette in a `prefers-color-scheme` media query: the boot script already consults the OS, and a media query would override the user's explicit choice.
+
 ```css
 :root {
   --font-body: 'Outfit', system-ui, sans-serif;
   --font-mono: 'Space Mono', 'SF Mono', Consolas, monospace;
+}
 
+/* Light-first aesthetic — swap the selectors for a dark-first one. */
+:root, :root[data-theme="light"] {
   --bg: #f8f9fa;
   --surface: #ffffff;
   --surface-elevated: #ffffff;
@@ -29,24 +34,22 @@ Always define both light and dark palettes via custom properties. Start with whi
   --node-c-dim: rgba(217, 119, 6, 0.1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --surface-elevated: #1c2333;
-    --border: rgba(255, 255, 255, 0.06);
-    --border-bright: rgba(255, 255, 255, 0.12);
-    --text: #e6edf3;
-    --text-dim: #8b949e;
-    --accent: #22d3ee;
-    --accent-dim: rgba(34, 211, 238, 0.12);
-    --node-a: #22d3ee;
-    --node-a-dim: rgba(34, 211, 238, 0.12);
-    --node-b: #34d399;
-    --node-b-dim: rgba(52, 211, 153, 0.12);
-    --node-c: #fbbf24;
-    --node-c-dim: rgba(251, 191, 36, 0.12);
-  }
+:root[data-theme="dark"] {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface-elevated: #1c2333;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-bright: rgba(255, 255, 255, 0.12);
+  --text: #e6edf3;
+  --text-dim: #8b949e;
+  --accent: #22d3ee;
+  --accent-dim: rgba(34, 211, 238, 0.12);
+  --node-a: #22d3ee;
+  --node-a-dim: rgba(34, 211, 238, 0.12);
+  --node-b: #34d399;
+  --node-b-dim: rgba(52, 211, 153, 0.12);
+  --node-c: #fbbf24;
+  --node-c-dim: rgba(251, 191, 36, 0.12);
 }
 ```
 
@@ -94,7 +97,7 @@ body {
 
 The fundamental building block. A colored card representing a system component, pipeline step, or data entity.
 
-**IMPORTANT: Never use `.node` as a CSS class name.** Mermaid.js internally uses `.node` on its SVG `<g>` elements with `transform: translate(x, y)` for positioning. Any page-level `.node` styles (hover transforms, box-shadows, transitions) will leak into Mermaid diagrams and break their layout. Use `.ve-card` instead (namespaced to avoid collisions with CSS frameworks like Bootstrap/Tailwind that also use `.card`).
+Use `.ve-card`, never `.node` — the name collides with Mermaid's internals (see "CSS class collision" in `mermaid-rules.md`). `.ve-card` is namespaced against frameworks like Bootstrap/Tailwind that also claim `.card`.
 
 ```css
 .ve-card {
@@ -131,6 +134,14 @@ The fundamental building block. A colored card representing a system component, 
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
   border-color: color-mix(in srgb, var(--border) 50%, var(--accent) 50%);
 }
+
+/* Tinted: semantic category rather than importance. The accent fades out by
+   60%, which reads as light falling on the card — a flat color-mix wash reads
+   as "this card is a different color". Layer over the surface, don't replace it. */
+.ve-card--tint {
+  background: linear-gradient(var(--accent-dim), transparent 60%), var(--surface);
+}
+/* Semantic variants reuse the node accents: --node-a-dim, --node-b-dim, … */
 
 /* Glass: special-occasion overlay effect (use sparingly) */
 .ve-card--glass {
@@ -287,6 +298,33 @@ For implementation plans and architecture docs, **don't display entire source fi
 - No height constraint on long code (page becomes endless scroll)
 
 If someone needs the full file, put it in a collapsible section or link to it.
+
+### Annotated Block
+
+For explaining a **format** rather than logic — CLI output, a config file, a log line, a JSON payload, a report schema. Inline annotations point at the lines they describe, which prose cannot do compactly.
+
+```css
+/* Overrides the usual pre-wrap: annotation columns depend on exact
+   character positions, so wrapping destroys the alignment. */
+.code-annotated {
+  white-space: pre;
+  overflow-x: auto;
+}
+.code-annotated .ann     { color: var(--text-dim); }  /* the commentary */
+.code-annotated .ann-key { color: var(--accent); }    /* the token pointed at */
+.code-annotated .ann-ok  { color: var(--green); }
+```
+
+```html
+<pre class="code-block code-annotated"><span class="ann-key">stat: ok</span>  duration=142ms    <span class="ann">← check this field first</span>
+retries: <span class="ann-key">2</span>                  <span class="ann">← nonzero means the transport flapped</span>
+signature: <span class="ann-ok">verified</span>         <span class="ann-ok">← anything else invalidates the above</span></pre>
+```
+
+Rules:
+- Accent **only the token being pointed at**. If every line is highlighted, nothing is.
+- Keep it under ~12 lines — past that the reader loses which arrow belongs to which line. Split into two blocks with prose between.
+- Pad with spaces to align the `←` column. Because `white-space: pre` is in force, `overflow-x: auto` on the block is mandatory rather than optional.
 
 ## Directory Tree
 
@@ -510,6 +548,18 @@ mermaid.initialize({
 
 Add zoom controls to every `.mermaid-wrap` container for complex diagrams.
 
+**The control set is fixed — five buttons, in this order.** The `data-action` values are the contract between the markup and the `actions` map; renaming one silently disables that button, since the handler is wired by attribute lookup.
+
+| `data-action` | Glyph | Does |
+|---|---|---|
+| `zoom-in` | `+` | Zoom in one step, centered on the viewport |
+| `zoom-out` | `−` | Zoom out one step, centered on the viewport |
+| `zoom-fit` | `↺` | Smart fit — contain the diagram in the viewport |
+| `zoom-one` | `1:1` | Reset to natural size |
+| `zoom-expand` | `⛶` | Open the diagram full size in a new tab |
+
+Plus three pointer interactions: **Ctrl/Cmd + wheel** zooms, **drag** pans once zoomed in, **double-click** fits. Wheel without a modifier scrolls the page — don't capture it. The hint line above the diagram states these, so it has to match what you wired.
+
 **Small diagrams in slides.** If a diagram has fewer than ~7 nodes with no branching, it will render tiny in a full-viewport slide container. For simple linear flows (A → B → C → D), use CSS pipeline cards instead of Mermaid — see `slide-patterns.md` "CSS Pipeline Slide." Reserve Mermaid for complex graphs where automatic edge routing is actually needed.
 
 ### Full Pattern
@@ -704,7 +754,38 @@ function initDiagram(shell) {
 document.querySelectorAll('.diagram-shell').forEach(initDiagram);
 ```
 
-This pattern removes all hardcoded IDs and supports unlimited diagrams per page. For the full implementation (including smart fit, pinch zoom, and shared drag state), use `templates/mermaid-flowchart.html` as the canonical source.
+This pattern removes all hardcoded IDs and supports unlimited diagrams per page. For the full implementation (including smart fit, pinch zoom, and shared drag state), use `../templates/mermaid-flowchart.html` as the canonical source.
+
+### `openInNewTab()` — the `zoom-expand` handler
+
+Lives inside `initDiagram(shell)`, so it closes over that diagram's `canvas`. It exports a *clone*: the live SVG carries the zoom/pan styles, and the new tab must show the diagram at natural size.
+
+```javascript
+function openInNewTab() {
+  const svg = canvas.querySelector('svg');
+  if (!svg) return;
+
+  const clone = svg.cloneNode(true);
+  clone.style.width = '';    // drop the zoom sizing — the export is natural size
+  clone.style.height = '';
+
+  // Read the theme at click time so the exported background matches the colors
+  // already baked into the SVG. A value captured at load goes stale on toggle.
+  const bg = isDarkTheme() ? '#042f2e' : '#f0fdfa';
+
+  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagram</title><style>
+  body{margin:0;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;
+  background:${bg};padding:40px;box-sizing:border-box}
+  svg{max-width:100%;width:auto;height:auto}
+  </style></head><body>${clone.outerHTML}</body></html>`;
+
+  open(URL.createObjectURL(new Blob([html], { type: 'text/html' })), '_blank');
+}
+```
+
+Substitute your page's `--bg` / `--surface` hexes for the teal pair. `isDarkTheme()` is the reader from "Theme Toggle" below — the attribute, never `matchMedia`.
 
 ## Grid Layouts
 
@@ -1029,7 +1110,9 @@ Define the keyframe once, then stagger via a `--i` CSS variable set per element.
 
 .ve-card {
   animation: fadeUp 0.4s ease-out both;
-  animation-delay: calc(var(--i, 0) * 0.05s);
+  /* Capped at the 8th element: on a long page an uncapped stagger takes
+     seconds to finish, and late cards read as broken rather than delayed. */
+  animation-delay: calc(min(var(--i, 0), 7) * 0.05s);
 }
 ```
 
@@ -1518,6 +1601,53 @@ hr {
   font-size: 18px;
   letter-spacing: 12px;
 }
+
+/* Sibling hairline: rhythm with no divider markup, and no stray rule at
+   either end of the page. Prefer this over <hr> between sections. */
+section + section { border-top: 1px solid var(--border-soft); }
+```
+
+### Numbered Chapters
+
+For a document read in order. Derive the numbers with counters — hand-written `<span>01</span>` desyncs the first time a section moves, and sections always move.
+
+```css
+.main { counter-reset: chapter; }
+section { counter-increment: chapter; }
+
+section > h2::before {
+  content: counter(chapter, decimal-leading-zero);   /* 01, 02, … */
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--accent);
+  vertical-align: 0.7em;    /* rides high against the heading, like a footnote */
+  margin-right: 11px;
+  letter-spacing: 0.1em;
+}
+```
+
+Notes:
+- `decimal-leading-zero` gives `01…09` free, which reads as "a set of chapters" rather than a bare list.
+- **Reset nested counters on a different ancestor.** Numbered step cards inside a chapter need their own `counter-reset: step` on the grid container, or they continue from the chapter number.
+- Counters can't reach into the nav, so TOC link labels (`1 ·`, `2 ·`) stay manual. Keep them in sync with the section order.
+
+### Definition-List Q&A
+
+For FAQ and glossary sections. An FAQ *is* definitions — a term and its explanation — so `<dl>` is the honest markup, it costs almost no CSS, and it copy-pastes into a document cleanly. Cards would give every answer equal visual weight, which is wrong for a tail-end reference section.
+
+```css
+dl.qa { margin: 0; }
+dl.qa dt {
+  font-weight: 600;
+  margin-top: 18px;
+  max-width: 74ch;
+}
+dl.qa dd {
+  margin: 4px 0 0;
+  color: var(--text-2);
+  font-size: 0.93rem;
+  max-width: 76ch;
+}
 ```
 
 ### Article Hero Patterns
@@ -1543,6 +1673,17 @@ hr {
   font-weight: 600;
   line-height: 1.15;
   margin-bottom: 16px;
+}
+/* Kicker — the literal subject (command, file, endpoint) in mono, sitting
+   above the headline inside the same <h1>. The kicker carries the name, the
+   headline carries the meaning; neither has to do both. */
+.hero__title .hero__kicker {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.52em;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 0.15em;
 }
 .hero__subtitle {
   font-size: 20px;
@@ -1636,12 +1777,35 @@ For warnings, tips, notes, and key takeaways.
 }
 ```
 
-### Theme Toggle
+### Theme Toggle (REQUIRED on every page)
 
-Use `data-theme` attribute for user-controllable light/dark modes. Random initial theme adds variety.
+Every generated page must ship this. `@media (prefers-color-scheme: ...)` on its own is not enough — it gives the viewer no control. Copy all four blocks below verbatim; only the palette values change per aesthetic.
+
+The mechanism is attribute-driven end to end: a blocking script in `<head>` resolves the mode (saved choice → `--theme` flag default → OS) and stamps `data-theme` on `<html>` before first paint, so there is no flash. No media query is involved, so each palette is declared exactly once.
+
+**1. Boot script — first thing in `<head>`, before the stylesheet.** Must be inline and blocking.
+
+```html
+<script>
+  // Resolve theme before first paint. Order: saved choice > page default > OS.
+  (function () {
+    var DEFAULT = 'auto';            // 'auto' | 'light' | 'dark' — set from the --theme flag
+    var saved = null;
+    try { saved = localStorage.getItem('ve-theme'); } catch (e) {}
+    var pref = saved || DEFAULT;
+    if (pref !== 'light' && pref !== 'dark') {
+      pref = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', pref);
+  })();
+</script>
+```
+
+**2. Palettes — both modes as attribute selectors.** Put the aesthetic's primary mode on the bare `:root` too, so the page is still styled if JS is disabled.
 
 ```css
-:root, [data-theme="light"] {
+/* Light-first aesthetic (editorial, paper/ink, blueprint) */
+:root, :root[data-theme="light"] {
   --bg: #fafaf9;
   --surface: #ffffff;
   --text: #1c1917;
@@ -1650,7 +1814,7 @@ Use `data-theme` attribute for user-controllable light/dark modes. Random initia
   --accent: #0d9488;
 }
 
-[data-theme="dark"] {
+:root[data-theme="dark"] {
   --bg: #0c0a09;
   --surface: #1c1917;
   --text: #fafaf9;
@@ -1658,22 +1822,13 @@ Use `data-theme` attribute for user-controllable light/dark modes. Random initia
   --border: #292524;
   --accent: #14b8a6;
 }
+/* Dark-first aesthetic: swap which palette shares the bare `:root`. */
 ```
 
-```javascript
-// Random initial theme
-const themes = ['light', 'dark'];
-document.documentElement.setAttribute('data-theme', themes[Math.floor(Math.random() * 2)]);
-
-// Toggle function
-function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme');
-  document.documentElement.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
-}
-```
+**3. Button — first element in `<body>`.**
 
 ```html
-<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+<button class="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">
   <svg class="theme-toggle__sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
     <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
   </svg>
@@ -1688,16 +1843,58 @@ function toggleTheme() {
   position: fixed;
   top: 20px;
   right: 20px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
   background: var(--surface);
+  color: var(--text-dim);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 8px;
+  border-radius: 10px;
   cursor: pointer;
   z-index: 100;
+  transition: color .18s ease, border-color .18s ease, transform .18s ease;
 }
-[data-theme="light"] .theme-toggle__moon { display: none; }
-[data-theme="dark"] .theme-toggle__sun { display: none; }
+.theme-toggle:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.theme-toggle svg { grid-area: 1 / 1; }
+:root[data-theme="light"] .theme-toggle__moon { display: none; }
+:root[data-theme="dark"]  .theme-toggle__sun  { display: none; }
+@media print { .theme-toggle { display: none; } }
 ```
+
+**4. Handler — near the end of `<body>`.** Persists the choice and fires `themechange` so JS-rendered content (Mermaid, Chart.js) can recolor itself.
+
+```javascript
+(function () {
+  var root = document.documentElement;
+  document.querySelector('.theme-toggle')?.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('ve-theme', next); } catch (e) {}
+    dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
+  });
+})();
+```
+
+**Mermaid and Chart.js must re-render on `themechange`.** Their colors are baked into the generated SVG/canvas at render time, so CSS variables alone won't update them. Read the current mode from the attribute — never from `matchMedia`, which ignores the user's override:
+
+```javascript
+const isDarkTheme = () => document.documentElement.getAttribute('data-theme') === 'dark';
+
+function mermaidConfig() {
+  const isDark = isDarkTheme();
+  return { startOnLoad: false, theme: 'base', look: 'classic', themeVariables: { /* isDark ? ... : ... */ } };
+}
+
+mermaid.initialize(mermaidConfig());
+// inside initDiagram(), after render() is defined:
+addEventListener('themechange', () => { mermaid.initialize(mermaidConfig()); render(); });
+```
+
+`openInNewTab()` has the same constraint — see "`openInNewTab()` — the `zoom-expand` handler" above.
+
+**Failure mode to avoid:** shipping the `[data-theme]` CSS with no boot script and no button. The rulesets are then dead code, the page silently falls back to OS-only, and the toggle appears to be "missing" for no visible reason.
 
 ### Prose Anti-Patterns
 

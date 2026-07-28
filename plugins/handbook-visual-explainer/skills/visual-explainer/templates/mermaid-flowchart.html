@@ -18,18 +18,35 @@
   - look: 'classic' for clean lines
   - default dagre layout (ELK mis-sizes labels in some environments)
   - Zoom controls with scroll-to-zoom and drag-to-pan
-  - Both light and dark themes via prefers-color-scheme
+  - REQUIRED theme toggle: data-theme attribute, boot script, Mermaid re-render on themechange
   - Staggered fade-in, reduced motion respect
 -->
+<script>
+  // Resolve theme before first paint. Order: saved choice > page default > OS.
+  (function () {
+    var DEFAULT = 'auto';            // 'auto' | 'light' | 'dark' — set from the --theme flag
+    var saved = null;
+    try { saved = localStorage.getItem('ve-theme'); } catch (e) {}
+    var pref = saved || DEFAULT;
+    if (pref !== 'light' && pref !== 'dark') {
+      pref = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', pref);
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Fragment+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
   /* ============ THEME ============ */
+  /* Light-first: the light palette also owns the bare :root so the page is
+     still styled if the boot script never runs (JS disabled). */
   :root {
     --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
     --font-mono: 'Fragment Mono', 'SF Mono', Consolas, monospace;
+  }
 
+  :root, :root[data-theme="light"] {
     --bg: #f0fdfa;
     --surface: #ffffff;
     --border: rgba(0, 0, 0, 0.07);
@@ -43,21 +60,43 @@
     --danger: #dc2626;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #042f2e;
-      --surface: #0a3d3a;
-      --border: rgba(255, 255, 255, 0.08);
-      --text: #ccfbf1;
-      --text-dim: #5eead4;
+  :root[data-theme="dark"] {
+    --bg: #042f2e;
+    --surface: #0a3d3a;
+    --border: rgba(255, 255, 255, 0.08);
+    --text: #ccfbf1;
+    --text-dim: #5eead4;
 
-      --primary: #2dd4bf;
-      --primary-dim: rgba(45, 212, 191, 0.14);
-      --secondary: #38bdf8;
-      --tertiary: #fbbf24;
-      --danger: #f87171;
-    }
+    --primary: #2dd4bf;
+    --primary-dim: rgba(45, 212, 191, 0.14);
+    --secondary: #38bdf8;
+    --tertiary: #fbbf24;
+    --danger: #f87171;
   }
+
+  /* ============ THEME TOGGLE (required on every page) ============ */
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    background: var(--surface);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 100;
+    transition: color .18s ease, border-color .18s ease, transform .18s ease;
+  }
+  .theme-toggle:hover { color: var(--primary); border-color: var(--primary); transform: translateY(-1px); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .theme-toggle svg { grid-area: 1 / 1; }
+  :root[data-theme="light"] .theme-toggle__moon { display: none; }
+  :root[data-theme="dark"]  .theme-toggle__sun  { display: none; }
+  @media print { .theme-toggle { display: none; } }
 
   /* ============ RESET + BASE ============ */
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -292,6 +331,15 @@
 </head>
 <body>
 
+<button class="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">
+  <svg class="theme-toggle__sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+  </svg>
+  <svg class="theme-toggle__moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+</button>
+
 <div class="container">
 
   <h1 class="animate" style="--i:0">CI/CD Pipeline</h1>
@@ -388,30 +436,37 @@
     activeDrag = null;
   });
 
-  const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+  // Read the live theme from the attribute, never from matchMedia — the user's
+  // toggle choice overrides the OS preference and matchMedia can't see it.
+  const isDarkTheme = () => document.documentElement.getAttribute('data-theme') === 'dark';
 
-  mermaid.initialize({
-    startOnLoad: false,
-    theme: 'base',
-    look: 'classic',
-    themeVariables: {
-      fontFamily: "'Bricolage Grotesque', system-ui, sans-serif",
-      fontSize: '16px',
-      primaryColor: isDark ? '#115e59' : '#ccfbf1',
-      primaryBorderColor: isDark ? '#2dd4bf' : '#0d9488',
-      primaryTextColor: isDark ? '#ccfbf1' : '#134e4a',
-      secondaryColor: isDark ? '#0c4a6e' : '#e0f2fe',
-      secondaryBorderColor: isDark ? '#38bdf8' : '#0369a1',
-      secondaryTextColor: isDark ? '#ccfbf1' : '#134e4a',
-      tertiaryColor: isDark ? '#2e2618' : '#fffbeb',
-      tertiaryBorderColor: isDark ? '#fbbf24' : '#d97706',
-      tertiaryTextColor: isDark ? '#ccfbf1' : '#134e4a',
-      lineColor: isDark ? '#5eead4' : '#5f8a85',
-      noteBkgColor: isDark ? '#115e59' : '#fefce8',
-      noteTextColor: isDark ? '#ccfbf1' : '#134e4a',
-      noteBorderColor: isDark ? '#fbbf24' : '#d97706',
-    }
-  });
+  function mermaidConfig() {
+    const isDark = isDarkTheme();
+    return {
+      startOnLoad: false,
+      theme: 'base',
+      look: 'classic',
+      themeVariables: {
+        fontFamily: "'Bricolage Grotesque', system-ui, sans-serif",
+        fontSize: '16px',
+        primaryColor: isDark ? '#115e59' : '#ccfbf1',
+        primaryBorderColor: isDark ? '#2dd4bf' : '#0d9488',
+        primaryTextColor: isDark ? '#ccfbf1' : '#134e4a',
+        secondaryColor: isDark ? '#0c4a6e' : '#e0f2fe',
+        secondaryBorderColor: isDark ? '#38bdf8' : '#0369a1',
+        secondaryTextColor: isDark ? '#ccfbf1' : '#134e4a',
+        tertiaryColor: isDark ? '#2e2618' : '#fffbeb',
+        tertiaryBorderColor: isDark ? '#fbbf24' : '#d97706',
+        tertiaryTextColor: isDark ? '#ccfbf1' : '#134e4a',
+        lineColor: isDark ? '#5eead4' : '#5f8a85',
+        noteBkgColor: isDark ? '#115e59' : '#fefce8',
+        noteTextColor: isDark ? '#ccfbf1' : '#134e4a',
+        noteBorderColor: isDark ? '#fbbf24' : '#d97706',
+      }
+    };
+  }
+
+  mermaid.initialize(mermaidConfig());
 
   function initDiagram(shell) {
     const wrap = shell.querySelector('.mermaid-wrap');
@@ -571,9 +626,9 @@
       clone.style.width = '';
       clone.style.height = '';
 
-      // Use the same isDark value that was used to render the Mermaid theme
-      // This ensures the background matches the baked-in SVG colors
-      const bg = isDark ? '#042f2e' : '#f0fdfa';
+      // Read the theme at click time so the exported background matches the
+      // colors currently baked into the SVG.
+      const bg = isDarkTheme() ? '#042f2e' : '#f0fdfa';
 
       const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -725,10 +780,30 @@
       }
     }).observe(wrap);
 
+    // Mermaid bakes colors into the SVG at render time, so a CSS variable swap
+    // can't recolor it — re-initialize and re-render from .diagram-source.
+    addEventListener('themechange', () => {
+      mermaid.initialize(mermaidConfig());
+      render();
+    });
+
     render();
   }
 
   document.querySelectorAll('.diagram-shell').forEach(initDiagram);
+
+  // Theme toggle: persist the choice, announce it for JS-rendered content.
+  (function () {
+    var root = document.documentElement;
+    var btn = document.querySelector('.theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('ve-theme', next); } catch (e) {}
+      dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
+    });
+  })();
 
   setTimeout(function () {
     document.querySelectorAll('.diagram-shell').forEach(function (shell) {
