@@ -6,7 +6,7 @@ argument-hint: "[topic] [--style <name>] [--theme light|dark] [--slides|--handbo
 compatibility: Requires a browser to view generated HTML files.
 metadata:
   attribution: "Based on https://github.com/nicobailon/visual-explainer by nicobailon (MIT)"
-  version: "0.8.0"
+  version: "0.8.1"
 ---
 
 # Visual Explainer
@@ -78,11 +78,11 @@ Before writing HTML, commit to a direction. Don't default to "dark theme with bl
 
 Prose patterns (lead paragraphs, pull quotes, callout boxes) are **accent elements** within visual pages, not a separate mode. Use them to highlight key points or provide breathing room, but the page structure remains visual.
 
-For prose accents, see "Prose Page Elements" in `./references/css-patterns.md`. For everything else, use the standard freeform approach with aesthetic directions below.
+For prose accents, read both halves: "Prose Accent Elements" in `./references/diagram-types.md` for which accent a page has earned and when, and "Prose Page Elements" in `./references/css-patterns.md` for the CSS that builds it. For everything else, use the standard freeform approach with aesthetic directions below.
 
 **Who is looking?** A developer understanding a system? A PM seeing the big picture? A team reviewing a proposal? This shapes information density and visual complexity.
 
-**What type of content?** Architecture, flowchart, sequence, data flow, schema/ER, state machine, mind map, class diagram, C4 architecture, data table, timeline, dashboard, longform documentation, or prose-first page. Each has distinct layout needs and rendering approaches — route via the table in §2, then read its section in `./references/diagram-types.md`.
+**What type of content?** Architecture, flowchart, sequence, data flow, schema/ER, state machine, mind map, class diagram, C4 architecture, data table, timeline, dashboard, implementation plan, longform documentation, or prose-first page. Each has distinct layout needs and rendering approaches — route via the table in §2, then read its section in `./references/diagram-types.md`.
 
 **What aesthetic?** Pick one value from the `--style` table in Arguments and commit. The constrained directions (`blueprint`, `editorial`, `paper`, `terminal`) carry visual requirements that crowd out generic output, so prefer them; the editor schemes are flexible and need more discipline to stay distinctive.
 
@@ -126,6 +126,7 @@ Vary the choice each time. If the last diagram was dark and technical, make the 
 | Data table | HTML `<table>` | Semantic markup, accessibility, copy-paste behavior |
 | Timeline | CSS (central line + cards) | Simple linear layout doesn't need a layout engine |
 | Dashboard | CSS Grid + Chart.js | Card grid with embedded charts |
+| Implementation plan / feature spec | CSS cards + a Mermaid flow, code as excerpts | Understanding the approach is the goal, so file structure and 5–10 line snippets carry it — never full source |
 | Documentation / longform guide | **Handbook Mode** | Navigable, scannable prose is the payload — no diagram required |
 
 **Once you've picked the approach**, read the matching section of `./references/diagram-types.md` for the syntax, caveats, and CSS override classes for that type.

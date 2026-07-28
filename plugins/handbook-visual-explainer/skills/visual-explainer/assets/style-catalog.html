@@ -363,6 +363,14 @@
     letter-spacing: 0.04em; color: var(--text-dim); white-space: nowrap;
   }
   .cmd__blurb { margin: 0 0 14px; font-size: 0.88rem; color: var(--text-dim); }
+  /* Only on the cards that take fewer flags than the rest — silence means the full set,
+     so this must not become decoration that every card carries. */
+  .cmd__flags {
+    margin: 0 0 14px; padding-left: 9px;
+    border-left: 2px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; line-height: 1.55;
+    color: var(--text-dim);
+  }
 
   .outro { margin-top: 62px; padding-top: 26px; border-top: 1px solid var(--border); }
   .outro h2 {
@@ -679,7 +687,7 @@
   <div class="panel" id="p-commands" role="tabpanel" aria-labelledby="t-commands" tabindex="0" hidden="until-found">
   <section class="group" aria-labelledby="g-commands">
     <div class="group__head"><h2 class="group__label" id="g-commands">Commands</h2></div>
-    <p class="group__note">Where a style gets spent. Every one of these takes <code>--style</code> and the format flags, so any style composes with any command. The format shown is what the command reaches for on its own — an affinity, not a restriction. Open a section list to see the structure that command emits, taken from its own definition; three of them have no fixed structure and say so. Prefix with <code>handbook-visual-explainer:</code> only if the name collides with another plugin's.</p>
+    <p class="group__note">Where a style gets spent. Five of them take <code>--style</code>, <code>--theme</code>, and the format flags, so any style composes with any command. Two are narrower and say so on the card: <code>/slides</code> takes a style but no format flag, because it is already the format, and <code>/fact-check</code> takes neither — it corrects a document in place rather than generating one, so there is nothing for a style to apply to. The format shown is what the command reaches for on its own — an affinity, not a restriction. Open a section list to see the structure that command emits, taken from its own definition; three of them have no fixed structure and say so. Prefix with <code>handbook-visual-explainer:</code> only if the name collides with another plugin's.</p>
     <div class="grid grid--cmd">
         <article id="cmd-web-diagram" class="cmd">
           <svg class="wire wire--cmd" viewBox="0 0 160 76" role="img" aria-label="Nodes joined by edges">
@@ -745,6 +753,7 @@
           </div>
           <p class="cmd__blurb">A magazine-quality deck — one viewport per slide. The only command that picks the deck format for you.</p>
           <p class="cmd__shape">No fixed outline — the agent composes a narrative arc for your topic and adds slides until the source is covered.</p>
+          <p class="cmd__flags">Takes <code>--style</code> and <code>--theme</code>. No format flag — it is the format.</p>
           <div class="pick">
             <code>/slides our caching strategy</code>
             <button type="button" class="copy" data-flag="/slides our caching strategy">copy</button>
@@ -859,9 +868,10 @@
           </svg>
           <div class="cmd__head">
             <h3 class="cmd__name">fact-check</h3>
-            <span class="cmd__fmt">page · document</span>
+            <span class="cmd__fmt">in place</span>
           </div>
           <p class="cmd__blurb">Extracts every checkable claim from a document, verifies it against the code, and corrects it in place.</p>
+          <p class="cmd__flags">Takes no flags. It edits the document you point it at, so there is no new page for a style or format to apply to.</p>
           <p class="cmd__shape">Edits your document in place — no new page. Appends a summary: claims checked, confirmed, corrected, unverifiable.</p>
           <div class="pick">
             <code>/fact-check README.md</code>

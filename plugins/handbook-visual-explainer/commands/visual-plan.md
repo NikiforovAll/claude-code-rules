@@ -90,6 +90,8 @@ Verify each against the code. If something cannot be verified, mark it as uncert
 
 Typography, palette, theme toggle, code-block formatting, and overflow protection are the skill's rules — follow its §3 Style and Quality Checks.
 
+Include responsive section navigation — this page emits ten sections, more than any other command's, and the skill requires nav past four.
+
 Write to `~/.agent/diagrams/` with a descriptive filename (e.g., `feature-name-plan.html`). Tell the user the file path.
 
 Ultrathink.
