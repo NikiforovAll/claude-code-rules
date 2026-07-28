@@ -190,13 +190,13 @@ Generate beautiful, self-contained HTML pages that visually explain systems, cod
 
 **Components:**
 - **Skill:** [`visual-explainer`](/component-reference/skills/visual-explainer) - Generate HTML diagrams, tables, slide decks, and architecture overviews
-- **Command:** [`/visual-explainer:generate-web-diagram`](/component-reference/commands/generate-web-diagram) - Generate an HTML diagram for any topic
-- **Command:** [`/visual-explainer:generate-visual-plan`](/component-reference/commands/generate-visual-plan) - Generate a visual implementation plan
-- **Command:** [`/visual-explainer:generate-slides`](/component-reference/commands/generate-slides) - Generate a magazine-quality slide deck
-- **Command:** [`/visual-explainer:diff-review`](/component-reference/commands/diff-review) - Visual diff review with architecture comparison
-- **Command:** [`/visual-explainer:plan-review`](/component-reference/commands/plan-review) - Compare a plan against the codebase
-- **Command:** [`/visual-explainer:project-recap`](/component-reference/commands/project-recap) - Mental model snapshot for context-switching
-- **Command:** [`/visual-explainer:fact-check`](/component-reference/commands/fact-check) - Verify accuracy of a document against code
+- **Command:** [`/handbook-visual-explainer:web-diagram`](/component-reference/commands/web-diagram) - Generate an HTML diagram for any topic
+- **Command:** [`/handbook-visual-explainer:visual-plan`](/component-reference/commands/visual-plan) - Generate a visual implementation plan
+- **Command:** [`/handbook-visual-explainer:slides`](/component-reference/commands/slides) - Generate a magazine-quality slide deck
+- **Command:** [`/handbook-visual-explainer:diff-review`](/component-reference/commands/diff-review) - Visual diff review with architecture comparison
+- **Command:** [`/handbook-visual-explainer:plan-review`](/component-reference/commands/plan-review) - Compare a plan against the codebase
+- **Command:** [`/handbook-visual-explainer:project-recap`](/component-reference/commands/project-recap) - Mental model snapshot for context-switching
+- **Command:** [`/handbook-visual-explainer:fact-check`](/component-reference/commands/fact-check) - Verify accuracy of a document against code
 
 ```bash
 claude plugin install handbook-visual-explainer@cc-handbook

@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.20.0] - 2026-07-29
+
+### Added
+- handbook-visual-explainer: README listing the skill, all seven commands, and the `--picker` flow
+
+### Changed
+- handbook-visual-explainer: Commands now name their input with `$ARGUMENTS` instead of zero-based `$N`/`$@`, so arguments no longer arrive twice
+- handbook-visual-explainer: All seven commands are user-invoked only via `disable-model-invocation`
+- handbook-visual-explainer: Version lives only in `plugin.json`; the duplicate in `SKILL.md` is removed
+
+### Fixed
+- website: Command reference pages for `web-diagram`, `visual-plan`, and `slides` imported source files under their old `generate-` names, which broke the site build
+- website: Command invocations were documented under the wrong `visual-explainer:` plugin prefix
+
 ## [1.19.9] - 2026-03-12
 
 ### Added
