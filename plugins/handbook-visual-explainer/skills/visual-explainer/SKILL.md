@@ -6,7 +6,6 @@ argument-hint: "[topic] [--style <name>] [--theme light|dark] [--slides|--handbo
 compatibility: Requires a browser to view generated HTML files.
 metadata:
   attribution: "Based on https://github.com/nicobailon/visual-explainer by nicobailon (MIT)"
-  version: "0.8.1"
 ---
 
 # Visual Explainer

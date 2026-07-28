@@ -1,14 +1,15 @@
 ---
-description: Generate a visual HTML plan review — current codebase state vs. proposed implementation plan
-argument-hint: "[plan file] [--style <name>] [--theme light|dark] [--slides|--handbook]"
+description: Visual HTML plan review — current codebase state vs. proposed implementation plan
+argument-hint: "[plan file] [codebase path] [--style <name>] [--theme light|dark] [--slides|--handbook]"
+disable-model-invocation: true
 ---
 Load the visual-explainer skill, then generate a comprehensive visual plan review as a self-contained HTML page, comparing the current codebase against a proposed implementation plan.
 
 Follow the visual-explainer skill workflow. Read the reference template, CSS patterns, and mermaid theming references before generating. Use a blueprint/editorial aesthetic with current-state vs. planned-state panels, but vary fonts and palette from previous diagrams.
 
-**Inputs:**
-- Plan file: `$1` (path to a markdown plan, spec, or RFC document)
-- Codebase: `$2` if provided, otherwise the current working directory
+**Inputs** — read both from the request, ignoring any `--flags` (those are the skill's, per its Arguments table): $ARGUMENTS
+- Plan file: the first path given (a markdown plan, spec, or RFC document)
+- Codebase: a second path if one is given, otherwise the current working directory
 
 **Data gathering phase** — read and cross-reference these before generating:
 
@@ -78,9 +79,4 @@ Verify each claim against the code and the plan. If something cannot be verified
 
 **Visual hierarchy**: Sections 1-4 should dominate the viewport on load (hero depth for summary, elevated for architecture diagrams). Sections 6+ are reference material and should feel lighter (flat or recessed depth, compact layout, collapsible where appropriate).
 
-
-Include responsive section navigation. Use a current-vs-planned visual language throughout: blue/neutral for current state, green/purple for planned additions, amber for areas of concern, red for gaps or risks. Write to `~/.agent/diagrams/` and tell the user the path.
-
-Ultrathink.
-
-$@
+Include responsive section navigation. Use a current-vs-planned visual language throughout: blue/neutral for current state, green/purple for planned additions, amber for areas of concern, red for gaps or risks.

@@ -1,8 +1,11 @@
 ---
-description: Generate a stunning magazine-quality slide deck as a self-contained HTML page
+description: Magazine-quality slide deck as a self-contained HTML page
 argument-hint: "[topic] [--style <name>] [--theme light|dark]"
+disable-model-invocation: true
 ---
-Load the visual-explainer skill, then generate a slide deck for: $@
+Load the visual-explainer skill, then generate a slide deck about the topic below. Any `--flags` in it belong to the skill's Arguments table, not to the topic.
+
+Topic: $ARGUMENTS
 
 Follow **Slide Deck Mode** in the skill — it owns the reading list, the narrative arc, and the composition rules.
 

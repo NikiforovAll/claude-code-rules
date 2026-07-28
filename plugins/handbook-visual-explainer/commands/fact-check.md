@@ -1,12 +1,13 @@
 ---
 description: Verify the factual accuracy of a document against the actual codebase, correct inaccuracies in place
 argument-hint: "[document path]"
+disable-model-invocation: true
 ---
 Load the visual-explainer skill, then verify the factual accuracy of a document that makes claims about a codebase. Read the file, extract every verifiable claim, check each against the actual code and git history, correct inaccuracies in place, and add a verification summary.
 
-For HTML files: read `the skill's references/css-patterns.md` to match the existing page's styling when inserting the verification summary.
+For HTML files: read the skill's `references/css-patterns.md` to match the existing page's styling when inserting the verification summary.
 
-**Target file** — determine what to verify from `$1`:
+**Target file** — the requested target: $ARGUMENTS
 - Explicit path: verify that specific file (`.html`, `.md`, or any text document)
 - No argument: verify the most recently modified `.html` file in `~/.agent/diagrams/` (`ls -t ~/.agent/diagrams/*.html | head -1`)
 
@@ -56,9 +57,3 @@ Include in the summary:
 **Phase 5: Report.** Tell the user what was checked, what was corrected, and where the file is. If nothing needed correction, say so — the verification still has value as confirmation.
 
 This is not a re-review. It does not second-guess analysis, opinions, or design judgments. It does not change the document's structure or organization. It is a fact-checker — it verifies that the data presented matches reality, corrects what doesn't, and leaves everything else alone.
-
-Write corrections to the original file.
-
-Ultrathink.
-
-$@

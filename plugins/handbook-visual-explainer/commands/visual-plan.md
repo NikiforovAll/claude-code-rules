@@ -1,8 +1,11 @@
 ---
-description: Generate a visual HTML implementation plan — detailed feature specification with state machines, code snippets, and edge cases
+description: Visual HTML implementation plan for a feature — state machines, code snippets, edge cases
 argument-hint: "[feature] [--style <name>] [--theme light|dark] [--slides|--handbook]"
+disable-model-invocation: true
 ---
-Load the visual-explainer skill, then generate a comprehensive visual implementation plan for `$@` as a self-contained HTML page.
+Load the visual-explainer skill, then generate a comprehensive visual implementation plan for the feature below, as a self-contained HTML page. Any `--flags` in it belong to the skill's Arguments table, not to the feature description.
+
+Feature: $ARGUMENTS
 
 Follow the visual-explainer skill workflow. Read the reference template, CSS patterns, and mermaid theming references before generating. Use an editorial or blueprint aesthetic, but vary fonts and palette from previous diagrams.
 
@@ -91,7 +94,3 @@ Verify each against the code. If something cannot be verified, mark it as uncert
 Typography, palette, theme toggle, code-block formatting, and overflow protection are the skill's rules — follow its §3 Style and Quality Checks.
 
 Include responsive section navigation — this page emits ten sections, more than any other command's, and the skill requires nav past four.
-
-Write to `~/.agent/diagrams/` with a descriptive filename (e.g., `feature-name-plan.html`). Tell the user the file path.
-
-Ultrathink.

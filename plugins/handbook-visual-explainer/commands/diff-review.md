@@ -1,12 +1,13 @@
 ---
 description: Generate a visual HTML diff review — before/after architecture comparison with code review analysis
 argument-hint: "[base..head | branch] [--style <name>] [--theme light|dark] [--slides|--handbook]"
+disable-model-invocation: true
 ---
 Load the visual-explainer skill, then generate a comprehensive visual diff review as a self-contained HTML page.
 
 Follow the visual-explainer skill workflow. Read the reference template, CSS patterns, and mermaid theming references before generating. Use a GitHub-diff-inspired aesthetic with red/green before/after panels, but vary fonts and palette from previous diagrams.
 
-**Scope detection** — determine what to diff based on `$1`:
+**Scope detection** — interpret the requested scope, ignoring any `--flags` (those are the skill's, per its Arguments table): $ARGUMENTS
 - Branch name (e.g. `main`, `develop`): working tree vs that branch
 - Commit hash: that specific commit's diff (`git show <hash>`)
 - `HEAD`: uncommitted changes only (`git diff` and `git diff --staged`)
@@ -60,9 +61,4 @@ Verify each claim against the code. If something cannot be verified, mark it as 
 
 **Visual hierarchy**: Sections 1-3 should dominate the viewport on load (hero depth, larger type, more padding). Sections 6+ are reference material and should feel lighter (flat or recessed depth, compact layout, collapsible where appropriate).
 
-
-Include responsive section navigation. Use diff-style visual language throughout: red for removed/before, green for added/after, yellow for modified, blue for neutral context. Write to `~/.agent/diagrams/` and tell the user the path.
-
-Ultrathink.
-
-$@
+Include responsive section navigation. Use diff-style visual language throughout: red for removed/before, green for added/after, yellow for modified, blue for neutral context.

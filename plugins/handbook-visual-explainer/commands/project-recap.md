@@ -1,14 +1,15 @@
 ---
-description: Generate a visual HTML project recap — rebuild mental model of a project's current state, recent decisions, and cognitive debt hotspots
+description: Visual HTML project recap — current state, recent decisions, and cognitive debt hotspots
 argument-hint: "[since <when>] [--style <name>] [--theme light|dark] [--slides|--handbook]"
+disable-model-invocation: true
 ---
 Load the visual-explainer skill, then generate a comprehensive visual project recap as a self-contained HTML page.
 
 Follow the visual-explainer skill workflow. Read the reference template, CSS patterns, and mermaid theming references before generating. Use a warm editorial or paper/ink aesthetic with muted blues and greens, but vary fonts and palette from previous diagrams.
 
-**Time window** — determine the recency window from `$1`:
+**Time window** — determine the recency window from the request, ignoring any `--flags` (those are the skill's, per its Arguments table): $ARGUMENTS
 - Shorthand like `2w`, `30d`, `3m`: parse to git's `--since` format (`2w` → `"2 weeks ago"`, `30d` → `"30 days ago"`, `3m` → `"3 months ago"`)
-- If `$1` doesn't match a time pattern, treat it as free-form context and use the default window
+- If what's left doesn't match a time pattern, treat it as free-form context and use the default window
 - No argument: default to `2w` (2 weeks)
 
 **Data gathering phase** — run these first to understand the project:
@@ -29,7 +30,6 @@ Follow the visual-explainer skill workflow. Read the reference template, CSS pat
 - Every behavior and architecture description
 - For each, cite the source: the git command output that produced it, or the file:line where you read it
 Verify each claim against the code. If something cannot be verified, mark it as uncertain rather than stating it as fact. This fact sheet is your source of truth during HTML generation — do not deviate from it.
-
 
 **Diagram structure** — the page should include:
 1. **Project identity** — not the README blurb. A *current-state* summary: what this project does, who uses it, what stage it's at (early dev, stable, actively shipping features). Include version, key dependencies, and the one-sentence "elevator pitch" for someone who forgot what they were building.
@@ -54,8 +54,4 @@ Verify each claim against the code. If something cannot be verified, mark it as 
    - Flag each with a severity and a concrete suggestion (e.g., "add a doc comment to `buildCoordinationInstructions` explaining the 4 coordination levels — this function is called from 3 places and the behavior is non-obvious")
 8. **Next steps** — inferred from recent activity, open TODOs, project trajectory. Not prescriptive — just "here's where the momentum was pointing when you left." Include any explicit next-step notes from progress docs or plan files.
 
-Include responsive section navigation. Use a warm, approachable visual language: muted blues and greens for architecture, amber callouts for cognitive debt hotspots, green/blue/amber/red for state-of-things status. Write to `~/.agent/diagrams/` and tell the user the path.
-
-Ultrathink.
-
-$@
+Include responsive section navigation. Use a warm, approachable visual language: muted blues and greens for architecture, amber callouts for cognitive debt hotspots, green/blue/amber/red for state-of-things status.
