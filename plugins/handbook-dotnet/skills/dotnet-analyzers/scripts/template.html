@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>.NET Analyzer Dashboard — __PROJECT_NAME__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root, [data-theme="light"] {
+    --bg: #f5f6f8;
+    --surface: #ffffff;
+    --surface-raised: #f0f1f4;
+    --border: rgba(0,0,0,0.08);
+    --border-strong: rgba(0,0,0,0.14);
+    --text: #1a1d27;
+    --text-dim: #5c607a;
+    --text-muted: #9498b0;
+    --noise-opacity: 0.015;
+    --glow-opacity: 0;
+    --bar-track-bg: rgba(0,0,0,0.04);
+    --hover-bg: rgba(0,0,0,0.03);
+    --hover-bg-strong: rgba(0,0,0,0.05);
+    --cell-border: rgba(255,255,255,0.7);
+    --cell-text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    --donut-track: rgba(0,0,0,0.05);
+    --scrollbar-thumb: rgba(0,0,0,0.12);
+    --selected-bg: rgba(55,110,230,0.08);
+
+    --ide: #3772e6;
+    --ide-glow: rgba(55,114,230,0.12);
+    --ide-surface: rgba(55,114,230,0.07);
+    --ca: #e04040;
+    --ca-glow: rgba(224,64,64,0.12);
+    --ca-surface: rgba(224,64,64,0.07);
+    --json: #c48820;
+    --json-glow: rgba(196,136,32,0.12);
+    --json-surface: rgba(196,136,32,0.07);
+    --green: #18a06e;
+
+    --font-display: 'DM Mono', 'Cascadia Code', monospace;
+    --font-body: 'DM Mono', 'Cascadia Code', monospace;
+    --font-mono: 'DM Mono', 'Cascadia Code', monospace;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  [data-theme="dark"] {
+    --bg: #08090c;
+    --surface: #0f1115;
+    --surface-raised: #14161c;
+    --border: rgba(255,255,255,0.06);
+    --border-strong: rgba(255,255,255,0.1);
+    --text: #e2e4e9;
+    --text-dim: #6b7084;
+    --text-muted: #454860;
+    --noise-opacity: 0.03;
+    --glow-opacity: 1;
+    --bar-track-bg: rgba(255,255,255,0.02);
+    --hover-bg: rgba(255,255,255,0.02);
+    --hover-bg-strong: rgba(255,255,255,0.04);
+    --cell-border: rgba(8,9,12,0.8);
+    --cell-text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+    --donut-track: rgba(255,255,255,0.03);
+    --scrollbar-thumb: rgba(255,255,255,0.1);
+    --selected-bg: rgba(77,142,255,0.08);
+
+    --ide: #4d8eff;
+    --ide-glow: rgba(77,142,255,0.15);
+    --ide-surface: rgba(77,142,255,0.06);
+    --ca: #ff5c5c;
+    --ca-glow: rgba(255,92,92,0.15);
+    --ca-surface: rgba(255,92,92,0.06);
+    --json: #e8a838;
+    --json-glow: rgba(232,168,56,0.15);
+    --json-surface: rgba(232,168,56,0.06);
+    --green: #34d399;
+
+    --font-display: 'DM Mono', 'Cascadia Code', monospace;
+    --font-body: 'DM Mono', 'Cascadia Code', monospace;
+    --font-mono: 'DM Mono', 'Cascadia Code', monospace;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: var(--noise-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Ambient glow */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(77,142,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+    opacity: var(--glow-opacity);
+    transition: opacity 0.4s;
+  }
+
+  .app { position: relative; z-index: 1; }
+
+  /* ─── Header ─── */
+  .header {
+    padding: 32px 40px 24px;
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    opacity: 0;
+    animation: fadeSlideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+  }
+  .header h1 {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .header .subtitle {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-dim);
+    letter-spacing: 0.02em;
+  }
+  .header .timestamp {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* ─── Inline Stats Bar ─── */
+  .stats-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 20px;
+    margin: 0 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    opacity: 0;
+    animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+    flex-wrap: wrap;
+  }
+  .stats-bar svg.donut-mini { flex-shrink: 0; }
+  .stats-bar .stat-item {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .stats-bar .stat-item strong {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .stats-bar .stat-item .pct {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+  .stats-bar .stat-dot {
+    width: 8px; height: 8px; border-radius: 2px;
+    display: inline-block;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .stats-bar .stat-sep { width: 1px; height: 20px; background: var(--border-strong); }
+  .stats-bar .stat-top {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--json);
+    font-weight: 500;
+    margin-left: auto;
+  }
+
+  /* ─── Metric Cards (legacy, hidden) ─── */
+  .cards {
+    display: none;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    margin: 0 40px;
+    background: var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+  }
+  .card {
+    background: var(--surface);
+    padding: 20px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .card { transition: background 0.3s; }
+  .card:hover { background: var(--surface-raised); }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover::before { opacity: 1; }
+  .card.style::before { background: var(--ide); }
+  .card.analyzer::before { background: var(--ca); }
+  .card.total::before { background: var(--text); }
+  .card.files::before { background: var(--green); }
+  .card.top::before { background: var(--json); }
+  .card .label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+  .card .value {
+    font-family: var(--font-mono);
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .card .detail {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-dim);
+  }
+  .card.style .value { color: var(--ide); }
+  .card.analyzer .value { color: var(--ca); }
+  .card.total .value { color: var(--text); }
+  .card.files .value { color: var(--green); }
+  .card.top .value {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--json);
+    margin-top: 4px;
+  }
+
+  /* ─── Controls ─── */
+  .controls {
+    padding: 20px 40px 12px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+  }
+  .toggle-group { display: flex; gap: 6px; }
+  .toggle-btn {
+    font-family: var(--font-mono);
+    padding: 6px 16px;
+    font-size: 11px;
+    font-weight: 400;
+    border: 1px solid var(--border-strong);
+    border-radius: 100px;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.25s var(--ease-out);
+    letter-spacing: 0.03em;
+  }
+  .toggle-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+  .toggle-btn.active {
+    border-color: var(--ide);
+    color: var(--ide);
+    background: var(--ide-surface);
+    box-shadow: 0 0 20px var(--ide-glow);
+  }
+  .toggle-btn.active.ca {
+    border-color: var(--ca);
+    color: var(--ca);
+    background: var(--ca-surface);
+    box-shadow: 0 0 20px var(--ca-glow);
+  }
+  .toggle-btn.active.json {
+    border-color: var(--json);
+    color: var(--json);
+    background: var(--json-surface);
+    box-shadow: 0 0 20px var(--json-glow);
+  }
+
+  .divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border-strong);
+  }
+
+  .diag-search {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    padding: 6px 12px;
+    width: 180px;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .diag-search::placeholder { color: var(--text-muted); }
+  .diag-search:focus { border-color: var(--ide); }
+
+  .slider-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .slider-wrap input[type=range] {
+    -webkit-appearance: none;
+    width: 100px;
+    height: 3px;
+    background: var(--border-strong);
+    border-radius: 2px;
+    outline: none;
+  }
+  .slider-wrap input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--ide);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 10px var(--ide-glow);
+    cursor: pointer;
+  }
+  .slider-val {
+    display: inline-block;
+    min-width: 16px;
+    text-align: center;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .view-tabs {
+    margin-left: auto;
+    display: flex;
+    gap: 2px;
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 3px;
+    border: 1px solid var(--border);
+  }
+  .view-tab {
+    font-family: var(--font-mono);
+    padding: 5px 14px;
+    font-size: 11px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .view-tab:hover { color: var(--text); }
+  .view-tab.active {
+    background: var(--ide);
+    color: #fff;
+    box-shadow: 0 2px 8px var(--ide-glow);
+  }
+
+  /* ─── Main Layout ─── */
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 680px;
+    gap: 0;
+    margin: 0 40px;
+    min-height: calc(100vh - 280px);
+    opacity: 0;
+    animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
+  }
+
+  .chart-area {
+    padding: 20px 28px 20px 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
+  .sidebar {
+    border-left: 1px solid var(--border);
+    overflow-y: auto;
+    max-height: calc(100vh - 280px);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
+  /* ─── Section Title ─── */
+  .section-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ─── Donut ─── */
+  .donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-bottom: 32px;
+    padding: 20px 24px;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .donut-legend { display: flex; flex-direction: column; gap: 10px; }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 300;
+  }
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .legend-item strong { font-weight: 500; color: var(--text); }
+  .legend-pct {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: 4px;
+  }
+
+  /* ─── Bar Chart ─── */
+  .bar-chart { display: flex; flex-direction: column; gap: 2px; }
+  .bar-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 36px;
+    align-items: center;
+    gap: 12px;
+    height: 32px;
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 0 8px;
+    transition: background 0.15s;
+  }
+  .bar-row:hover { background: var(--hover-bg); }
+  .bar-row.selected { background: var(--selected-bg); }
+  .bar-row.copied {
+    background: rgba(52,211,153,0.18);
+    transition: background 0.1s;
+  }
+  .bar-row.copied .bar-id::after {
+    content: ' copied';
+    color: var(--green);
+    font-size: 10px;
+    margin-left: 6px;
+  }
+  .bar-id {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-dim);
+    transition: color 0.15s;
+  }
+  .bar-row:hover .bar-id { color: var(--text); }
+  .bar-row.selected .bar-id { color: var(--ide); }
+  .bar-track {
+    height: 20px;
+    background: var(--bar-track-bg);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    position: relative;
+    transition: width 0.5s var(--ease-out);
+  }
+  .bar-fill.ide { background: var(--ide); }
+  .bar-fill.ca { background: var(--ca); }
+  .bar-fill.json { background: var(--json); }
+  .bar-desc {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+  }
+  .bar-count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    text-align: right;
+    color: var(--text-dim);
+  }
+
+  /* ─── Sidebar File Detail ─── */
+  .file-detail-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  .file-detail-back {
+    border: 1px solid var(--border-strong);
+    background: transparent;
+    color: var(--text-dim);
+    width: 24px; height: 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .file-detail-back:hover { color: var(--text); border-color: var(--ide); }
+  .file-detail-path {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    direction: rtl;
+    text-align: left;
+  }
+  .file-detail-body { padding: 8px 0; }
+  .diag-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-left: 2px solid transparent;
+  }
+  .diag-detail-row:hover {
+    background: var(--hover-bg);
+    border-left-color: var(--ide);
+  }
+  .diag-detail-desc {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--text-dim);
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  /* ─── Sidebar File List ─── */
+  .file-group { border-bottom: 1px solid var(--border); }
+  .file-group-header {
+    padding: 10px 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-dim);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.15s;
+    letter-spacing: 0.02em;
+  }
+  .file-group-header:hover { color: var(--text); background: var(--hover-bg); }
+  .file-group-header .count-badge {
+    font-size: 10px;
+    font-weight: 400;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .file-item {
+    padding: 7px 16px 7px 24px;
+    font-size: 11px;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .file-item.copied {
+    background: rgba(52,211,153,0.12);
+    border-left-color: var(--green);
+    transition: background 0.1s, border-color 0.1s;
+  }
+  .file-item.copied::after {
+    content: 'copied';
+    position: absolute;
+    right: 12px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--green);
+    background: var(--surface);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(52,211,153,0.3);
+  }
+  .diag-tooltip {
+    display: none;
+    position: fixed;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    min-width: 220px;
+    max-width: 320px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    z-index: 1000;
+    pointer-events: none;
+  }
+  .diag-tooltip-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 3px 0;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .diag-tooltip-row .badge { flex-shrink: 0; }
+  .diag-tooltip-desc {
+    color: var(--text-dim);
+    font-weight: 300;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .file-item:hover { background: var(--hover-bg); }
+  .file-item.selected {
+    background: var(--selected-bg);
+    border-left-color: var(--ide);
+  }
+  .file-name {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 300;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    color: var(--text-dim);
+    transition: color 0.15s;
+  }
+  .file-item:hover .file-name { color: var(--text); }
+  .file-item.selected .file-name { color: var(--text); }
+  .file-badges { display: flex; gap: 4px; flex-shrink: 0; margin-left: 8px; }
+  .file-copy {
+    flex-shrink: 0;
+    margin-left: 4px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+    display: flex;
+    align-items: center;
+    width: 16px; height: 16px;
+    position: relative;
+  }
+  .file-item:hover .file-copy { opacity: 1; }
+  .file-copy .cb-box {
+    width: 14px; height: 14px;
+    border: 1.5px solid var(--text-muted);
+    border-radius: 3px;
+    transition: background 0.2s, border-color 0.2s;
+    position: absolute;
+    inset: 0;
+    margin: auto;
+  }
+  .file-copy:hover .cb-box { border-color: var(--ide); }
+  .file-copy .cb-check {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 14px; height: 14px;
+    opacity: 0;
+  }
+  .file-copy .cb-check path {
+    stroke-dasharray: 12;
+    stroke-dashoffset: 12;
+    transition: none;
+  }
+  .file-copy.copied .cb-check path {
+    animation: checkDraw 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
+  }
+  .file-copy.copied .cb-box {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .file-copy.copied .cb-check {
+    opacity: 1;
+  }
+
+  @keyframes checkDraw {
+    from { stroke-dashoffset: 12; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 400;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+  }
+  .badge.ide { background: var(--ide-surface); color: var(--ide); border: 1px solid rgba(77,142,255,0.15); }
+  .badge.ca { background: var(--ca-surface); color: var(--ca); border: 1px solid rgba(255,92,92,0.15); }
+  .badge.json { background: var(--json-surface); color: var(--json); border: 1px solid rgba(232,168,56,0.15); }
+
+  /* ─── Treemap ─── */
+  .treemap-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .treemap-cell {
+    position: absolute;
+    border: 1px solid var(--cell-border);
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    transition: filter 0.2s, transform 0.2s;
+  }
+  .treemap-cell:hover { filter: brightness(1.3); z-index: 2; }
+  .treemap-cell.selected {
+    outline: 2px solid var(--text);
+    outline-offset: -2px;
+    z-index: 3;
+  }
+  .treemap-cell.copied {
+    outline: 2px solid var(--green);
+    outline-offset: -2px;
+    filter: brightness(1.4);
+    z-index: 4;
+  }
+  .treemap-cell span {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 400;
+    text-align: center;
+    color: rgba(255,255,255,0.85);
+    text-shadow: var(--cell-text-shadow);
+    word-break: break-all;
+    line-height: 1.3;
+  }
+
+  /* ─── Tooltip ─── */
+  .tooltip {
+    position: fixed;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 100;
+    max-width: 300px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    display: none;
+    backdrop-filter: blur(12px);
+  }
+  .tooltip .tt-id {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .tooltip .tt-desc { color: var(--text-dim); font-weight: 300; }
+
+  /* ─── Prompt Output ─── */
+  .prompt-area {
+    margin: 0 40px 24px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards;
+  }
+  .prompt-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 400;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding-top: 2px;
+    flex-shrink: 0;
+  }
+  .prompt-text {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-dim);
+    line-height: 1.6;
+    min-height: 20px;
+    white-space: pre-wrap;
+  }
+  .copy-btn {
+    font-family: var(--font-mono);
+    padding: 6px 16px;
+    font-size: 11px;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover { border-color: var(--ide); color: var(--ide); background: var(--ide-surface); }
+  .copy-btn.copied { border-color: var(--green); color: var(--green); background: rgba(52,211,153,0.06); }
+
+  /* ─── Animations ─── */
+  @keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes barGrow {
+    from { width: 0 !important; }
+  }
+  @keyframes countUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes cellFadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .bar-fill { animation: barGrow 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+  .bar-row:nth-child(1) .bar-fill { animation-delay: 0.5s; }
+  .bar-row:nth-child(2) .bar-fill { animation-delay: 0.53s; }
+  .bar-row:nth-child(3) .bar-fill { animation-delay: 0.56s; }
+  .bar-row:nth-child(4) .bar-fill { animation-delay: 0.59s; }
+  .bar-row:nth-child(5) .bar-fill { animation-delay: 0.62s; }
+  .bar-row:nth-child(6) .bar-fill { animation-delay: 0.65s; }
+  .bar-row:nth-child(7) .bar-fill { animation-delay: 0.68s; }
+  .bar-row:nth-child(8) .bar-fill { animation-delay: 0.71s; }
+  .bar-row:nth-child(9) .bar-fill { animation-delay: 0.74s; }
+  .bar-row:nth-child(10) .bar-fill { animation-delay: 0.77s; }
+  .bar-row:nth-child(n+11) .bar-fill { animation-delay: 0.8s; }
+
+  /* Theme transition */
+  body, .card, .donut-wrap, .prompt-area, .toggle-btn, .view-tabs, .bar-track,
+  .file-group-header, .file-item, .sidebar, .tooltip {
+    transition: background 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+
+  /* Theme toggle */
+  .theme-toggle {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--border-strong);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover { color: var(--text); border-color: var(--ide); background: var(--ide-surface); }
+
+  [data-theme="light"] .bar-fill { box-shadow: none !important; }
+  [data-theme="light"] .cards { box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  [data-theme="light"] .donut-wrap { box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  [data-theme="light"] .prompt-area { box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+
+  .hidden { display: none !important; }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+</style>
+</head>
+<body>
+<div class="tooltip" id="tooltip"><div class="tt-id"></div><div class="tt-desc"></div></div>
+
+<div class="app">
+  <div class="header">
+    <h1>.NET Analyzer Dashboard</h1>
+    <span class="subtitle">__PROJECT_NAME__</span>
+    <span class="timestamp" id="timestamp"></span>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode">
+      <svg id="themeIconSun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg id="themeIconMoon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+
+  <div class="stats-bar" id="statsBar"></div>
+  <div class="cards" id="cards"></div>
+
+  <div class="controls">
+    <div class="toggle-group" id="toggleGroup"></div>
+    <div class="divider"></div>
+    <div class="search-wrap">
+      <input type="text" id="diagSearch" class="diag-search" placeholder="filter diagnostics..." oninput="state.searchQuery=this.value.toLowerCase();updateAll()">
+    </div>
+    <div class="divider"></div>
+    <div class="slider-wrap">
+      <span>min count</span>
+      <input type="range" min="1" max="20" value="1" id="minCount" oninput="state.minCount=+this.value;updateAll()">
+      <span class="slider-val" id="minCountVal">1</span>
+    </div>
+    <div class="view-tabs">
+      <button class="view-tab active" data-view="bar" onclick="setView('bar')">Bars</button>
+      <button class="view-tab" data-view="treemap" onclick="setView('treemap')">Treemap</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="chart-area" id="chartArea"></div>
+    <div class="sidebar" id="sidebar"></div>
+  </div>
+  <div class="diag-tooltip" id="diagTooltip"></div>
+
+  <div class="prompt-area">
+    <span class="prompt-label">cmd</span>
+    <div class="prompt-text" id="promptText">Select a diagnostic or file to generate the fix command.</div>
+    <button class="copy-btn" id="copyBtn" onclick="copyPrompt()">copy</button>
+  </div>
+</div>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  document.getElementById('themeIconSun').style.display = next === 'dark' ? 'none' : 'block';
+  document.getElementById('themeIconMoon').style.display = next === 'dark' ? 'block' : 'none';
+  localStorage.setItem('analyzer-theme', next);
+}
+
+(function initTheme() {
+  const saved = localStorage.getItem('analyzer-theme');
+  const theme = saved || 'light';
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('themeIconSun').style.display = theme === 'light' ? 'block' : 'none';
+  document.getElementById('themeIconMoon').style.display = theme === 'dark' ? 'block' : 'none';
+})();
+
+document.getElementById('timestamp').textContent = new Date().toLocaleDateString('en-US', {year:'numeric', month:'short', day:'numeric'}) + ' ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
+
+/*__DATA__*/
+
+function getCat(id) {
+  const m = id.match(/^[A-Za-z]+/);
+  return m ? m[0].toUpperCase() : '?';
+}
+
+const allViolations = [...styleViolations, ...analyzerViolations];
+const descMap = Object.fromEntries(allViolations.map(v => [v.id, v.desc]));
+
+const fileMap = new Map();
+[...styleFiles, ...analyzerFiles].forEach(f => {
+  if (!fileMap.has(f.file)) fileMap.set(f.file, new Set());
+  f.diagnostics.forEach(d => fileMap.get(f.file).add(d));
+});
+const allFiles = [...fileMap.entries()].map(([file, diags]) => ({file, diagnostics: [...diags]}));
+
+const palette = [
+  {color:'#7a9cc6', surface:'rgba(122,156,198,0.08)', glow:'rgba(122,156,198,0.15)'},
+  {color:'#c47b7b', surface:'rgba(196,123,123,0.08)', glow:'rgba(196,123,123,0.15)'},
+  {color:'#b89968', surface:'rgba(184,153,104,0.08)', glow:'rgba(184,153,104,0.15)'},
+  {color:'#7faa92', surface:'rgba(127,170,146,0.08)', glow:'rgba(127,170,146,0.15)'},
+  {color:'#9b8bb4', surface:'rgba(155,139,180,0.08)', glow:'rgba(155,139,180,0.15)'},
+  {color:'#c08aa6', surface:'rgba(192,138,166,0.08)', glow:'rgba(192,138,166,0.15)'}
+];
+const presentCats = [...new Set(allViolations.map(v => getCat(v.id)))].sort();
+const catStyle = {};
+presentCats.forEach((c, i) => catStyle[c] = palette[i % palette.length]);
+function catColor(c) { return (catStyle[c] || palette[0]).color; }
+function badgeHtml(d) {
+  const s = catStyle[getCat(d)] || palette[0];
+  return `<span class="badge" style="color:${s.color};background:${s.surface};border:1px solid ${s.color}33">${d}</span>`;
+}
+
+const state = {
+  cats: Object.fromEntries(presentCats.map(c => [c, true])),
+  minCount: 1,
+  view: 'bar',
+  selectedDiag: null,
+  selectedFile: null,
+  collapsedGroups: {},
+  searchQuery: ''
+};
+
+function renderCategoryToggles() {
+  const tg = document.getElementById('toggleGroup');
+  tg.innerHTML = presentCats.map(c => {
+    const s = catStyle[c];
+    const active = state.cats[c];
+    const style = active
+      ? `border-color:${s.color};color:${s.color};background:${s.surface};box-shadow:0 0 20px ${s.glow};`
+      : '';
+    return `<button class="toggle-btn${active ? ' active' : ''}" data-cat="${c}" onclick="toggleCat('${c}')" style="${style}">${c}*</button>`;
+  }).join('');
+}
+
+function toggleCat(cat) {
+  state.cats[cat] = !state.cats[cat];
+  state.selectedDiag = null;
+  renderCategoryToggles();
+  updateAll();
+}
+
+function setView(v) {
+  state.view = v;
+  document.querySelectorAll('.view-tab').forEach(t => t.classList.toggle('active', t.dataset.view === v));
+  updateAll();
+}
+
+function getFiltered() {
+  return allViolations.filter(v => {
+    if (!state.cats[getCat(v.id)]) return false;
+    if (v.count < state.minCount) return false;
+    if (state.searchQuery) {
+      const q = state.searchQuery;
+      return v.id.toLowerCase().includes(q) || v.desc.toLowerCase().includes(q);
+    }
+    return true;
+  });
+}
+
+function getFilteredFiles() {
+  const activeDiags = new Set(getFiltered().map(v => v.id));
+  return allFiles
+    .map(f => ({...f, diagnostics: f.diagnostics.filter(d => activeDiags.has(d))}))
+    .filter(f => f.diagnostics.length > 0);
+}
+
+function renderStats() {
+  const filtered = getFiltered();
+  const counts = {};
+  presentCats.forEach(c => counts[c] = 0);
+  filtered.forEach(v => { counts[getCat(v.id)] = (counts[getCat(v.id)] || 0) + v.count; });
+  const total = Object.values(counts).reduce((s, n) => s + n, 0);
+  const files = getFilteredFiles();
+  const top = filtered.length > 0 ? filtered.reduce((a, b) => a.count >= b.count ? a : b) : null;
+
+  const r = 16, cx = 20, cy = 20, sw = 5;
+  const segments = presentCats
+    .map(c => ({val: counts[c], color: catColor(c)}))
+    .filter(s => s.val > 0);
+  const circ = 2 * Math.PI * r;
+  let offset = 0;
+  let paths = '';
+  segments.forEach(seg => {
+    const pct = seg.val / (total || 1);
+    const dash = circ * pct;
+    paths += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${seg.color}" stroke-width="${sw}"
+      stroke-dasharray="${dash} ${circ - dash}" stroke-dashoffset="${-offset}"
+      transform="rotate(-90 ${cx} ${cy})" stroke-linecap="butt" />`;
+    offset += dash;
+  });
+
+  const pctOf = (n) => total ? Math.round(n / total * 100) + '%' : '0%';
+  const items = presentCats
+    .filter(c => counts[c] > 0)
+    .map(c => `<div class="stat-item"><span class="stat-dot" style="background:${catColor(c)}"></span>${c}* <strong>${counts[c]}</strong> <span class="pct">${pctOf(counts[c])}</span></div>`)
+    .join('');
+
+  document.getElementById('statsBar').innerHTML = `
+    <svg class="donut-mini" width="40" height="40" viewBox="0 0 40 40">
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--donut-track)" stroke-width="${sw}" />
+      ${paths}
+    </svg>
+    <div class="stat-item"><strong>${total}</strong> total</div>
+    <div class="stat-sep"></div>
+    ${items}
+    <div class="stat-sep"></div>
+    <div class="stat-item"><strong>${files.length}</strong> files</div>
+    <div class="stat-item"><strong>${filtered.length}</strong> rules</div>
+    ${top ? `<div class="stat-top">top: ${top.id} × ${top.count}</div>` : ''}
+  `;
+}
+
+function renderCards() {
+  const filtered = getFiltered();
+  const total = filtered.reduce((s, v) => s + v.count, 0);
+  const styleCount = filtered.filter(v => getCat(v.id) === 'ide').reduce((s, v) => s + v.count, 0);
+  const caCount = filtered.filter(v => getCat(v.id) === 'ca').reduce((s, v) => s + v.count, 0);
+  const jsonCount = filtered.filter(v => getCat(v.id) === 'json').reduce((s, v) => s + v.count, 0);
+  const files = getFilteredFiles();
+  const top = filtered.length > 0 ? filtered.reduce((a, b) => a.count >= b.count ? a : b) : null;
+
+  document.getElementById('cards').innerHTML = `
+    <div class="card total">
+      <div class="label">Total</div>
+      <div class="value">${total}</div>
+      <div class="detail">${filtered.length} rules</div>
+    </div>
+    <div class="card files">
+      <div class="label">Files</div>
+      <div class="value">${files.length}</div>
+      <div class="detail">affected</div>
+    </div>
+    <div class="card style">
+      <div class="label">Style</div>
+      <div class="value">${styleCount}</div>
+      <div class="detail">IDE* violations</div>
+    </div>
+    <div class="card analyzer">
+      <div class="label">Analyzers</div>
+      <div class="value">${caCount + jsonCount}</div>
+      <div class="detail">CA* + JSON*</div>
+    </div>
+    <div class="card top">
+      <div class="label">Top Offender</div>
+      <div class="value">${top ? top.id : '\u2014'}</div>
+      <div class="detail">${top ? top.count + ' \u2014 ' + top.desc : ''}</div>
+    </div>
+  `;
+}
+
+function renderBarChart() {
+  const filtered = getFiltered().sort((a, b) => b.count - a.count);
+  const max = filtered.length > 0 ? filtered[0].count : 1;
+  const area = document.getElementById('chartArea');
+
+  let html = '<div class="section-title">Violations by Diagnostic</div>';
+  html += '<div class="bar-chart">';
+  filtered.forEach(v => {
+    const cat = getCat(v.id);
+    const pct = (v.count / max * 100).toFixed(1);
+    const sel = state.selectedDiag === v.id ? ' selected' : '';
+    const cop = state.copiedDiag === v.id ? ' copied' : '';
+    html += `<div class="bar-row${sel}${cop}" onclick="selectDiag('${v.id}')"
+      onmouseenter="showTip(event,'${v.id}','${v.desc.replace(/'/g,"&#39;")}')"
+      onmouseleave="hideTip()">
+      <span class="bar-id">${v.id}</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${pct}%;background:${catColor(cat)}"></div>
+        <span class="bar-desc">${v.desc}</span>
+      </div>
+      <span class="bar-count">${v.count}</span>
+    </div>`;
+  });
+  html += '</div>';
+  area.innerHTML = html;
+}
+
+function renderDonut(filtered) {
+  const ide = filtered.filter(v => getCat(v.id) === 'ide').reduce((s, v) => s + v.count, 0);
+  const ca = filtered.filter(v => getCat(v.id) === 'ca').reduce((s, v) => s + v.count, 0);
+  const json = filtered.filter(v => getCat(v.id) === 'json').reduce((s, v) => s + v.count, 0);
+  const total = ide + ca + json || 1;
+  const r = 46, cx = 52, cy = 52, sw = 10;
+  const segments = [
+    {val: ide, color: '#4d8eff', label: 'Style (IDE*)'},
+    {val: ca, color: '#ff5c5c', label: 'Analyzers (CA*)'},
+    {val: json, color: '#e8a838', label: 'JSON*'}
+  ].filter(s => s.val > 0);
+
+  let offset = 0;
+  const circ = 2 * Math.PI * r;
+  let paths = '';
+  segments.forEach(seg => {
+    const pct = seg.val / total;
+    const dash = circ * pct;
+    const gap = circ - dash;
+    paths += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${seg.color}" stroke-width="${sw}"
+      stroke-dasharray="${dash} ${gap}" stroke-dashoffset="${-offset}"
+      transform="rotate(-90 ${cx} ${cy})"
+      style="filter: drop-shadow(0 0 6px ${seg.color}40);" />`;
+    offset += dash;
+  });
+
+  let legend = '<div class="donut-legend">';
+  segments.forEach(seg => {
+    const pct = (seg.val / total * 100).toFixed(0);
+    legend += `<div class="legend-item">
+      <span class="legend-dot" style="background:${seg.color}"></span>
+      ${seg.label} <strong>${seg.val}</strong>
+      <span class="legend-pct">${pct}%</span>
+    </div>`;
+  });
+  legend += '</div>';
+
+  return `<div class="donut-wrap">
+    <svg width="104" height="104" viewBox="0 0 104 104">
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--donut-track)" stroke-width="${sw}" />
+      ${paths}
+      <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central"
+        fill="var(--text)" font-family="DM Mono, monospace" font-size="16" font-weight="500">${total}</text>
+    </svg>
+    ${legend}
+  </div>`;
+}
+
+function renderTreemap() {
+  const files = getFilteredFiles();
+  if (files.length === 0) {
+    document.getElementById('chartArea').innerHTML = '<p style="color:var(--text-muted);padding:20px;font-weight:300">No files match current filters.</p>';
+    return;
+  }
+
+  const area = document.getElementById('chartArea');
+  const sorted = [...files].sort((a, b) => b.diagnostics.length - a.diagnostics.length);
+
+  let html = '<div class="section-title">File Treemap &mdash; size = violation count</div>';
+  html += '<div class="treemap-container" id="treemapBox"></div>';
+  area.innerHTML = html;
+
+  const box = document.getElementById('treemapBox');
+  const W = box.clientWidth, H = box.clientHeight;
+  const rects = squarify(sorted.map(f => f.diagnostics.length), W, H);
+
+  rects.forEach((rect, i) => {
+    const f = sorted[i];
+    const cat = getCat(f.diagnostics[0]);
+    const base = catColor(cat);
+    const colors = [base + 'aa', base + 'cc', base + '99'];
+    const name = f.file.split('/').pop();
+    const cell = document.createElement('div');
+    cell.className = 'treemap-cell';
+    cell.style.cssText = `left:${rect.x}px;top:${rect.y}px;width:${rect.w}px;height:${rect.h}px;background:${colors[i % colors.length]};animation:cellFadeIn 0.4s cubic-bezier(0.16,1,0.3,1) ${i * 0.02}s backwards;`;
+    cell.innerHTML = rect.w > 55 && rect.h > 22 ? `<span>${name}</span>` : '';
+    cell.title = `${f.file}\n${f.diagnostics.join(', ')}\nClick to copy path`;
+    if (state.selectedFile === f.file) cell.classList.add('selected');
+    cell.onclick = () => {
+      state.selectedFile = state.selectedFile === f.file ? null : f.file;
+      navigator.clipboard.writeText(f.file).then(() => {
+        cell.classList.add('copied');
+        setTimeout(() => cell.classList.remove('copied'), 900);
+      });
+      renderSidebar();
+      updatePrompt();
+      // refresh selected outline on cells
+      document.querySelectorAll('.treemap-cell').forEach(c => c.classList.remove('selected'));
+      if (state.selectedFile === f.file) cell.classList.add('selected');
+    };
+    box.appendChild(cell);
+  });
+}
+
+function squarify(values, W, H) {
+  const total = values.reduce((s, v) => s + v, 0);
+  const areas = values.map(v => (v / total) * W * H);
+  const rects = [];
+  let x = 0, y = 0, w = W, h = H;
+  let i = 0;
+  while (i < areas.length) {
+    const isWide = w >= h;
+    const side = isWide ? h : w;
+    let row = [areas[i]], rowSum = areas[i];
+    i++;
+    while (i < areas.length) {
+      const test = [...row, areas[i]];
+      const testSum = rowSum + areas[i];
+      if (worst(row, rowSum, side) <= worst(test, testSum, side)) break;
+      row.push(areas[i]);
+      rowSum = testSum;
+      i++;
+    }
+    let offset = 0;
+    const thickness = rowSum / side;
+    row.forEach(area => {
+      const len = area / thickness;
+      if (isWide) rects.push({x, y: y + offset, w: thickness, h: len});
+      else rects.push({x: x + offset, y, w: len, h: thickness});
+      offset += len;
+    });
+    if (isWide) { x += thickness; w -= thickness; }
+    else { y += thickness; h -= thickness; }
+  }
+  return rects;
+}
+
+function worst(row, sum, side) {
+  const s2 = sum * sum;
+  let mx = -Infinity, mn = Infinity;
+  row.forEach(r => { mx = Math.max(mx, r); mn = Math.min(mn, r); });
+  const side2 = side * side;
+  return Math.max((side2 * mx) / s2, s2 / (side2 * mn));
+}
+
+function renderSidebar() {
+  const files = getFilteredFiles();
+
+  if (state.selectedFile) {
+    const f = files.find(x => x.file === state.selectedFile) || allFiles.find(x => x.file === state.selectedFile);
+    if (f) {
+      const rows = f.diagnostics.map(d => {
+        const desc = descMap[d] || '';
+        return `<div class="diag-detail-row" onclick="selectDiag('${d}')">
+          ${badgeHtml(d)}
+          <span class="diag-detail-desc">${desc}</span>
+        </div>`;
+      }).join('');
+      document.getElementById('sidebar').innerHTML = `
+        <div class="file-detail">
+          <div class="file-detail-header">
+            <button class="file-detail-back" onclick="state.selectedFile=null;updateAll()" title="Back">&#8592;</button>
+            <span class="file-detail-path" title="${f.file}">${f.file}</span>
+            <span class="count-badge">${f.diagnostics.length}</span>
+          </div>
+          <div class="file-detail-body">${rows}</div>
+        </div>`;
+      return;
+    }
+  }
+
+  const groups = {};
+  files.forEach(f => {
+    const parts = f.file.split(/[\\/]/);
+    const top = parts.length > 1 ? parts[0] : '(root)';
+    (groups[top] ||= []).push(f);
+  });
+  const groupOrder = Object.keys(groups).sort((a, b) => groups[b].length - groups[a].length);
+
+  let html = '';
+  for (const group of groupOrder) {
+    const items = groups[group];
+    const visible = state.selectedDiag ? items.filter(f => f.diagnostics.includes(state.selectedDiag)) : items;
+    if (visible.length === 0) continue;
+    const collapsed = state.collapsedGroups[group];
+    html += `<div class="file-group">
+      <div class="file-group-header" onclick="toggleGroup('${group}')">
+        <span>${collapsed ? '\u25B6' : '\u25BC'} ${group}/</span>
+        <span class="count-badge">${visible.length}</span>
+      </div>`;
+    if (!collapsed) {
+      visible.forEach(f => {
+        const name = f.file.replace(group + '/', '');
+        const sel = state.selectedFile === f.file ? ' selected' : '';
+        const badges = f.diagnostics.map(d => badgeHtml(d)).join('');
+        html += `<div class="file-item${sel}" onclick="copyPath('${f.file.replace(/'/g,"\\'")}',this)" data-diags="${f.diagnostics.join(',')}" title="Click to copy path">
+          <span class="file-name">${name}</span>
+          <span class="file-badges">${badges}</span>
+        </div>`;
+      });
+    }
+    html += '</div>';
+  }
+  document.getElementById('sidebar').innerHTML = html;
+}
+
+function selectDiag(id) {
+  state.selectedDiag = id;
+  state.selectedFile = null;
+  navigator.clipboard.writeText(id).catch(() => {});
+  state.copiedDiag = id;
+  updateAll();
+  setTimeout(() => {
+    if (state.copiedDiag === id) {
+      state.copiedDiag = null;
+      updateAll();
+    }
+  }, 900);
+}
+
+function selectFile(file) {
+  state.selectedFile = file;
+  updateAll();
+}
+
+function clearSelection() {
+  state.selectedDiag = null;
+  state.selectedFile = null;
+  updateAll();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') clearSelection(); });
+
+function toggleGroup(group) {
+  state.collapsedGroups[group] = !state.collapsedGroups[group];
+  renderSidebar();
+}
+
+const diagTip = document.getElementById('diagTooltip');
+const sidebarEl = document.getElementById('sidebar');
+sidebarEl.addEventListener('mouseover', e => {
+  const item = e.target.closest('.file-item');
+  if (!item) { diagTip.style.display = 'none'; return; }
+  const diags = (item.dataset.diags || '').split(',').filter(Boolean);
+  if (!diags.length) return;
+  diagTip.innerHTML = diags.map(d =>
+    `<div class="diag-tooltip-row">${badgeHtml(d)}<span class="diag-tooltip-desc">${descMap[d] || ''}</span></div>`
+  ).join('');
+  diagTip.style.display = 'block';
+  diagTip.style.visibility = 'hidden';
+  const rect = item.getBoundingClientRect();
+  const sRect = sidebarEl.getBoundingClientRect();
+  const tw = diagTip.offsetWidth;
+  const th = diagTip.offsetHeight;
+  let left = sRect.left - tw - 8;
+  if (left < 8) left = 8;
+  let top = rect.top + (rect.height - th) / 2;
+  if (top < 8) top = 8;
+  if (top + th > window.innerHeight - 8) top = window.innerHeight - th - 8;
+  diagTip.style.left = left + 'px';
+  diagTip.style.top = top + 'px';
+  diagTip.style.visibility = 'visible';
+});
+sidebarEl.addEventListener('mouseleave', () => { diagTip.style.display = 'none'; });
+
+function updatePrompt() {
+  const el = document.getElementById('promptText');
+  if (state.selectedDiag) {
+    const v = allViolations.find(x => x.id === state.selectedDiag);
+    const cat = getCat(state.selectedDiag);
+    const cmd = cat === 'IDE' ? 'style' : 'analyzers';
+    el.textContent = `dotnet format ${cmd} --diagnostics ${state.selectedDiag} --severity warn\n# ${v ? v.desc : ''} (${v ? v.count : 0} occurrences)`;
+  } else if (state.selectedFile) {
+    const f = allFiles.find(x => x.file === state.selectedFile);
+    if (f) {
+      const styleDiags = f.diagnostics.filter(d => getCat(d) === 'IDE');
+      const caDiags = f.diagnostics.filter(d => getCat(d) !== 'IDE');
+      const cmds = [];
+      if (styleDiags.length) cmds.push(`dotnet format style --diagnostics ${styleDiags.join(' ')} --severity warn --include ${f.file}`);
+      if (caDiags.length) cmds.push(`dotnet format analyzers --diagnostics ${caDiags.join(' ')} --severity warn --include ${f.file}`);
+      el.textContent = cmds.join('\n');
+    }
+  } else {
+    const filtered = getFiltered();
+    const total = filtered.reduce((s, v) => s + v.count, 0);
+    el.textContent = total > 0
+      ? `${total} violations across ${filtered.length} rules. Click a bar or file for the fix command.`
+      : 'No violations match current filters.';
+  }
+}
+
+function copyPath(path, el) {
+  navigator.clipboard.writeText(path).then(() => {
+    el.classList.add('copied');
+    setTimeout(() => el.classList.remove('copied'), 1200);
+  });
+}
+
+function selectAndCopyFile(file, el) {
+  state.selectedFile = state.selectedFile === file ? null : file;
+  navigator.clipboard.writeText(file).then(() => {
+    if (el) {
+      el.classList.add('copied');
+      setTimeout(() => el.classList.remove('copied'), 900);
+    }
+  });
+  updatePrompt();
+  // re-render sidebar to reflect selection without losing flash
+  setTimeout(() => updateAll(), 950);
+}
+
+function copyPrompt() {
+  const text = document.getElementById('promptText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1800);
+  });
+}
+
+const tooltip = document.getElementById('tooltip');
+function showTip(e, id, desc) {
+  tooltip.querySelector('.tt-id').textContent = id;
+  tooltip.querySelector('.tt-id').style.color = catColor(getCat(id));
+  tooltip.querySelector('.tt-desc').textContent = desc;
+  tooltip.style.display = 'block';
+  tooltip.style.left = (e.clientX + 14) + 'px';
+  tooltip.style.top = (e.clientY - 8) + 'px';
+}
+function hideTip() { tooltip.style.display = 'none'; }
+
+function updateAll() {
+  document.getElementById('minCountVal').textContent = state.minCount;
+  renderCategoryToggles();
+  renderStats();
+  renderCards();
+  if (state.view === 'bar') renderBarChart();
+  else renderTreemap();
+  renderSidebar();
+  updatePrompt();
+}
+
+updateAll();
+</script>
+</body>
+</html>

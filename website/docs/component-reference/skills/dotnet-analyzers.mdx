@@ -1,0 +1,69 @@
+---
+title: "dotnet-analyzers"
+sidebar_position: 26
+---
+
+import DotnetAnalyzersSource from '!!raw-loader!../../../../plugins/handbook-dotnet/skills/dotnet-analyzers/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `dotnet-analyzers` skill
+
+<span className="badge badge--handbook-dotnet">handbook-dotnet</span>
+
+Fix code style and analyzer diagnostics (IDE\*, CA\*, SA\*) with `dotnet format`, and optionally render the findings as an interactive HTML dashboard.
+
+The skill is deliberately report-first: it always starts in verify/list mode and never applies fixes until you confirm. Violations are collected as a structured JSON report and summarized with `jq`, so you see counts per diagnostic and affected files before anything changes.
+
+## When to Use This Skill
+
+Use the `dotnet-analyzers` skill when you want to:
+
+- Remove unnecessary usings (IDE0005) or fix formatting across a solution
+- Fix a specific analyzer rule such as CA1305 or CA1822
+- Check format compliance in CI (`--verify-no-changes`)
+- See a per-diagnostic breakdown of everything the analyzers report
+- Generate an HTML dashboard of analyzer findings
+
+## Quick Examples
+
+```bash
+# List violations without fixing (the default behavior)
+dotnet format style --verify-no-changes --severity warn -v diag
+
+# Fix one diagnostic, after confirming
+dotnet format style --diagnostics IDE0005 --severity warn
+
+# Fix one analyzer rule
+dotnet format analyzers --diagnostics CA1305 --severity warn
+
+# CI gate
+dotnet format --verify-no-changes --severity warn
+```
+
+## Reporting Modes
+
+Pass `--dashboard` to generate the interactive HTML report. Two data sources are available:
+
+| Mode | Source | Trade-off |
+|------|--------|-----------|
+| default | `dotnet format` | Fast; fixable diagnostics only |
+| `--sarif` | `dotnet build -t:Rebuild` + Roslyn ErrorLog SARIF | Slower; comprehensive, respects `.editorconfig` severity |
+
+```bash
+bash ~/.claude/skills/dotnet-analyzers/scripts/generate-report.sh ./MyProject.sln analyzer-dashboard.html
+```
+
+:::note
+`dotnet format` performs its own internal compilation — it does not rely on cached build output. Reports are generated deterministically by the script; no AI is involved.
+:::
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{DotnetAnalyzersSource}
+</CodeBlock>
+
+## Related
+
+- [`dotnet-verify`](./dotnet-verify.mdx) — manage Verify snapshot tests
+- [`coverage-report`](./coverage-report.mdx) — branch-scoped code coverage reports

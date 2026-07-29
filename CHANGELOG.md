@@ -3,6 +3,9 @@
 ## [1.20.0] - 2026-07-29
 
 ### Added
+- handbook-dotnet: New `dotnet-inspect` skill for querying .NET APIs across NuGet packages, platform libraries, and local assemblies
+- handbook-dotnet: New `dotnet-analyzers` skill for fixing style/analyzer diagnostics with `dotnet format`, including an HTML dashboard report
+- handbook-dotnet: New `roslyn-query` skill for structural C# codebase queries via Roslyn AST analysis
 - handbook-visual-explainer: README listing the skill, all seven commands, and the `--picker` flow
 
 ### Changed

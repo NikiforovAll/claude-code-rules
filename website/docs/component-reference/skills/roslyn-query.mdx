@@ -1,0 +1,82 @@
+---
+title: "roslyn-query"
+sidebar_position: 27
+---
+
+import RoslynQuerySource from '!!raw-loader!../../../../plugins/handbook-dotnet/skills/roslyn-query/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `roslyn-query` skill
+
+<span className="badge badge--handbook-dotnet">handbook-dotnet</span>
+
+Query C# codebases structurally using Roslyn AST analysis, executed as throwaway scripts via `dotnet run file.cs`.
+
+Grep finds text; Roslyn finds *code*. This skill generates single-file analysis scripts that answer questions text search cannot — who calls this method, which types implement this interface, where does untrusted data flow, which layers violate the architecture.
+
+## When to Use This Skill
+
+Use the `roslyn-query` skill when you want to:
+
+- Trace data flow from sources to sinks (taint analysis)
+- Audit every assignment to a specific property
+- Find all callers of a method, implementations of an interface, or overrides
+- Detect pattern violations — empty catches, missing sanitizers, magic numbers
+- Validate architecture layering
+- Run an ad-hoc structural query over a codebase
+
+## Analysis Tiers
+
+Pick the cheapest tier that answers the question.
+
+| Tier | Mechanism | Good for |
+|------|-----------|----------|
+| **1 — Syntax-only** | `CSharpSyntaxTree.ParseText()`, no compilation | Assignment audits, empty catches, naming, complexity, method size |
+| **2 — Semantic** | `MSBuildWorkspace`, loads the project | Callers, implementations, overrides, type graphs, data flow |
+
+Tier 1 packages:
+
+```csharp
+#:package Microsoft.CodeAnalysis.CSharp@4.*
+```
+
+Tier 2 adds:
+
+```csharp
+#:package Microsoft.CodeAnalysis.CSharp.Workspaces@4.*
+#:package Microsoft.CodeAnalysis.Workspaces.MSBuild@4.*
+#:package Microsoft.Build.Locator@1.*
+#:property DisableMSBuildAssemblyCopyCheck=true
+```
+
+:::warning
+Roslyn 4.x `MSBuildWorkspace` does not support `.slnx`. Open a `.csproj` with `OpenProjectAsync` instead — transitive project references load automatically.
+:::
+
+## Script Conventions
+
+- Target path comes from `args[0]`, defaulting to the current directory
+- Output is `file:line` plus a description and context, using `Path.GetRelativePath()`
+- Exit code `0` means clean, `1` means findings
+
+```bash
+dotnet run scripts/my-analysis.cs -- <target-path>
+```
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{RoslynQuerySource}
+</CodeBlock>
+
+## References
+
+The skill ships two bundled references it loads on demand:
+
+- `references/roslyn-api.md` — key Roslyn APIs with code examples
+- `references/templates.md` — ready-to-use analysis script templates
+
+## Related
+
+- [`dotnet-run-file`](./dotnet-run-file.mdx) — execution conventions and directive syntax for the generated scripts
+- [`dotnet-analyzers`](./dotnet-analyzers.mdx) — fix diagnostics that built-in analyzers already detect

@@ -1,0 +1,59 @@
+---
+title: "dotnet-inspect"
+sidebar_position: 25
+---
+
+import DotnetInspectSource from '!!raw-loader!../../../../plugins/handbook-dotnet/skills/dotnet-inspect/SKILL.md'
+import CodeBlock from '@theme/CodeBlock';
+
+# Use `dotnet-inspect` skill
+
+<span className="badge badge--handbook-dotnet">handbook-dotnet</span>
+
+Query .NET APIs across NuGet packages, platform libraries, and local `.dll`/`.nupkg` files — without writing a line of code.
+
+The same commands work everywhere: search for types, list API surfaces, diff two package versions, find extension methods and implementors. Especially useful when code broke after a package upgrade — `diff` classifies breaking versus additive changes, then `member` shows the replacement API.
+
+## When to Use This Skill
+
+Use the `dotnet-inspect` skill when you want to:
+
+- Discover what types and members a package exposes
+- Find out what changed between two versions of a package
+- Fix code that uses an API that no longer exists
+- Locate extension methods for a type, or concrete implementations of an interface
+- Inspect package or assembly metadata
+
+## Quick Examples
+
+```bash
+# Scan a type's members (token-efficient)
+dnx dotnet-inspect -y -- member JsonSerializer --package System.Text.Json --oneline
+
+# Triage what changed between versions
+dnx dotnet-inspect -y -- diff --package System.CommandLine@2.0.0-beta4.22272.1..2.0.3 --oneline
+
+# Inspect a type's hierarchy and surface at a glance
+dnx dotnet-inspect -y -- type 'HashSet<T>' --platform System.Collections --shape
+
+# Find extension methods for a type
+dnx dotnet-inspect -y -- extensions IServiceCollection --extensions
+```
+
+## Key Conventions
+
+- Run via `dnx` (like `npx`), always with `-y --` to avoid interactive prompts
+- Generic types need quotes and a type parameter: `'Option<T>'`, not `"Option<>"`
+- Do **not** pipe through `head`/`tail` — use the built-in `-n N` limit and `-s Section` selector, which preserve headers
+- `--oneline` is the default scanning mode; drop it when you need full signatures and docs
+
+## Skill Specification
+
+<CodeBlock language="markdown">
+{DotnetInspectSource}
+</CodeBlock>
+
+## Related
+
+- [`dotnet-dependency`](./dotnet-dependency.mdx) — investigate and audit project dependencies
+- [`ilspy-decompile`](./ilspy-decompile.mdx) — decompile assemblies to C# source
