@@ -15,6 +15,17 @@ Python scripting with Gemini image generation using uv. Write small, focused scr
 
 **Scripting tasks**: For non-image Python tasks, use the same heredoc pattern with `uv run`.
 
+**Optional Atlas Cloud provider**: Keep Gemini as the default. When the user explicitly requests Atlas Cloud, set `ATLASCLOUD_API_KEY` and run the bundled helper:
+
+```bash
+uv run ${CLAUDE_SKILL_DIR}/scripts/generate_atlas.py \
+  --prompt "A cute banana character with sunglasses" \
+  --size 1024x1024 \
+  --output tmp/generated.png
+```
+
+The helper submits one `openai/gpt-image-2/text-to-image` generation request, polls the prediction with bounded retries, and downloads the completed image. Use `--model` to select another compatible Atlas Cloud text-to-image model. Do not retry a failed generation command automatically because the submission may be billable.
+
 ## Writing Scripts
 
 Execute Python inline using heredocs with inline script metadata for dependencies:

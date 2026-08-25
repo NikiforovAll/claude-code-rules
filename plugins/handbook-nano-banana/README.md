@@ -14,6 +14,8 @@ Python scripting and Gemini image generation using uv with inline script depende
 - [uv](https://docs.astral.sh/uv/) installed
 - `GOOGLE_API_KEY` environment variable set with a valid Gemini API key
 
+Atlas Cloud is also available as an optional provider. Export `ATLASCLOUD_API_KEY` and use the bundled `skills/nano-banana/scripts/generate_atlas.py` helper when Atlas is explicitly selected; the Gemini workflow remains the default.
+
 ## Usage
 
 The skill activates when you ask Claude to generate images or run Python scripts. Example triggers:
@@ -49,6 +51,17 @@ for part in response.parts:
         print("Saved: tmp/output.png")
 EOF
 ```
+
+### Atlas Cloud (optional)
+
+```bash
+export ATLASCLOUD_API_KEY="your-api-key"
+uv run skills/nano-banana/scripts/generate_atlas.py \
+  --prompt "A cute banana character" \
+  --output tmp/output.png
+```
+
+The helper uses Atlas Cloud's asynchronous image API and defaults to `openai/gpt-image-2/text-to-image`. Generation submissions are sent once; only prediction checks use bounded retries.
 
 ## Installation
 
