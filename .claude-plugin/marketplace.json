@@ -29,10 +29,17 @@
     },
     {
       "name": "handbook-dotnet",
-      "description": ".NET development tools including CSharpier formatting, dotnet run file support, selective unit testing, and dependency investigation",
+      "description": ".NET development skills: dotnet run file support, selective unit testing, coverage, API inspection, analyzers and Roslyn queries",
       "source": "./plugins/handbook-dotnet",
       "category": "development",
-      "tags": ["dotnet", "csharp", "formatting", "csharpier", "hooks", "automation", "scripting", "testing", "xunit", "unit-tests", "dependencies", "nuget"]
+      "tags": ["dotnet", "csharp", "scripting", "testing", "xunit", "unit-tests", "dependencies", "nuget", "roslyn", "coverage"]
+    },
+    {
+      "name": "dotnet-csharpier",
+      "description": "Automatic CSharpier formatting for C# files after Claude writes or edits them",
+      "source": "./plugins/dotnet-csharpier",
+      "category": "development",
+      "tags": ["dotnet", "csharp", "formatting", "csharpier", "hooks", "automation"]
     },
     {
       "name": "handbook-microsoft-docs",

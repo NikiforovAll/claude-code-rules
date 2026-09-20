@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.20.1] - 2026-09-20
+
+### Added
+- dotnet-csharpier: New plugin holding the CSharpier formatting hook, so the formatter is opt-in and `handbook-dotnet` can be installed without it
+- dotnet-csharpier: `assumes.csharpier` in the manifest records the CSharpier version and CLI option names the hook is written against; `hooks/test-format-hook.sh` checks them against every CSharpier on the machine
+
+### Fixed
+- dotnet-csharpier: The hook passed `--syntax-errors-as-warnings`, which CSharpier 1.2.6 does not have. CSharpier reads an unknown option as a path, so every run failed with "There was no file or directory found at --syntax-errors-as-warnings" and no file was ever formatted
+- dotnet-csharpier: That option was renamed between 1.2.6 and 1.3.0 and both versions are in the wild, so the hook now picks the spelling the installed CLI lists in `format --help` instead of hardcoding one
+
+### Changed
+- dotnet-csharpier: The disable variable is `CC_DOTNET_CSHARPIER_DISABLE_HOOKS`; `CC_HANDBOOK_DOTNET_DISABLE_HOOKS` still works
+- handbook-dotnet: No longer ships a hook — skills only
+
 ## [1.20.0] - 2026-07-29
 
 ### Added

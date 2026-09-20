@@ -69,6 +69,11 @@
   --ifm-badge-color: white;
 }
 
+.badge--dotnet-csharpier {
+  --ifm-badge-background-color: #1a7f37;
+  --ifm-badge-color: white;
+}
+
 .badge--handbook-context7 {
   --ifm-badge-background-color: #ffba00;
   --ifm-badge-color: black;

@@ -1,26 +1,16 @@
 # Handbook .NET
 
-.NET development tools including automatic CSharpier formatting for C# files and dotnet run file support.
+.NET development skills: running single C# files, testing, coverage, API inspection, analyzers and Roslyn queries.
+
+> Automatic CSharpier formatting left this plugin in 1.20.1. It is now [`dotnet-csharpier`](../dotnet-csharpier/README.md), so you can take these skills without the formatting hook.
 
 ## Features
 
-- Automatic CSharpier formatting for `.cs` files after Claude edits them
-- Performance optimized with `--skip-validation`
-- Non-blocking warnings
-- Uses `.csharpierrc` config if present
 - **dotnet-run-file skill**: Run C# files directly without projects (.NET 10+)
 - **coverage-report skill**: Generate code coverage reports scoped to branch changes
 - **dotnet-inspect skill**: Query .NET APIs across NuGet packages, platform libraries, and local assemblies
 - **dotnet-analyzers skill**: Fix code style and analyzer diagnostics with `dotnet format`, plus an HTML dashboard
 - **roslyn-query skill**: Query C# codebases structurally via Roslyn AST analysis
-
-## Prerequisites
-
-Install CSharpier:
-
-```bash
-dotnet tool install -g csharpier
-```
 
 ## Installation
 
@@ -28,16 +18,6 @@ dotnet tool install -g csharpier
 /plugin marketplace add nikiforovall/claude-code-rules
 /plugin install handbook-dotnet
 ```
-
-## Configuration
-
-**Disable formatting:**
-```bash
-export CC_HANDBOOK_DOTNET_DISABLE_HOOKS=true
-```
-
-**Custom config:**
-Place `.csharpierrc` or `.csharpierrc.json` in your project root.
 
 ## Skills
 

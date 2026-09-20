@@ -88,9 +88,29 @@ EOF
 BEFORE=$(cat "$TEST_DIR/env-test.cs")
 ENV_PATH=$(to_path "$TEST_DIR/env-test.cs")
 
-echo -n "  Respects DISABLE_HOOKS=true ... "
-echo "{\"tool_input\":{\"file_path\":\"$ENV_PATH\"}}" | CC_HANDBOOK_DOTNET_DISABLE_HOOKS=true bash "$HOOK_SCRIPT" &>/dev/null || true
+echo -n "  Respects CC_DOTNET_CSHARPIER_DISABLE_HOOKS=true ... "
+echo "{\"tool_input\":{\"file_path\":\"$ENV_PATH\"}}" | CC_DOTNET_CSHARPIER_DISABLE_HOOKS=true bash "$HOOK_SCRIPT" &>/dev/null || true
 AFTER=$(cat "$TEST_DIR/env-test.cs")
+if [ "$BEFORE" = "$AFTER" ]; then
+    echo "✓"
+    PASSED=$((PASSED + 1))
+else
+    echo "✗ (file was formatted despite env var)"
+    FAILED=$((FAILED + 1))
+fi
+
+# The name the hook carried inside handbook-dotnet; anyone who exported it keeps working.
+cat > "$TEST_DIR/env-test-legacy.cs" << 'EOF'
+class Example
+{
+}
+EOF
+BEFORE=$(cat "$TEST_DIR/env-test-legacy.cs")
+LEGACY_PATH=$(to_path "$TEST_DIR/env-test-legacy.cs")
+
+echo -n "  Respects legacy CC_HANDBOOK_DOTNET_DISABLE_HOOKS=true ... "
+echo "{\"tool_input\":{\"file_path\":\"$LEGACY_PATH\"}}" | CC_HANDBOOK_DOTNET_DISABLE_HOOKS=true bash "$HOOK_SCRIPT" &>/dev/null || true
+AFTER=$(cat "$TEST_DIR/env-test-legacy.cs")
 if [ "$BEFORE" = "$AFTER" ]; then
     echo "✓"
     PASSED=$((PASSED + 1))
@@ -149,6 +169,57 @@ EOF
         echo "✗ (no formatting occurred)"
         FAILED=$((FAILED + 1))
     fi
+fi
+
+echo ""
+echo "Manifest Assumptions:"
+
+# CSharpier reads an unknown option as a path, so a renamed flag does not fail loudly — it fails every
+# run with "no file or directory found at --flag". This is the check that catches that rename.
+MANIFEST="$SCRIPT_DIR/../.claude-plugin/plugin.json"
+if ! command -v csharpier &>/dev/null && ! dotnet csharpier --version &>/dev/null 2>&1; then
+    echo "  CLI options still exist ... ⊘ (CSharpier not installed)"
+    SKIPPED=$((SKIPPED + 1))
+else
+    # Both spellings can be present on one machine — a repo tool manifest and a global install can sit
+    # at different versions — so each command the hook might pick is checked on its own.
+    for cmd in "csharpier" "dotnet csharpier"; do
+        HELP=$($cmd format --help 2>&1) || continue
+        VERSION=$($cmd --version 2>/dev/null | tr -d '\r')
+
+        # jq on MSYS writes CRLF, so every value needs the carriage return stripped.
+        ASSUMED_MAJOR=$(jq -r '.assumes.csharpier.majorVersion' "$MANIFEST" | tr -d '\r')
+        echo -n "  $cmd ($VERSION) is a known major ... "
+        if [ "$ASSUMED_MAJOR" = "${VERSION%%.*}" ]; then
+            echo "✓"
+            PASSED=$((PASSED + 1))
+        else
+            echo "✗ (manifest assumes ${ASSUMED_MAJOR}.x)"
+            FAILED=$((FAILED + 1))
+        fi
+
+        while read -r option; do
+            echo -n "  $cmd accepts $option ... "
+            if echo "$HELP" | grep -q -- "$option"; then
+                echo "✓"
+                PASSED=$((PASSED + 1))
+            else
+                echo "✗ (not in '$cmd format --help')"
+                FAILED=$((FAILED + 1))
+            fi
+        done < <(jq -r '.assumes.csharpier.options.required[]' "$MANIFEST" | tr -d '\r')
+
+        # One of the spellings must match — which one is the installed version's business.
+        echo -n "  $cmd accepts one errorsAsWarnings spelling ... "
+        if jq -r '.assumes.csharpier.options.errorsAsWarnings[]' "$MANIFEST" | tr -d '\r' \
+            | grep -q -f <(echo "$HELP" | grep -o -- '--[a-z-]*'); then
+            echo "✓"
+            PASSED=$((PASSED + 1))
+        else
+            echo "✗ (none of the manifest spellings are in '$cmd format --help')"
+            FAILED=$((FAILED + 1))
+        fi
+    done
 fi
 
 # Results

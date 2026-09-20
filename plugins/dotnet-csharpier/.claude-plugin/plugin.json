@@ -1,0 +1,34 @@
+{
+  "name": "dotnet-csharpier",
+  "version": "1.0.0",
+  "description": "Automatic CSharpier formatting for C# files after Claude writes or edits them",
+  "author": {
+    "name": "nikiforovall",
+    "url": "https://github.com/nikiforovall"
+  },
+  "homepage": "https://nikiforovall.blog/claude-code-rules/",
+  "repository": "https://github.com/nikiforovall/claude-code-rules",
+  "license": "MIT",
+  "keywords": [
+    "csharp",
+    "dotnet",
+    "formatting",
+    "csharpier",
+    "hooks",
+    "automation"
+  ],
+  "assumes": {
+    "csharpier": {
+      "majorVersion": 1,
+      "testedWith": ["1.2.6", "1.3.0"],
+      "options": {
+        "required": ["--skip-validation"],
+        "errorsAsWarnings": [
+          "--compilation-errors-as-warnings",
+          "--syntax-errors-as-warnings"
+        ]
+      },
+      "note": "CSharpier reads an unknown option as a path, so a flag it does not know fails every run with 'no file or directory found at --flag' instead of erroring clearly. The errorsAsWarnings option was renamed between 1.2.6 and 1.3.0, and both versions are in the wild, so format-csharp.sh picks whichever name the installed CLI lists in 'format --help' rather than hardcoding one."
+    }
+  }
+}

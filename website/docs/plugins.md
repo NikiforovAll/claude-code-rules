@@ -43,10 +43,18 @@ claude plugin install handbook-extras@cc-handbook
 
 ## [<span className="badge badge--handbook-dotnet">handbook-dotnet</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-dotnet/README.md)
 
-.NET development tools and automatic CSharpier formatting for C# files.
+.NET development skills: running single C# files, testing, coverage, API inspection, analyzers and Roslyn queries.
 
 ```bash
 claude plugin install handbook-dotnet@cc-handbook
+```
+
+## [<span className="badge badge--dotnet-csharpier">dotnet-csharpier</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/dotnet-csharpier/README.md)
+
+Automatic CSharpier formatting for C# files after Claude writes or edits them. Part of `handbook-dotnet` until 1.20.1, opt-in on its own since.
+
+```bash
+claude plugin install dotnet-csharpier@cc-handbook
 ```
 
 ## [<span className="badge badge--handbook-microsoft-docs">handbook-microsoft-docs</span>](https://github.com/nikiforovall/claude-code-rules/blob/main/plugins/handbook-microsoft-docs/README.md)
@@ -238,6 +246,9 @@ claude plugin install ./plugins/handbook-qa
 
 # Install .NET plugin
 claude plugin install ./plugins/handbook-dotnet
+
+# Install CSharpier formatting hook
+claude plugin install ./plugins/dotnet-csharpier
 
 # Install Microsoft Docs plugin
 claude plugin install ./plugins/handbook-microsoft-docs

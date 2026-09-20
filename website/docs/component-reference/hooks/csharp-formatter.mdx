@@ -8,19 +8,25 @@ import CodeBlock from '@theme/CodeBlock';
 
 # CSharpier Auto-Formatter Hook
 
-<span className="badge badge--handbook-dotnet">handbook-dotnet</span>
+<span className="badge badge--dotnet-csharpier">dotnet-csharpier</span>
 
 Automatically format C# files after Claude creates or edits them using CSharpier.
 
 This PostToolUse hook integrates CSharpier formatting into your Claude Code workflow, ensuring consistent code style without manual intervention.
 
+:::note
+This hook shipped inside `handbook-dotnet` until 1.20.1. It is now its own plugin, so formatting is opt-in and the .NET skills can be installed without it. Install `dotnet-csharpier@cc-handbook`.
+:::
+
 ## How It Works
 
 The hook triggers after Claude uses the `Write` or `Edit` tools:
 
-1. **Detects C# files**: Only processes files with `.cs` extension
-2. **Runs CSharpier**: Executes `dotnet csharpier format <file>` with optimized flags
-3. **Non-blocking**: Shows warnings if formatting fails, but doesn't interrupt Claude's workflow
+1. **Detects C# files**: Only processes `.cs`, `.CS`, `.csx` and `.CSX` files
+2. **Picks a CSharpier**: `dotnet csharpier` (a repo tool manifest) first, then a global `csharpier`
+3. **Chooses its options**: reads `format --help` and uses the option names that CLI actually lists
+4. **Runs CSharpier**: formats the one file that was written or edited
+5. **Non-blocking**: Shows warnings if formatting fails, but doesn't interrupt Claude's workflow
 
 ## Hook Configuration
 
@@ -46,8 +52,30 @@ The hook triggers after Claude uses the `Write` or `Edit` tools:
 
 ### CSharpier Options Used
 
+The hook does not hardcode option names. It reads them from `assumes.csharpier` in the plugin's `plugin.json`:
+
+```json
+"assumes": {
+  "csharpier": {
+    "majorVersion": 1,
+    "testedWith": ["1.2.6", "1.3.0"],
+    "options": {
+      "required": ["--skip-validation"],
+      "errorsAsWarnings": [
+        "--compilation-errors-as-warnings",
+        "--syntax-errors-as-warnings"
+      ]
+    }
+  }
+}
+```
+
 - `--skip-validation`: Skip validation for better performance
-- `--compilation-errors-as-warnings`: Format code even with compilation errors
+- `errorsAsWarnings`: format code even when it does not parse or compile. CSharpier renamed this option between 1.2.6 and 1.3.0, so the hook uses whichever spelling the installed CLI lists in `format --help`.
+
+This indirection matters because **CSharpier reads an option it does not know as a path**. A wrong option name does not produce a clear error — every run fails with `There was no file or directory found at --flag` and nothing is ever formatted.
+
+To support a new CSharpier version, add its option names to the manifest. `hooks/test-format-hook.sh` checks the recorded names against every CSharpier installed on the machine, so an upstream rename shows up as a failing test rather than as silently unformatted code.
 
 ## Prerequisites
 
@@ -65,26 +93,34 @@ dotnet csharpier --version
 
 **Debug manually:**
 ```bash
+# Use the option name your CSharpier lists; 1.3.0 renamed it to --syntax-errors-as-warnings
 dotnet csharpier format path/to/file.cs --skip-validation --compilation-errors-as-warnings
 ```
 
-Or make sure `jq` is installed. The hook script requires `jq` for JSON parsing.
+Or make sure `jq` is installed. The hook script requires `jq` to read its JSON input and its manifest.
+
+**Run the test suite**, which also reports whether the recorded option names still exist:
+```bash
+bash plugins/dotnet-csharpier/hooks/test-format-hook.sh
+```
 
 ## Configuration
 
 ### Environment Variables
 
-**CC_HANDBOOK_DOTNET_DISABLE_HOOKS**
+**CC_DOTNET_CSHARPIER_DISABLE_HOOKS**
 
 Disable the automatic CSharpier formatting hook.
 
 ```bash
 # Disable globally in your shell
-export CC_HANDBOOK_DOTNET_DISABLE_HOOKS=true
+export CC_DOTNET_CSHARPIER_DISABLE_HOOKS=true
 
 # Or disable for a single Claude Code session
-CC_HANDBOOK_DOTNET_DISABLE_HOOKS=true claude
+CC_DOTNET_CSHARPIER_DISABLE_HOOKS=true claude
 ```
+
+`CC_HANDBOOK_DOTNET_DISABLE_HOOKS`, the name used while the hook lived in `handbook-dotnet`, still works.
 
 This is useful when:
 - You want to temporarily disable formatting
@@ -109,4 +145,5 @@ If you have a `.csharpierrc` or `.csharpierrc.json` file in your project, CSharp
 
 ## See Also
 
-- [handbook-dotnet Plugin](/plugins#handbook-dotnet)
+- [dotnet-csharpier Plugin](/plugins#dotnet-csharpier)
+- [handbook-dotnet Plugin](/plugins#handbook-dotnet) — the .NET skills, without this hook
