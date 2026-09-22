@@ -11,13 +11,13 @@ Do NOT use for dashboards — CSS Grid card layouts with Chart.js look better fo
 **CDN (UMD build — use this, not the ESM `.mjs` build):**
 ```html
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"
-        onerror="document.querySelectorAll('.zoom-label').forEach(function (l) { l.textContent = 'Error: Mermaid failed to load (offline or CDN blocked)'; })"></script>
+        onerror="window.__mermaidFailed = true;"></script>
 <script>
   mermaid.initialize({ startOnLoad: true, /* ... */ });
 </script>
 ```
 
-The UMD build exposes a `mermaid` global and its `onerror` hook makes CDN failures visible. A static ESM `import` that fails (offline, blocked CDN) kills the entire module script silently — the page hangs on "Loading..." with no error and no way to diagnose it.
+Check the flag before rendering and replace each figure with a readable message when it is set. The UMD build exposes a `mermaid` global and its `onerror` hook makes CDN failures visible. A static ESM `import` that fails (offline, blocked CDN) kills the entire module script silently — the page hangs on "Loading..." with no error and no way to diagnose it.
 
 **ELK layout — do not use.** `layout: 'elk'` (the separate `@mermaid-js/layout-elk` package) mis-measures HTML labels in some environments and produces a giant canvas with tiny scattered nodes — observed: the same 16-node flowchart rendered at viewBox 7557×21070 with ELK vs 825×1342 with dagre. The default dagre layout renders correctly everywhere. If you believe a diagram truly needs ELK, verify the output visually in a real browser AND headless before delivering.
 
@@ -68,23 +68,21 @@ Always use `theme: 'base'` — it's the only theme where all `themeVariables` ar
 Mermaid renders SVG. Override its classes for pixel-perfect control that `themeVariables` can't reach:
 
 ```css
-/* Container — see css-patterns.md "Zoom Controls" for the full zoom pattern */
-.mermaid-wrap {
-  position: relative;
+/* Container — mermaid-rules.md "Container structure" owns the figure */
+.diagram {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 24px;
-  overflow: auto;
+  padding: 30px 22px;
+  overflow-x: auto;
 }
 
-/* CRITICAL: Force node/edge text to follow the page's color scheme.
-   Without this, themeVariables.primaryTextColor works for DEFAULT nodes,
-   but any classDef that sets color: will hardcode a single value that
-   breaks in the opposite color scheme. Fix: never set color: in classDef,
-   and always include these CSS overrides. */
-.mermaid .nodeLabel { color: var(--text) !important; }
-.mermaid .edgeLabel { color: var(--text-dim) !important; background-color: var(--bg) !important; }
+/* Color only. A font-family or font-size rule on a label is applied after
+   Mermaid measured it, which is one of the three drift sources — see "Drift"
+   in mermaid-rules.md. Label fonts belong in themeVariables.
+   With htmlLabels: false the labels are SVG text, so they take fill, not color. */
+.mermaid .nodeLabel { fill: var(--text) !important; }
+.mermaid .edgeLabel { fill: var(--text-dim) !important; }
 .mermaid .edgeLabel rect { fill: var(--bg) !important; }
 
 /* Node shapes */
@@ -442,11 +440,11 @@ mermaid.initialize(mermaidConfig());
 
 addEventListener('themechange', () => {
   mermaid.initialize(mermaidConfig());
-  render();   // re-render from the preserved .diagram-source, per mermaid-flowchart.html
+  renderDiagrams();   // re-read each dataset.source, per mermaid-rules.md "The config"
 });
 ```
 
-Anything else that reads the theme at load time — `openInNewTab()`'s export background, Chart.js colors — must be recomputed the same way, at use time or on `themechange`. CSS overrides on the container (`.mermaid-wrap`) follow the attribute automatically since they use custom properties.
+Anything else that reads the theme at load time — Chart.js colors, for one — must be recomputed the same way, at use time or on `themechange`. CSS overrides on the container (`.diagram`) follow the attribute automatically since they use custom properties.
 
 ## Chart.js — Data Visualizations
 

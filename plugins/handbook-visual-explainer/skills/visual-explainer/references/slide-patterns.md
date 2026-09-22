@@ -4,7 +4,7 @@ CSS patterns, JS engine, slide type layouts, transitions, navigation chrome, and
 
 **When to use slides:** Only when the user explicitly requests them — `/slides`, `--slides` flag on an existing prompt, or natural language like "as a slide deck." Never auto-select slide format.
 
-**Before generating**, also read `./css-patterns.md` for shared patterns (Mermaid zoom controls, overflow protection, depth tiers, status badges) and `./libraries.md` for Mermaid theming, Chart.js, and font pairings. Those patterns apply to slides too — this file adds slide-specific patterns on top.
+**Before generating**, also read `./mermaid-rules.md` if the deck has a diagram, `./css-patterns.md` for shared patterns (overflow protection, depth tiers, status badges) and `./libraries.md` for Mermaid theming, Chart.js, and font pairings. Those patterns apply to slides too — this file adds slide-specific patterns on top.
 
 ## Planning a Deck from a Source Document
 
@@ -356,7 +356,7 @@ class SlideEngine {
     var self = this;
     // Keyboard — skip if focus is inside interactive content
     document.addEventListener('keydown', function(e) {
-      if (e.target.closest('.mermaid-wrap, .table-scroll, .code-scroll, input, textarea, [contenteditable]')) return;
+      if (e.target.closest('.diagram, .table-scroll, .code-scroll, input, textarea, [contenteditable]')) return;
       if (['ArrowDown', 'ArrowRight', ' ', 'PageDown'].includes(e.key)) {
         e.preventDefault(); self.next();
       } else if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)) {
@@ -696,29 +696,19 @@ Full-viewport Mermaid diagram. Max 8–10 nodes (presentation scale — fewer, l
 - **Use CSS Pipeline** (below) for simple linear flows: A → B → C → D sequences, build steps, deployment stages. CSS cards give full control over sizing, typography, and fill the viewport naturally.
 - **Never leave a small Mermaid diagram alone on a slide.** If the diagram is small, either switch to CSS, or pair it with supporting content (description cards, bullet annotations, a summary panel) in a split layout. A slide with a tiny diagram and empty space is a failed slide.
 
-**Mermaid centering fix.** When you do use Mermaid, add `display: flex; align-items: center; justify-content: center;` to `.mermaid-wrap` so the SVG centers within its container instead of hugging the top-left corner. Change `transform-origin` to `center center` so zoom radiates from the middle.
+Decks build diagrams to the same recipe as pages — `mermaid-rules.md` owns the container, the config and the render sequence, including `htmlLabels: false` and the `getBBox` pass. A deck adds only the centering below. Neither medium ships a zoom engine: a slide is already one viewport tall, so a diagram that needs zoom to read is one to rebuild or split.
 
 ```html
 <section class="slide slide--diagram">
   <h2 class="slide__heading reveal">Diagram Title</h2>
-  <div class="mermaid-wrap reveal" style="flex:1; min-height:0;">
-    <div class="zoom-controls">
-      <button onclick="zoomDiagram(this,1.2)" title="Zoom in">+</button>
-      <button onclick="zoomDiagram(this,0.8)" title="Zoom out">&minus;</button>
-      <button onclick="resetZoom(this)" title="Reset">&#8634;</button>
-      <button onclick="openDiagramFullscreen(this)" title="Open full size in new tab">&#x26F6;</button>
-    </div>
+  <figure class="diagram reveal" style="flex:1; min-height:0;">
     <pre class="mermaid">
-      graph TD
-        A --> B
+graph TD
+  A --&gt; B
     </pre>
-  </div>
+  </figure>
 </section>
 ```
-
-**Click to expand.** Clicking anywhere on the diagram (without dragging) opens it full-size in a new browser tab. The expand button (⛶) provides the same functionality for discoverability.
-
-**Decks run four buttons, not the page set of five.** `css-patterns.md` "Zoom Controls" documents the viewport engine used on pages and documents — `zoom-fit` / `zoom-one` / double-click-to-fit, and no click-to-expand. A slide is already one viewport tall, so the deck engine keeps `reset` in place of fit-plus-1:1 and spends the whole diagram area on click-to-expand. Both are correct in their own medium; don't port one set of controls onto the other engine's handlers.
 
 ```css
 .slide--diagram {
@@ -729,7 +719,7 @@ Full-viewport Mermaid diagram. Max 8–10 nodes (presentation scale — fewer, l
   margin-bottom: clamp(8px, 1.5vh, 20px);
 }
 
-.slide--diagram .mermaid-wrap {
+.slide--diagram .diagram {
   border-radius: 12px;
   overflow: auto;
   display: flex;
@@ -737,32 +727,15 @@ Full-viewport Mermaid diagram. Max 8–10 nodes (presentation scale — fewer, l
   justify-content: center;
 }
 
-.slide--diagram .mermaid-wrap .mermaid {
-  transform-origin: center center;
+.slide--diagram .diagram svg {
+  max-width: 100%;
+  height: auto;
 }
 ```
 
-**Auto-fit SVG to container.** Mermaid renders SVGs with fixed dimensions and an inline `max-width` style that keeps diagrams tiny inside large slides. The `autoFit()` function (see above) handles this at runtime. Keep the CSS as a belt-and-suspenders fallback:
+**Presentation scale lives in `themeVariables`.** Set `fontSize: '22px'` in the deck's Mermaid config rather than writing a font rule against `.nodeLabel` — a CSS font rule applies after Mermaid measures, which is a **drift** source (see `mermaid-rules.md`). Shapes are safe to style here:
 
 ```css
-.slide--diagram .mermaid svg {
-  width: 100% !important;
-  height: auto !important;
-  max-width: 100% !important;
-}
-```
-
-**Mermaid overrides for presentation scale** (add alongside the standard Mermaid CSS overrides from `libraries.md`):
-
-```css
-.slide--diagram .mermaid .nodeLabel {
-  font-size: 18px !important;
-}
-
-.slide--diagram .mermaid .edgeLabel {
-  font-size: 14px !important;
-}
-
 .slide--diagram .mermaid .node rect,
 .slide--diagram .mermaid .node circle,
 .slide--diagram .mermaid .node polygon {
@@ -1213,7 +1186,7 @@ Slides get projected, screen-shared, viewed at distance. Design accordingly:
 - **One focal point per slide.** Not three competing elements.
 - **Higher contrast than pages.** Dimmed text (`--text-dim`) should still be easily readable at distance — test against the background.
 - **Nav chrome opacity.** Dots and progress bar must be visible on any slide background (light or dark) without being distracting. Use the backdrop blur or text-shadow approach from the Nav Chrome section.
-- **Simpler Mermaid diagrams.** Max 8–10 nodes, 18px+ labels, 2px+ edges. The diagram should be readable without zoom at presentation distance. Zoom controls remain available for detail inspection.
+- **Simpler Mermaid diagrams.** Max 8–10 nodes, `fontSize` 18px or more, 2px+ edges. The diagram reads at presentation distance on its own — there is no zoom to fall back on.
 
 ## Content Density Limits
 

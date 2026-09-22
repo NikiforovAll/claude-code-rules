@@ -2,7 +2,7 @@
 
 Generate beautiful, self-contained HTML pages that visually explain systems, code changes, plans, and data.
 
-Every page is a single file with no build step and no external assets beyond web fonts and CDN libraries: a theme toggle, a considered palette and font pairing, and Mermaid diagrams with zoom and pan where the topology matters.
+Every page is a single file with no build step and no external assets beyond web fonts and CDN libraries: a theme toggle, a considered palette and font pairing, and Mermaid diagrams where the topology matters.
 
 ## Skills
 

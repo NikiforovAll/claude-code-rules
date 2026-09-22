@@ -21,7 +21,7 @@
   - Dark-first with REQUIRED theme toggle (data-theme attribute, boot script, persistence)
   - Responsive height breakpoints for projection and small viewports
   - Nav chrome with backdrop blur for mixed-background visibility
-  - Event delegation: Mermaid zoom and table scroll don't trigger slide nav
+  - Event delegation: diagram and table scroll don't trigger slide nav
   - prefers-reduced-motion respected
 -->
 <script>
@@ -364,54 +364,33 @@
   }
   .slide--diagram .slide__heading { margin-bottom: clamp(8px, 1.5vh, 20px); }
 
-  .mermaid-wrap {
-    position: relative;
+  .diagram {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 24px;
-    overflow: auto;
+    margin: 0;
     flex: 1;
     min-height: 0;
+    overflow-x: auto;
     display: flex;
-    justify-content: center;
     align-items: center;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
   }
-  .mermaid-wrap::-webkit-scrollbar { width: 6px; height: 6px; }
-  .mermaid-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-
-
-  .zoom-controls {
-    position: absolute; top: 8px; right: 8px;
-    display: flex; gap: 2px; z-index: 10;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 6px; padding: 2px;
-  }
-  .zoom-controls button {
-    width: 28px; height: 28px; border: none; background: transparent;
-    color: var(--text-dim); font-family: var(--font-mono); font-size: 14px;
-    cursor: pointer; border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.15s, color 0.15s;
-  }
-  .zoom-controls button:hover { background: var(--border); color: var(--text); }
-  .mermaid-wrap { cursor: grab; }
-  .mermaid-wrap.is-panning { cursor: grabbing; user-select: none; }
-
-  .mermaid .nodeLabel { color: var(--text) !important; }
-  .mermaid .edgeLabel { color: var(--text-dim) !important; background-color: var(--bg) !important; }
-  .mermaid .edgeLabel rect { fill: var(--bg) !important; }
-  .slide--diagram .mermaid svg {
-    width: 100% !important;
-    height: auto !important;
-    max-width: 100% !important;
+  /* safe center keeps the diagram centred until it outgrows the slide, then
+     falls back to flex-start so scrolling still reaches the left edge. */
+  .diagram .mermaid { display: flex; justify-content: safe center; width: 100%; min-height: 0; }
+  /* A slide is a fixed box, so unlike a scrolling page the diagram is capped on
+     both axes. aspect-ratio (set at render) keeps the width in step when the
+     height cap binds. A diagram wider than ~2:1 keeps its labels readable here. */
+  .diagram .mermaid svg { max-width: 100%; max-height: 100%; height: auto; display: block; }
+  .diagram__error {
+    font-family: var(--font-mono); font-size: 14px;
+    color: var(--text-dim); text-align: center; width: 100%;
   }
 
-  .slide--diagram .mermaid .nodeLabel { font-size: 18px !important; }
-  .slide--diagram .mermaid .edgeLabel { font-family: var(--font-mono) !important; font-size: 14px !important; }
+  /* No font rule targets .nodeLabel or .edgeLabel. Mermaid sizes the geometry
+     from its own measurement, so a font applied afterwards paints wider than the
+     viewBox it computed. Deck label sizes belong in themeVariables.fontSize. */
   .slide--diagram .mermaid .node rect,
   .slide--diagram .mermaid .node circle,
   .slide--diagram .mermaid .node polygon { stroke-width: 2px; }
@@ -461,12 +440,14 @@
   /* ============ SLIDE TYPE: TABLE ============ */
   .slide--table { padding: clamp(24px, 4vh, 48px) clamp(24px, 4vw, 60px); }
 
+  /* flex: 0 1 auto, not flex: 1 — a short table should size to its rows and sit
+     centred with the heading, not stretch to the full slide height. */
   .table-wrap {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
     overflow: hidden;
-    flex: 1;
+    flex: 0 1 auto;
     min-height: 0;
   }
   .table-scroll { overflow-x: auto; }
@@ -731,22 +712,16 @@
   <!-- SLIDE 6: DIAGRAM -->
   <section class="slide slide--diagram">
     <h2 class="slide__heading reveal">Request Flow</h2>
-    <div class="mermaid-wrap reveal">
-      <div class="zoom-controls">
-        <button onclick="zoomDiagram(this,1.2)" title="Zoom in">+</button>
-        <button onclick="zoomDiagram(this,0.8)" title="Zoom out">&minus;</button>
-        <button onclick="resetZoom(this)" title="Reset">&#8634;</button>
-        <button onclick="openDiagramFullscreen(this)" title="Open full size in new tab">&#x26F6;</button>
-      </div>
+    <figure class="diagram reveal">
       <pre class="mermaid">
 graph LR
-  Client["Client"] --> Edge["Edge Worker"]
-  Edge --> Auth["Auth Cache"]
-  Edge --> RL["Rate Limiter<br/>Durable Object"]
-  Edge --> Router["Route Resolver"]
-  Router --> API["API Service"]
-  Router --> Static["Static Assets"]
-  API --> DB["Database"]
+  Client["Client"] --&gt; Edge["Edge Worker"]
+  Edge --&gt; Auth["Auth Cache"]
+  Edge --&gt; RL["Rate Limiter&lt;br/&gt;Durable Object"]
+  Edge --&gt; Router["Route Resolver"]
+  Router --&gt; API["API Service"]
+  Router --&gt; Static["Static Assets"]
+  API --&gt; DB["Database"]
 
   classDef primary fill:#d4a73a22,stroke:#d4a73a,stroke-width:2px
   classDef secondary fill:#60a5fa22,stroke:#60a5fa,stroke-width:2px
@@ -756,7 +731,7 @@ graph LR
   class Auth,RL,Router secondary
   class API,Static,DB storage
       </pre>
-    </div>
+    </figure>
   </section>
 
   <!-- SLIDE 7: DASHBOARD -->
@@ -854,9 +829,16 @@ graph LR
   function mermaidConfig() {
     var isDark = isDarkTheme();
     return {
-      startOnLoad: true,
+      startOnLoad: false,
       theme: 'base',
       look: 'classic',
+      // htmlLabels: false makes Mermaid measure SVG text with getBBox instead of a
+      // foreignObject, whose size browsers report inconsistently — the drift that
+      // paints labels outside the computed viewBox.
+      htmlLabels: false,
+      markdownAutoWrap: false,
+      flowchart: { useMaxWidth: false, htmlLabels: false, wrappingWidth: 320 },
+      sequence: { useMaxWidth: false },
       themeVariables: {
         primaryColor: isDark ? '#1d2b52' : '#fef3e0',
         primaryBorderColor: isDark ? '#d4a73a' : '#b8860b',
@@ -879,20 +861,25 @@ graph LR
 
   // mermaid.run() overwrites each source node with SVG, so keep the original
   // definition around — it's the only way to re-render after a theme change.
-  document.querySelectorAll('.mermaid').forEach(function (el) {
-    el.dataset.veSource = el.textContent;
-  });
+  var diagrams = Array.prototype.slice.call(document.querySelectorAll('.diagram .mermaid'));
+  diagrams.forEach(function (el) { el.dataset.veSource = el.textContent; });
 
   mermaid.initialize(mermaidConfig());
 
   function autoFit() {
-    document.querySelectorAll('.mermaid svg').forEach(function(svg) {
-      if (!svg.getAttribute('viewBox')) return; // stripping height without a viewBox collapses the SVG
+    document.querySelectorAll('.diagram svg').forEach(function(svg) {
+      var box;
+      try { box = svg.getBBox(); } catch (e) { return; }
+      if (!box || !box.width || !box.height) return;
+      var pad = 8, w = box.width + pad * 2, h = box.height + pad * 2;
+      svg.setAttribute('viewBox', (box.x - pad) + ' ' + (box.y - pad) + ' ' + w + ' ' + h);
+      svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      svg.removeAttribute('width');
       svg.removeAttribute('height');
       svg.style.width = '100%';
       svg.style.maxWidth = '100%';
       svg.style.height = 'auto';
-      svg.parentElement.style.width = '100%';
+      svg.style.aspectRatio = w + ' / ' + h;
     });
     document.querySelectorAll('.slide__kpi-val').forEach(function(el) {
       if (el.scrollWidth > el.clientWidth) {
@@ -919,8 +906,34 @@ graph LR
     else fn();
   }
 
-  mermaid.run().then(function() {
-    autoFit();
+  // document.fonts.ready resolves before an unpainted face is fetched, so load the
+  // faces Mermaid measures against first. Measuring on fallback metrics and painting
+  // on the real font is drift.
+  function fontsSettled() {
+    if (!document.fonts) return Promise.resolve();
+    var body = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim();
+    var faces = ['18px ' + body, '600 18px ' + body];
+    return Promise.all(faces.map(function (f) { return document.fonts.load(f); }))
+      .then(function () { return document.fonts.ready; })
+      .catch(function () { /* proceed with fallback metrics */ });
+  }
+
+  function renderDiagrams() {
+    return fontsSettled()
+      .then(function () { return mermaid.run({ nodes: diagrams }); })
+      .then(autoFit)
+      .catch(function (err) {
+        console.error('Mermaid render failed:', err);
+        diagrams.forEach(function (el) {
+          var box = document.createElement('div');
+          box.className = 'diagram__error';
+          box.textContent = 'Diagram unavailable — ' + (err.message || 'render failed');
+          el.replaceWith(box);
+        });
+      });
+  }
+
+  renderDiagrams().then(function () {
     whenParsed(function () { new SlideEngine(); });
   });
 
@@ -940,27 +953,18 @@ graph LR
   // Mermaid colors are baked into the SVG at render time — restore the source
   // and re-run so diagrams follow the toggle.
   addEventListener('themechange', function () {
-    var nodes = document.querySelectorAll('.mermaid');
-    if (!nodes.length) return;
-    nodes.forEach(function (el) {
+    if (!diagrams.length) return;
+    diagrams.forEach(function (el) {
       el.removeAttribute('data-processed');
       el.innerHTML = '';
       el.textContent = el.dataset.veSource || '';
     });
     mermaid.initialize(mermaidConfig());
-    mermaid.run({ nodes: nodes }).then(autoFit);
+    renderDiagrams();
   });
 </script>
 
 <script>
-  // Mermaid zoom controls + click-to-expand
-  var INITIAL_ZOOM=1;
-  function zoomDiagram(b,f){var w=b.closest('.mermaid-wrap');var t=w.querySelector('.mermaid');var c=parseFloat(t.dataset.zoom||INITIAL_ZOOM);var n=Math.min(Math.max(c*f,0.5),5);t.dataset.zoom=n;t.style.zoom=n;}
-  function resetZoom(b){var w=b.closest('.mermaid-wrap');var t=w.querySelector('.mermaid');t.dataset.zoom=INITIAL_ZOOM;t.style.zoom=INITIAL_ZOOM;}
-  function openDiagramFullscreen(b){openInNewTab(b.closest('.mermaid-wrap'));}
-  function openInNewTab(w){var svg=w.querySelector('.mermaid svg');if(!svg)return;var clone=svg.cloneNode(true);clone.style.zoom='';clone.style.transform='';var styles=getComputedStyle(document.documentElement);var bg=styles.getPropertyValue('--bg').trim()||'#ffffff';var html='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Diagram</title><style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:'+bg+';padding:40px;box-sizing:border-box}svg{max-width:100%;max-height:90vh;height:auto}</style></head><body>'+clone.outerHTML+'</body></html>';window.open(URL.createObjectURL(new Blob([html],{type:'text/html'})),'_blank');}
-  document.querySelectorAll('.mermaid-wrap').forEach(function(w){w.addEventListener('wheel',function(e){if(!e.ctrlKey&&!e.metaKey)return;e.preventDefault();var t=w.querySelector('.mermaid');var c=parseFloat(t.dataset.zoom||INITIAL_ZOOM);var f=e.deltaY<0?1.1:0.9;var n=Math.min(Math.max(c*f,0.5),5);t.dataset.zoom=n;t.style.zoom=n;},{passive:false});var sX,sY,sL,sT,sTime,didPan;w.addEventListener('mousedown',function(e){if(e.target.closest('.zoom-controls'))return;w.classList.add('is-panning');sX=e.clientX;sY=e.clientY;sL=w.scrollLeft;sT=w.scrollTop;sTime=Date.now();didPan=false;});window.addEventListener('mousemove',function(e){if(!w.classList.contains('is-panning'))return;var dx=e.clientX-sX,dy=e.clientY-sY;if(Math.abs(dx)>5||Math.abs(dy)>5)didPan=true;w.scrollLeft=sL-dx;w.scrollTop=sT-dy;});window.addEventListener('mouseup',function(){if(!w.classList.contains('is-panning'))return;w.classList.remove('is-panning');if(!didPan&&Date.now()-sTime<300)openInNewTab(w);});});
-
   // SlideEngine
   function SlideEngine(){
     this.deck=document.querySelector('.deck');
@@ -990,7 +994,7 @@ graph LR
   SlideEngine.prototype.bindEvents=function(){
     var self=this;
     document.addEventListener('keydown',function(e){
-      if(e.target.closest('.mermaid-wrap,.table-scroll,.code-scroll,input,textarea,[contenteditable]'))return;
+      if(e.target.closest('.diagram,.table-scroll,.code-scroll,input,textarea,[contenteditable]'))return;
       if(['ArrowDown','ArrowRight',' ','PageDown'].indexOf(e.key)>-1){e.preventDefault();self.next();}
       else if(['ArrowUp','ArrowLeft','PageUp'].indexOf(e.key)>-1){e.preventDefault();self.prev();}
       else if(e.key==='Home'){e.preventDefault();self.goTo(0);}

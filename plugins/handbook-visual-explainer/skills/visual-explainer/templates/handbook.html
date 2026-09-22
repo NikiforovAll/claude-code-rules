@@ -621,7 +621,7 @@ signature: <span class="ann-ok">verified</span>               <span class="ann-o
     <dd>An FAQ is definitions: a term and its explanation. <code>&lt;dl&gt;/&lt;dt&gt;/&lt;dd&gt;</code> says so semantically, costs about six lines of CSS, and copy-pastes into a document cleanly. Cards would give each answer equal visual weight, which is the opposite of what a tail-end reference section wants.</dd>
 
     <dt>Does this mode ever include a diagram?</dt>
-    <dd>It can, and then the Mermaid container rules apply in full — shell, zoom controls, and re-render on <code>themechange</code>. But reach for <code>--handbook</code> because the page is a <em>document</em>. If a diagram is the payload, a different template fits better.</dd>
+    <dd>It can, and then <code>references/mermaid-rules.md</code> applies in full — the <code>.diagram</code> container, the four drift guards, and re-render on <code>themechange</code>. But reach for <code>--handbook</code> because the page is a <em>document</em>. If a diagram is the payload, a different template fits better.</dd>
 
     <dt>How is this different from <code>--style paper</code>?</dt>
     <dd>Different axes, so it isn't a choice between them. <code>--style paper</code> sets the palette: warm cream and terracotta, informal. <code>--handbook</code> sets the structure — rail, chapters, stat band, marginalia — and accepts any palette. <code>--handbook --style paper</code> is both.</dd>
