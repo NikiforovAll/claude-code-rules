@@ -1,0 +1,14 @@
+{
+  "name": "gitlab-mr",
+  "version": "0.1.0",
+  "description": "The GitLab merge request of the current branch above the prompt, through glab",
+  "author": {
+    "name": "nikiforovall",
+    "url": "https://github.com/nikiforovall"
+  },
+  "homepage": "https://nikiforovall.blog/claude-code-rules/",
+  "repository": "https://github.com/nikiforovall/claude-code-rules",
+  "license": "MIT",
+  "keywords": ["gitlab", "glab", "merge-requests", "mod", "status"],
+  "types": "./types/index.d.ts"
+}
