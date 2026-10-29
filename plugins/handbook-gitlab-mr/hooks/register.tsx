@@ -81,14 +81,14 @@ function check($: EngineInterface): Promise<Snapshot> {
 async function details($: EngineInterface) {
   const s = await check($)
   if ('error' in s) return s.error
-  if (!s.mr) return `No merge request for ${s.branch}.\nCreate one: ${s.create}`
+  if (!s.mr) return `No merge request for ${s.branch}. [Create one](${s.create})`
   const { mr } = s
-  const rows = [`!${mr.iid} ${mr.title}`, `${stateLabel(mr)} · ${s.branch} → ${mr.target}${mr.merge ? ` · ${mr.merge}` : ''}`, mr.url]
+  const rows = [`[!${mr.iid}](${mr.url}) ${mr.title}`, `${stateLabel(mr)} · ${s.branch} → ${mr.target}${mr.merge ? ` · ${mr.merge}` : ''}`]
   if (mr.state === 'opened') {
     const p = (await glab($, ['mr', 'view', String(mr.iid)])).head_pipeline
-    if (p) rows.push(`pipeline ${p.status}: ${p.web_url}`)
+    if (p) rows.push(`[pipeline #${p.id}](${p.web_url}) ${p.status}`)
   }
-  return rows.join('\n')
+  return rows.join('  \n')
 }
 
 async function openWeb($: EngineInterface) {
