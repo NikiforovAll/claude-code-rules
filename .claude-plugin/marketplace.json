@@ -105,6 +105,13 @@
       "tags": ["gitlab", "glab", "merge-requests", "mod", "hooks"]
     },
     {
+      "name": "handbook-github-pr",
+      "description": "Mod that shows the GitHub pull request of the current branch above the prompt, with /gh-pr for details",
+      "source": "./plugins/handbook-github-pr",
+      "category": "productivity",
+      "tags": ["github", "gh", "pull-requests", "mod", "hooks"]
+    },
+    {
       "name": "handbook-csharp-lsp",
       "description": "C# Language Server Protocol support using csharp-ls for code intelligence features",
       "source": "./plugins/handbook-csharp-lsp",

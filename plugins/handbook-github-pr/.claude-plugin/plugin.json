@@ -1,0 +1,14 @@
+{
+  "name": "github-pr",
+  "version": "0.1.1",
+  "description": "The GitHub pull request of the current branch above the prompt, through gh",
+  "author": {
+    "name": "nikiforovall",
+    "url": "https://github.com/nikiforovall"
+  },
+  "homepage": "https://nikiforovall.blog/claude-code-rules/",
+  "repository": "https://github.com/nikiforovall/claude-code-rules",
+  "license": "MIT",
+  "keywords": ["github", "gh", "pull-requests", "mod", "status"],
+  "types": "./types/index.d.ts"
+}
