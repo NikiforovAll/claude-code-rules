@@ -1,6 +1,6 @@
 {
   "name": "github-pr",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "The GitHub pull request of the current branch above the prompt, through gh",
   "author": {
     "name": "nikiforovall",

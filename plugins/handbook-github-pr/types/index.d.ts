@@ -7,7 +7,11 @@ export type Pr = {
   url: string
   target: string
 }
-export type Snapshot = { branch: string; pr: Pr } | { branch: string; create: string; pr: null } | { error: string }
+export type Snapshot =
+  | { branch: string; pr: Pr }
+  | { branch: string; create: string; pr: null }
+  | { branch: string; isDefault: true }
+  | { error: string }
 
 declare module 'claude-code' {
   interface PluginState {

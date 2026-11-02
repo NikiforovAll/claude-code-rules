@@ -13,7 +13,7 @@ const STATE: Record<string, string> = { open: 'success', merged: 'merged', close
 
 const last = atom({ plugin: 'github-pr', key: 'last' } as const, null, { shape: 'snapshot-1' })
 
-type Repo = { owner: string; url: string }
+type Repo = { owner: string; url: string; defaultBranch: string }
 
 const repos = new Map<string, Promise<Repo>>()
 const origins = new Map<string, Promise<boolean>>()
@@ -39,7 +39,7 @@ async function api($: EngineInterface, args: string[], cache?: string) {
 async function repo($: EngineInterface, cwd: string) {
   let r = repos.get(cwd)
   if (!r) {
-    r = api($, ['repos/{owner}/{repo}'], '1h').then(x => ({ owner: x.owner.login, url: x.html_url }))
+    r = api($, ['repos/{owner}/{repo}'], '1h').then(x => ({ owner: x.owner.login, url: x.html_url, defaultBranch: x.default_branch }))
     repos.set(cwd, r)
     r.catch(() => repos.delete(cwd))
   }
@@ -99,7 +99,9 @@ async function snapshot($: EngineInterface, bypassCache: boolean): Promise<Snaps
   if (!(await isGitHub($, checkedCwd))) return { error: 'Not a GitHub repository: origin is not on a host gh knows.' }
   const branch = await run($, ['git', 'branch', '--show-current'])
   if (!branch) return { error: 'Detached HEAD: no branch.' }
-  const { owner, url } = await repo($, checkedCwd)
+  const { owner, url, defaultBranch } = await repo($, checkedCwd)
+  // PRs from the default branch are release PRs into other branches, not work on this one.
+  if (branch === defaultBranch) return { branch, isDefault: true }
   const list = await api(
     $,
     ['-X', 'GET', 'repos/{owner}/{repo}/pulls', '-f', `head=${owner}:${branch}`, '-f', 'state=all', '-f', 'per_page=5'],
@@ -142,6 +144,7 @@ function check($: EngineInterface, bypassCache = false): Promise<Snapshot> {
 async function details($: EngineInterface) {
   const s = await check($, true)
   if ('error' in s) return s.error
+  if ('isDefault' in s) return `${s.branch} is the default branch, so there is no pull request to show.`
   if (!s.pr) return `No pull request for ${s.branch}. [Create one](${s.create})`
   const { pr } = s
   const rows = [`[#${pr.number}](${pr.url}) ${pr.title}`]
@@ -163,7 +166,7 @@ async function details($: EngineInterface) {
 
 async function openWeb($: EngineInterface) {
   const s = (await read($, last)) ?? (await check($))
-  if ('error' in s || !s.pr) return 'No pull request to open. Run /gh-pr for details.'
+  if ('error' in s || 'isDefault' in s || !s.pr) return 'No pull request to open. Run /gh-pr for details.'
   await run($, ['gh', 'browse', String(s.pr.number)])
   return `Opened #${s.pr.number} in the browser.`
 }
@@ -212,7 +215,7 @@ export const register: Register = on => {
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
     const s = await read($, last)
-    if (e.props.hasSurvey || !s || 'error' in s) return next(e)
+    if (e.props.hasSurvey || !s || 'error' in s || 'isDefault' in s) return next(e)
     const { Box, Text, Link } = $.ui.resolve(e)
     const { pr } = s
     return (

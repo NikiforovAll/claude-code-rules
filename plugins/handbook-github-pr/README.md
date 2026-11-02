@@ -2,7 +2,7 @@
 
 A Claude Code mod that shows the GitHub pull request of the session's current branch in a band above the prompt, right-aligned: `PR #42 open → main`. The PR number links to the PR. When the branch has no PR, the band shows `PR none for <branch> · create`, where `create` opens a new PR for the branch. Outside a GitHub repository the band shows nothing.
 
-It finds PRs whose head branch is in the repository itself, not in a fork.
+It finds PRs whose head branch is in the repository itself, not in a fork. On the repository's default branch the band shows nothing, because PRs from that branch are release PRs into other branches.
 
 ## Prerequisites
 
