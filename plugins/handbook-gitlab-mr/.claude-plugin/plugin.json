@@ -1,6 +1,6 @@
 {
   "name": "gitlab-mr",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "The GitLab merge request of the current branch above the prompt, through glab",
   "author": {
     "name": "nikiforovall",

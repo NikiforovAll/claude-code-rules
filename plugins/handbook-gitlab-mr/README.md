@@ -19,11 +19,16 @@ The mod calls `glab` and never sees your token.
 
 ## When it refreshes
 
-- When the session starts, and every 60 seconds while it runs interactively.
-- After `/cd`.
-- After a Bash command that can change the branch or the MR: `git checkout`, `switch`, `push`, `pull`, `merge`, `rebase`, `reset`, `commit`, `worktree`, or `glab mr`.
+- When the session starts, and every 5 minutes while it runs interactively.
+- When the directory changes, through `/cd` or a Bash `cd`.
+- When you submit a prompt, if the directory changed or the last check is more than 60 seconds old.
+- After a Bash command that can change the branch or the MR: `git checkout`, `switch`, `push`, `pull`, `merge`, `rebase`, `reset`, `commit`, `worktree`, or `glab mr`. After `git remote`, `init` or `clone`, it also reads the remote again.
 
-In a folder that `glab` does not know, the timer stops checking until one of the other events happens.
+## Which folders it checks
+
+The mod checks a folder only when its `origin` remote is on a GitLab host: a host in the `hosts:` list of glab's `config.yml`, `GITLAB_HOST`, `gitlab.com`, or any host whose name contains `gitlab`. Self-hosted GitLab, such as `git.epam.com`, counts once you sign in to it with `glab auth login`.
+
+It reads the remote once per folder with `git remote get-url origin`, and glab's config file once per session. In any other folder it starts no process after that first read, so it costs nothing in a GitHub repository or outside git. Only `origin` counts, so a repository with remotes on both GitLab and GitHub shows one band.
 
 Each check runs `git branch --show-current` and one `glab mr list` call. A branch with no MR also makes one `glab repo view` call, once per folder.
 
